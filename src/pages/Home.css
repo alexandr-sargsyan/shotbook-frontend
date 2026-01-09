@@ -1,43 +1,65 @@
 .home-page {
   min-height: 100vh;
   background-color: #f5f5f5;
+  position: relative;
 }
 
 .home-header {
   background: white;
-  padding: 16px 20px;
+  padding: 18px 24px;
   border-bottom: 1px solid #e0e0e0;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1002;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.sidebar-toggle {
-  display: none;
+/* Поисковая строка в центре верхней панели */
+.search-container {
+  flex: 1;
+  min-width: 200px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.categories-toggle-btn {
   background: none;
-  border: 2px solid #e0e0e0;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 20px;
   cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 1002;
+  position: relative;
+  pointer-events: auto;
 }
 
-.search-container {
-  flex: 1;
-  min-width: 200px;
+.categories-toggle-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #d0d0d0;
 }
 
 .home-content {
   display: flex;
   max-width: 1600px;
   margin: 0 auto;
-  min-height: calc(100vh - 100px);
-}
-
-.category-sidebar-wrapper {
-  width: 280px;
-  flex-shrink: 0;
+  padding-top: 82px; /* Отступ для фиксированного header */
+  min-height: calc(100vh - 82px);
 }
 
 .video-content {
@@ -46,46 +68,58 @@
   min-width: 0;
 }
 
-@media (max-width: 1024px) {
-  .category-sidebar-wrapper {
-    width: 250px;
+/* Пустая боковая панель */
+.empty-sidebar {
+  position: fixed;
+  left: 0;
+  top: 73px; /* Начинается после фиксированного header (padding + border) */
+  bottom: 0;
+  width: 300px;
+  background-color: white;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
   }
 }
 
+
 @media (max-width: 768px) {
-  .sidebar-toggle {
-    display: block;
-  }
-
   .home-header {
-    padding: 12px 16px;
+    padding: 14px 18px;
   }
 
-  .category-sidebar-wrapper {
-    position: fixed;
-    left: -100%;
-    top: 0;
-    bottom: 0;
-    z-index: 1000;
-    transition: left 0.3s;
-  }
-
-  .category-sidebar-wrapper.open {
-    left: 0;
-  }
-
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+  .home-content {
+    padding-top: 70px; /* Отступ для фиксированного header на мобильных */
+    min-height: calc(100vh - 70px);
   }
 
   .video-content {
     padding: 16px;
+  }
+
+  .search-container {
+    max-width: 100%;
+    order: 3;
+    width: 100%;
+    margin: 12px 0 0 0;
+  }
+
+  .categories-toggle-btn {
+    font-size: 16px;
+    padding: 6px 10px;
+  }
+
+  .empty-sidebar {
+    width: 280px;
+    top: 61px; /* На мобильных после фиксированного header */
   }
 }
 

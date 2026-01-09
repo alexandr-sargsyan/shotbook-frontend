@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './CategorySidebar.css';
 
-const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId }) => {
+const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId, onClose }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
 
   // Ensure categories is always an array
@@ -36,7 +36,11 @@ const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId
           {!hasChildren && <span className="category-spacer" />}
           <button
             className="category-name"
-            onClick={() => onCategorySelect(category.id)}
+            onClick={() => {
+              if (onCategorySelect) {
+                onCategorySelect(category.id);
+              }
+            }}
           >
             {category.name}
           </button>
@@ -59,14 +63,25 @@ const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId
       <div className="category-header">
         <h3>Категории</h3>
         <button
-          className="category-clear"
-          onClick={() => onCategorySelect(null)}
+          className="category-close-btn"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onClose) {
+              onClose();
+            }
+          }}
+          title="Закрыть"
         >
-          Все
+          ✕
         </button>
       </div>
       <div className="category-list">
-        {rootCategories.map((category) => renderCategory(category))}
+        {rootCategories.length > 0 ? (
+          rootCategories.map((category) => renderCategory(category))
+        ) : (
+          <div className="category-empty">Нет категорий</div>
+        )}
       </div>
     </div>
   );
