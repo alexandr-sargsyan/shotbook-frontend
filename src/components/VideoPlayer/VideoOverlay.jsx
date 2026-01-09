@@ -1,50 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './VideoOverlay.css';
 
-const VideoOverlay = ({ platform }) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-
-  const handlePlay = () => {
-    setIsPlaying(true);
-    // Логика запуска через API платформы будет добавлена позже
-  };
-
-  const handlePause = () => {
-    setIsPlaying(false);
-    // Логика паузы через API платформы будет добавлена позже
-  };
-
-  const handleMute = () => {
-    setIsMuted(true);
-    // Логика выключения звука будет добавлена позже
-  };
-
-  const handleUnmute = () => {
-    setIsMuted(false);
-    // Логика включения звука будет добавлена позже
-  };
-
+const VideoOverlay = ({ 
+  platform, 
+  isPlaying = false, 
+  isMuted = true,
+  onPlay,
+  onPause,
+  onToggleMute,
+}) => {
   // Для Instagram не показываем overlay, так как у него свой интерфейс
   if (platform === 'instagram') {
     return null;
   }
 
+  const handlePlayClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPlay) {
+      onPlay();
+    }
+  };
+
+  const handlePauseClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onPause) {
+      onPause();
+    }
+  };
+
+  const handleMuteClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Для звука не перезапускаем видео
+    if (onToggleMute) {
+      onToggleMute();
+    }
+  };
+
   return (
     <div className="video-overlay">
       {!isPlaying && (
-        <button className="play-button" onClick={handlePlay}>
+        <button className="play-button" onClick={handlePlayClick}>
           ▶
         </button>
       )}
       {isPlaying && (
-        <button className="pause-button" onClick={handlePause}>
+        <button className="pause-button" onClick={handlePauseClick}>
           ⏸
         </button>
       )}
       <button 
         className="mute-button" 
-        onClick={isMuted ? handleUnmute : handleMute}
+        onClick={handleMuteClick}
       >
         {isMuted ? '🔇' : '🔊'}
       </button>
