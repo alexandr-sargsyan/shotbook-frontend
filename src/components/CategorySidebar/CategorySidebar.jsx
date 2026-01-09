@@ -1,23 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CategorySidebar.css';
 
-const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId, onClose }) => {
+const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategoryToggle, onClose }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
 
   // Ensure categories is always an array
   const categoriesArray = Array.isArray(categories) ? categories : [];
 
+  // Восстанавливаем состояние открытых категорий из localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('expandedCategories');
+    if (saved) {
+      try {
+        setExpandedCategories(JSON.parse(saved));
+      } catch (e) {
+        // Ignore parse errors
+      }
+    }
+  }, []);
+
+  // Сохраняем состояние открытых категорий в localStorage
   const toggleCategory = (categoryId) => {
-    setExpandedCategories((prev) => ({
-      ...prev,
-      [categoryId]: !prev[categoryId],
-    }));
+    setExpandedCategories((prev) => {
+      const newState = {
+        ...prev,
+        [categoryId]: !prev[categoryId],
+      };
+      localStorage.setItem('expandedCategories', JSON.stringify(newState));
+      return newState;
+    });
+  };
+
+  const handleCheckboxChange = (categoryId, event) => {
+    event.stopPropagation();
+    if (onCategoryToggle) {
+      onCategoryToggle(categoryId);
+    }
   };
 
   const renderCategory = (category, level = 0) => {
     const hasChildren = categoriesArray.some((cat) => cat.parent_id === category.id);
     const isExpanded = expandedCategories[category.id];
-    const isSelected = selectedCategoryId === category.id;
+    const isSelected = selectedCategoryIds.includes(category.id);
 
     return (
       <div key={category.id} className="category-item">
@@ -25,25 +49,38 @@ const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId
           className={`category-row ${isSelected ? 'active' : ''}`}
           style={{ paddingLeft: `${level * 20 + 12}px` }}
         >
+          {/* Чекбокс */}
+          <input
+            type="checkbox"
+            className="category-checkbox"
+            checked={isSelected}
+            onChange={(e) => handleCheckboxChange(category.id, e)}
+            onClick={(e) => e.stopPropagation()}
+          />
+          
+          {/* Стрелка для раскрытия подкатегорий */}
           {hasChildren && (
             <button
               className="category-toggle"
               onClick={() => toggleCategory(category.id)}
+              aria-label={isExpanded ? 'Свернуть' : 'Развернуть'}
             >
               {isExpanded ? '▼' : '▶'}
             </button>
           )}
           {!hasChildren && <span className="category-spacer" />}
-          <button
+          
+          {/* Название категории */}
+          <label
             className="category-name"
             onClick={() => {
-              if (onCategorySelect) {
-                onCategorySelect(category.id);
+              if (onCategoryToggle) {
+                onCategoryToggle(category.id);
               }
             }}
           >
             {category.name}
-          </button>
+          </label>
         </div>
         {hasChildren && isExpanded && (
           <div className="category-children">
@@ -60,22 +97,6 @@ const CategorySidebar = ({ categories = [], onCategorySelect, selectedCategoryId
 
   return (
     <div className="category-sidebar">
-      <div className="category-header">
-        <h3>Категории</h3>
-        <button
-          className="category-close-btn"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (onClose) {
-              onClose();
-            }
-          }}
-          title="Закрыть"
-        >
-          ✕
-        </button>
-      </div>
       <div className="category-list">
         {rootCategories.length > 0 ? (
           rootCategories.map((category) => renderCategory(category))

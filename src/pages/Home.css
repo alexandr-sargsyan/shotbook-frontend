@@ -68,7 +68,7 @@
   min-width: 0;
 }
 
-/* Пустая боковая панель */
+/* Боковая панель с категориями */
 .empty-sidebar {
   position: fixed;
   left: 0;
@@ -79,6 +79,7 @@
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
   z-index: 1001;
   animation: slideIn 0.3s ease-out;
+  overflow-y: auto;
 }
 
 @keyframes slideIn {

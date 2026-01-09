@@ -3,13 +3,26 @@ import { useQuery } from '@tanstack/react-query';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import SearchBar from '../components/SearchBar/SearchBar';
 import Filters from '../components/Filters/Filters';
-import { searchVideoReferences } from '../services/api';
+import CategorySidebar from '../components/CategorySidebar/CategorySidebar';
+import { searchVideoReferences, getCategories } from '../services/api';
 import './Home.css';
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+
+  // Fetch categories
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const response = await getCategories();
+      return response.data;
+    },
+  });
+
+  const categories = categoriesData?.data || [];
 
   // Build query params
   const queryParams = {
@@ -21,9 +34,12 @@ const Home = () => {
     queryParams.search = searchQuery;
   }
 
-  // Add category_id from filters if exists
-  if (filters.category_id) {
-    queryParams.category_id = filters.category_id;
+  // Add selected category IDs to filters
+  if (selectedCategoryIds.length > 0) {
+    // Если выбрано несколько категорий, отправляем массив
+    queryParams.category_id = selectedCategoryIds.length === 1 
+      ? selectedCategoryIds[0] 
+      : selectedCategoryIds;
   }
 
   // Remove undefined and empty values
@@ -50,6 +66,16 @@ const Home = () => {
     setFilters(newFilters);
   }, []);
 
+  const handleCategoryToggle = useCallback((categoryId) => {
+    setSelectedCategoryIds((prev) => {
+      if (prev.includes(categoryId)) {
+        return prev.filter((id) => id !== categoryId);
+      } else {
+        return [...prev, categoryId];
+      }
+    });
+  }, []);
+
   const videos = videosData?.data || [];
 
   return (
@@ -72,10 +98,15 @@ const Home = () => {
         />
       </div>
 
-      {/* Пустая боковая панель */}
+      {/* Боковая панель с категориями */}
       {sidebarOpen && (
         <div className="empty-sidebar">
-          {/* Пустая панель */}
+          <CategorySidebar
+            categories={categories}
+            selectedCategoryIds={selectedCategoryIds}
+            onCategoryToggle={handleCategoryToggle}
+            onClose={() => setSidebarOpen(false)}
+          />
         </div>
       )}
 
