@@ -1,70 +1,153 @@
-# Getting Started with Create React App
+# Filmmaker Reference Platform - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Фронтенд для пользователей на React с респонсивным дизайном в стиле TikTok и Wildberries.
 
-## Available Scripts
+## 📋 Требования
 
-In the project directory, you can run:
+- Node.js 16+ и npm
+- Backend API должен быть запущен на `http://localhost:8000` (или настроить через переменную окружения)
 
-### `npm start`
+## 🚀 Установка и запуск
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Установка зависимостей
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+npm install
+```
 
-### `npm test`
+### 2. Настройка переменных окружения (опционально)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Создайте файл `.env` в корне проекта:
 
-### `npm run build`
+```env
+REACT_APP_API_URL=http://localhost:8000/api
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Если переменная не задана, по умолчанию используется `http://localhost:8000/api`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Запуск в режиме разработки
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npm start
+```
 
-### `npm run eject`
+Приложение будет доступно по адресу: `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. Сборка для production
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm run build
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Собранные файлы будут в папке `build/`.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📱 Функционал
 
-## Learn More
+### Главная страница (`/`)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Поиск**: Full-text search с debounce
+- **Фильтры**: 
+  - Категория
+  - Платформа (YouTube, Instagram, TikTok)
+  - Темп (медленный, быстрый, смешанный)
+  - Уровень продакшена
+  - Чекбоксы для эффектов (визуальные эффекты, 3D, анимации, типографика, звуковой дизайн)
+  - Наличие уроков
+- **Боковая панель категорий**: Иерархическое отображение категорий (стиль Wildberries)
+- **Сетка видео**: Вертикальная лента видео в стиле TikTok
+- **Респонсивность**: Адаптация под мобильные, планшеты и десктопы
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Страница детального просмотра (`/video/:id`)
 
-### Code Splitting
+- **Видео-плеер/превью**: Отображение видео или превью
+- **Правая боковая панель**:
+  - Название и категория
+  - Описание
+  - Кнопка редиректа на оригинальный сайт
+  - Теги
+  - Уроки с временными метками
+  - Характеристики (чекбоксы эффектов)
+  - Дополнительная информация
+- **Респонсивность**: На мобильных панель доступна через свайп/кнопку
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🎨 Дизайн
 
-### Analyzing the Bundle Size
+### Респонсивные breakpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Мобильные**: < 768px
+- **Планшеты**: 768px - 1024px
+- **Десктопы**: > 1024px
 
-### Making a Progressive Web App
+### Особенности
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Mobile-first подход
+- Touch-friendly интерфейс
+- Плавные анимации и переходы
+- Адаптивная сетка видео
+- Скрываемая боковая панель на мобильных
 
-### Advanced Configuration
+## 📁 Структура проекта
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+src/
+├── components/
+│   ├── CategorySidebar/      # Боковая панель категорий
+│   ├── VideoGrid/            # Сетка видео
+│   ├── VideoCard/            # Карточка видео
+│   ├── SearchBar/            # Поисковая строка
+│   ├── Filters/              # Панель фильтров
+│   ├── VideoDetailView/      # Видео-плеер/превью
+│   ├── VideoDetailSidebar/   # Боковая панель деталей
+│   ├── TutorialCard/         # Карточка урока
+│   └── TagBadge/             # Бейдж тега
+├── pages/
+│   ├── Home.jsx              # Главная страница
+│   └── VideoDetail.jsx       # Страница детального просмотра
+├── services/
+│   └── api.js                # API клиент
+├── styles/
+│   └── responsive.css        # Респонсивные стили
+├── App.js                    # Главный компонент с роутингом
+└── index.js                  # Точка входа
+```
 
-### Deployment
+## 🔧 Технологии
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **React 19** - UI библиотека
+- **React Router DOM** - Роутинг
+- **TanStack Query (React Query)** - Управление состоянием и кэширование
+- **Axios** - HTTP клиент
+- **CSS3** - Стилизация с media queries
 
-### `npm run build` fails to minify
+## 📡 API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Фронтенд использует следующие endpoints:
+
+- `GET /api/video-references` - Поиск и фильтрация видео
+- `GET /api/video-references/:id` - Получить видео по ID
+- `GET /api/categories` - Список категорий
+- `GET /api/tags` - Список тегов
+
+## 🐛 Решение проблем
+
+### CORS ошибки
+
+Убедитесь, что backend настроен для работы с фронтендом. В Laravel нужно добавить в `config/cors.php`:
+
+```php
+'allowed_origins' => ['http://localhost:3000'],
+```
+
+### API не отвечает
+
+Проверьте, что:
+1. Backend запущен на `http://localhost:8000`
+2. Переменная окружения `REACT_APP_API_URL` настроена правильно
+3. Backend API доступен и работает
+
+## 📝 Примечания
+
+- Поиск использует debounce (500ms) для оптимизации запросов
+- React Query кэширует результаты запросов
+- Все компоненты полностью респонсивны
+- Боковая панель категорий скрывается на мобильных устройствах

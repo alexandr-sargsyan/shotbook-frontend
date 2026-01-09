@@ -1,0 +1,31 @@
+.tutorial-card {
+  padding: 12px;
+  margin-bottom: 8px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 3px solid #007bff;
+}
+
+.tutorial-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.tutorial-time {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.tutorial-link {
+  display: inline-block;
+  color: #007bff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.tutorial-link:hover {
+  text-decoration: underline;
+}
+
