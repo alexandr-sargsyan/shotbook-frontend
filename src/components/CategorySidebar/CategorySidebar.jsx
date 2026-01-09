@@ -39,7 +39,8 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
   };
 
   const renderCategory = (category, level = 0) => {
-    const hasChildren = categoriesArray.some((cat) => cat.parent_id === category.id);
+    // Проверяем наличие подкатегорий через поле children из API
+    const hasChildren = category.children && Array.isArray(category.children) && category.children.length > 0;
     const isExpanded = expandedCategories[category.id];
     const isSelected = selectedCategoryIds.includes(category.id);
 
@@ -58,18 +59,6 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
             onClick={(e) => e.stopPropagation()}
           />
           
-          {/* Стрелка для раскрытия подкатегорий */}
-          {hasChildren && (
-            <button
-              className="category-toggle"
-              onClick={() => toggleCategory(category.id)}
-              aria-label={isExpanded ? 'Свернуть' : 'Развернуть'}
-            >
-              {isExpanded ? '▼' : '▶'}
-            </button>
-          )}
-          {!hasChildren && <span className="category-spacer" />}
-          
           {/* Название категории */}
           <label
             className="category-name"
@@ -81,12 +70,21 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
           >
             {category.name}
           </label>
+          
+          {/* Стрелка для раскрытия подкатегорий (в конце) */}
+          {hasChildren && (
+            <button
+              className="category-toggle"
+              onClick={() => toggleCategory(category.id)}
+              aria-label={isExpanded ? 'Свернуть' : 'Развернуть'}
+            >
+              {isExpanded ? '▼' : '▶'}
+            </button>
+          )}
         </div>
         {hasChildren && isExpanded && (
           <div className="category-children">
-            {categoriesArray
-              .filter((cat) => cat.parent_id === category.id)
-              .map((child) => renderCategory(child, level + 1))}
+            {category.children.map((child) => renderCategory(child, level + 1))}
           </div>
         )}
       </div>

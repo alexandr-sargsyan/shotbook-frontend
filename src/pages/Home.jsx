@@ -83,11 +83,14 @@ const Home = () => {
       <div className="home-header">
         <div className="search-container">
           <button
-            className="categories-toggle-btn"
+            className={`categories-toggle-btn ${selectedCategoryIds.length > 0 ? 'has-filters' : ''}`}
             onClick={() => setSidebarOpen(!sidebarOpen)}
             title={sidebarOpen ? "Закрыть" : "Открыть"}
           >
             {sidebarOpen ? '✕' : '☰'}
+            {selectedCategoryIds.length > 0 && (
+              <span className="filter-badge"></span>
+            )}
           </button>
           <SearchBar onSearch={handleSearch} />
         </div>
