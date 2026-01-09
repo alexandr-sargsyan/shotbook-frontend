@@ -13,11 +13,11 @@ const VideoDetailSidebar = ({ video }) => {
   };
 
   const features = [
-    { key: 'has_visual_effects', label: 'Визуальные эффекты' },
+    { key: 'has_visual_effects', label: 'Visual Effects' },
     { key: 'has_3d', label: '3D' },
-    { key: 'has_animations', label: 'Анимации' },
-    { key: 'has_typography', label: 'Типографика' },
-    { key: 'has_sound_design', label: 'Звуковой дизайн' },
+    { key: 'has_animations', label: 'Animations' },
+    { key: 'has_typography', label: 'Typography' },
+    { key: 'has_sound_design', label: 'Sound Design' },
   ];
 
   return (
@@ -31,7 +31,7 @@ const VideoDetailSidebar = ({ video }) => {
 
       {video.public_summary && (
         <div className="sidebar-section">
-          <h3>Описание</h3>
+          <h3>Description</h3>
           <p className="video-summary">{video.public_summary}</p>
         </div>
       )}
@@ -43,13 +43,13 @@ const VideoDetailSidebar = ({ video }) => {
           rel="noopener noreferrer"
           className="source-link"
         >
-          Открыть оригинал →
+          Open Original →
         </a>
       </div>
 
       {video.tags && video.tags.length > 0 && (
         <div className="sidebar-section">
-          <h3>Теги</h3>
+          <h3>Tags</h3>
           <div className="tags-container">
             {video.tags.map((tag) => (
               <TagBadge key={tag.id} tag={tag} />
@@ -60,7 +60,7 @@ const VideoDetailSidebar = ({ video }) => {
 
       {video.tutorials && video.tutorials.length > 0 && (
         <div className="sidebar-section">
-          <h3>Уроки</h3>
+          <h3>Tutorials</h3>
           <div className="tutorials-container">
             {video.tutorials.map((tutorial, index) => (
               <TutorialCard key={index} tutorial={tutorial} />
@@ -70,7 +70,7 @@ const VideoDetailSidebar = ({ video }) => {
       )}
 
       <div className="sidebar-section">
-        <h3>Характеристики</h3>
+        <h3>Features</h3>
         <div className="features-list">
           {features.map((feature) => (
             <div
@@ -88,7 +88,7 @@ const VideoDetailSidebar = ({ video }) => {
 
       {video.details_public && Object.keys(video.details_public).length > 0 && (
         <div className="sidebar-section">
-          <h3>Дополнительно</h3>
+          <h3>Additional Details</h3>
           <div className="details-list">
             {Object.entries(video.details_public).map(([key, value]) => (
               <div key={key} className="detail-item">

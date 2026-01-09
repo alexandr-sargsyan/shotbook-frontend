@@ -76,7 +76,7 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
             <button
               className="category-toggle"
               onClick={() => toggleCategory(category.id)}
-              aria-label={isExpanded ? 'Свернуть' : 'Развернуть'}
+              aria-label={isExpanded ? 'Collapse' : 'Expand'}
             >
               {isExpanded ? '▼' : '▶'}
             </button>
@@ -99,7 +99,7 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
         {rootCategories.length > 0 ? (
           rootCategories.map((category) => renderCategory(category))
         ) : (
-          <div className="category-empty">Нет категорий</div>
+          <div className="category-empty">No categories</div>
         )}
       </div>
     </div>

@@ -54,17 +54,40 @@
   border-color: #d0d0d0;
 }
 
-.categories-toggle-btn .filter-badge {
+.categories-toggle-btn .filter-badge,
+.filters-toggle-btn .filter-badge {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 8px;
-  height: 8px;
-  background-color: #007bff;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 0 1px rgba(0, 123, 255, 0.3);
+  top: -8px;
+  right: -6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #007bff;
+  line-height: 1;
 }
+
+.filters-toggle-btn {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s, border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 1002;
+  position: relative;
+  pointer-events: auto;
+}
+
+.filters-toggle-btn:hover {
+  background-color: #f0f0f0;
+  border-color: #d0d0d0;
+}
+
 
 .home-content {
   display: flex;
@@ -103,6 +126,29 @@
   }
 }
 
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Боковая панель с фильтрами (справа) */
+.filters-sidebar {
+  position: fixed;
+  right: 0;
+  top: 73px; /* Начинается после фиксированного header (padding + border) */
+  bottom: 0;
+  width: 300px;
+  background-color: white;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  animation: slideInRight 0.3s ease-out;
+  overflow-y: auto;
+}
+
 
 @media (max-width: 768px) {
   .home-header {
@@ -131,6 +177,11 @@
   }
 
   .empty-sidebar {
+    width: 280px;
+    top: 61px; /* На мобильных после фиксированного header */
+  }
+
+  .filters-sidebar {
     width: 280px;
     top: 61px; /* На мобильных после фиксированного header */
   }

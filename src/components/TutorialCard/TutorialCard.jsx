@@ -31,7 +31,7 @@ const TutorialCard = ({ tutorial }) => {
           rel="noopener noreferrer"
           className="tutorial-link"
         >
-          Открыть урок →
+          Open Tutorial →
         </a>
       )}
     </div>

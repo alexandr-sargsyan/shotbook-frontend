@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import SearchBar from '../components/SearchBar/SearchBar';
-import Filters from '../components/Filters/Filters';
 import CategorySidebar from '../components/CategorySidebar/CategorySidebar';
+import FilterSidebar from '../components/FilterSidebar/FilterSidebar';
 import { searchVideoReferences, getCategories } from '../services/api';
 import './Home.css';
 
@@ -11,6 +11,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [filtersSidebarOpen, setFiltersSidebarOpen] = useState(false);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
   // Fetch categories
@@ -66,6 +67,13 @@ const Home = () => {
     setFilters(newFilters);
   }, []);
 
+  // Подсчет количества активных фильтров
+  const activeFiltersCount = Object.values(filters).filter(
+    (value) => value !== '' && value !== false && value !== null
+  ).length;
+
+  const hasActiveFilters = activeFiltersCount > 0;
+
   const handleCategoryToggle = useCallback((categoryId) => {
     setSelectedCategoryIds((prev) => {
       if (prev.includes(categoryId)) {
@@ -85,23 +93,37 @@ const Home = () => {
           <button
             className={`categories-toggle-btn ${selectedCategoryIds.length > 0 ? 'has-filters' : ''}`}
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            title={sidebarOpen ? "Закрыть" : "Открыть"}
+            title={sidebarOpen ? "Close" : "Open"}
           >
             {sidebarOpen ? '✕' : '☰'}
             {selectedCategoryIds.length > 0 && (
-              <span className="filter-badge"></span>
+              <span className="filter-badge">{selectedCategoryIds.length}</span>
             )}
           </button>
           <SearchBar onSearch={handleSearch} />
+          <button
+            className={`filters-toggle-btn ${hasActiveFilters ? 'has-filters' : ''}`}
+            onClick={() => setFiltersSidebarOpen(!filtersSidebarOpen)}
+            title={filtersSidebarOpen ? "Close" : "Open"}
+          >
+            {filtersSidebarOpen ? '✕' : (
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Верхний слайдер */}
+                <line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                <circle cx="14" cy="6" r="2.5" fill="currentColor"/>
+                {/* Нижний слайдер */}
+                <line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
+                <circle cx="6" cy="14" r="2.5" fill="currentColor"/>
+              </svg>
+            )}
+            {hasActiveFilters && (
+              <span className="filter-badge">{activeFiltersCount}</span>
+            )}
+          </button>
         </div>
-        <Filters
-          categories={[]}
-          onFilterChange={handleFilterChange}
-          currentFilters={filters}
-        />
       </div>
 
-      {/* Боковая панель с категориями */}
+      {/* Боковая панель с категориями (слева) */}
       {sidebarOpen && (
         <div className="empty-sidebar">
           <CategorySidebar
@@ -109,6 +131,17 @@ const Home = () => {
             selectedCategoryIds={selectedCategoryIds}
             onCategoryToggle={handleCategoryToggle}
             onClose={() => setSidebarOpen(false)}
+          />
+        </div>
+      )}
+
+      {/* Боковая панель с фильтрами (справа) */}
+      {filtersSidebarOpen && (
+        <div className="filters-sidebar">
+          <FilterSidebar
+            categories={categories}
+            onFilterChange={handleFilterChange}
+            currentFilters={filters}
           />
         </div>
       )}

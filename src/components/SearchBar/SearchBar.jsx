@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './SearchBar.css';
 
-const SearchBar = ({ onSearch, placeholder = 'Поиск видео...' }) => {
+const SearchBar = ({ onSearch, placeholder = 'Search videos...' }) => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {

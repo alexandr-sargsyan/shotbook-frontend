@@ -6,7 +6,7 @@ const VideoGrid = ({ videos = [], loading = false }) => {
   if (loading) {
     return (
       <div className="video-grid loading">
-        <div className="loading-spinner">Загрузка...</div>
+        <div className="loading-spinner">Loading...</div>
       </div>
     );
   }
@@ -14,7 +14,7 @@ const VideoGrid = ({ videos = [], loading = false }) => {
   if (videos.length === 0) {
     return (
       <div className="video-grid empty">
-        <div className="empty-message">Видео не найдены</div>
+        <div className="empty-message">No videos found</div>
       </div>
     );
   }
