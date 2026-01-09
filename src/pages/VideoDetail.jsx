@@ -19,12 +19,12 @@ const VideoDetail = () => {
     enabled: !!id,
   });
 
-  const video = videoData;
+  const video = videoData?.data;
 
   if (isLoading) {
     return (
       <div className="video-detail-page loading">
-        <div className="loading-spinner">Загрузка...</div>
+        <div className="loading-spinner">Loading...</div>
       </div>
     );
   }
@@ -32,9 +32,9 @@ const VideoDetail = () => {
   if (!video) {
     return (
       <div className="video-detail-page error">
-        <div className="error-message">Видео не найдено</div>
+        <div className="error-message">Video not found</div>
         <button onClick={() => navigate('/')} className="back-button">
-          Вернуться к каталогу
+          Back to catalog
         </button>
       </div>
     );
@@ -43,7 +43,7 @@ const VideoDetail = () => {
   return (
     <div className="video-detail-page">
       <button className="back-button" onClick={() => navigate('/')}>
-        ← Назад
+        ← Back
       </button>
       <div className="video-detail-container">
         <div className="video-detail-main">

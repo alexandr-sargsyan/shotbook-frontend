@@ -1,0 +1,93 @@
+.unified-video-player {
+  position: relative;
+  width: 100%;
+  margin: 0.5cm auto; /* 0.5 см сверху и снизу */
+  padding: 0 5mm; /* 5 мм слева и справа */
+  box-sizing: border-box;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 177.78%; /* 9:16 aspect ratio */
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.video-container iframe,
+.video-container blockquote {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 16px;
+  background: #f5f5f5;
+}
+
+/* Адаптивность - мобильные устройства */
+@media (max-width: 480px) {
+  .unified-video-player {
+    max-width: 100%;
+    width: calc(100% - 10mm); /* 5 мм с каждой стороны */
+    margin: 0.5cm auto;
+    padding: 0;
+  }
+
+  .video-container {
+    padding-bottom: 177.78%;
+    border-radius: 0;
+  }
+}
+
+/* Планшеты (портрет) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .unified-video-player {
+    max-width: 380px;
+    width: calc(100% - 10mm); /* 5 мм с каждой стороны */
+    margin: 0.5cm auto;
+  }
+}
+
+/* Планшеты (ландшафт) и маленькие ноутбуки */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .unified-video-player {
+    max-width: 420px;
+    width: calc(100% - 10mm);
+    margin: 0.5cm auto;
+  }
+}
+
+/* Средние экраны */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .unified-video-player {
+    max-width: 460px;
+    width: calc(100% - 10mm);
+    margin: 0.5cm auto;
+  }
+}
+
+/* Большие экраны */
+@media (min-width: 1441px) {
+  .unified-video-player {
+    max-width: 500px;
+    width: calc(100% - 10mm);
+    margin: 0.5cm auto;
+  }
+}
+

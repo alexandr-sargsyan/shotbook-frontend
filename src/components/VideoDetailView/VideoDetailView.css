@@ -11,6 +11,12 @@
   max-width: 100%;
   position: relative;
   background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .video-embed {
@@ -35,21 +41,24 @@
 
 .video-placeholder-large {
   width: 100%;
-  padding-top: 56.25%;
+  padding-top: 177.78%; /* 9:16 aspect ratio */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
 }
 
-.video-icon-large {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.video-placeholder-large .video-icon-large {
   font-size: 64px;
   color: white;
+  margin-bottom: 16px;
+}
+
+.video-placeholder-large p {
+  color: white;
+  font-size: 18px;
 }
 
 .video-detail-loading {

@@ -35,6 +35,8 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .video-detail-sidebar-wrapper {
@@ -74,6 +76,7 @@
   .video-detail-main {
     height: 50vh;
     min-height: 300px;
+    padding: 10px;
   }
 
   .video-detail-sidebar-wrapper {
