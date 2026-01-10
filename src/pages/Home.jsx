@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import SearchBar from '../components/SearchBar/SearchBar';
@@ -8,11 +9,23 @@ import { searchVideoReferences, getCategories } from '../services/api';
 import './Home.css';
 
 const Home = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [filtersSidebarOpen, setFiltersSidebarOpen] = useState(false);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+
+  // Обработка URL параметра category_id при загрузке страницы или изменении URL
+  useEffect(() => {
+    const categoryIdParam = searchParams.get('category_id');
+    if (categoryIdParam) {
+      const categoryId = parseInt(categoryIdParam, 10);
+      if (!isNaN(categoryId)) {
+        setSelectedCategoryIds([categoryId]);
+      }
+    }
+  }, [searchParams]);
 
   // Fetch categories
   const { data: categoriesData } = useQuery({
@@ -48,6 +61,10 @@ const Home = () => {
     if (queryParams[key] === undefined || queryParams[key] === '' || queryParams[key] === false) {
       delete queryParams[key];
     }
+    // Удаляем пустые массивы
+    if (Array.isArray(queryParams[key]) && queryParams[key].length === 0) {
+      delete queryParams[key];
+    }
   });
 
   // Fetch videos
@@ -68,9 +85,12 @@ const Home = () => {
   }, []);
 
   // Подсчет количества активных фильтров
-  const activeFiltersCount = Object.values(filters).filter(
-    (value) => value !== '' && value !== false && value !== null
-  ).length;
+  const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
+    if (key === 'tag_ids') {
+      return Array.isArray(value) && value.length > 0;
+    }
+    return value !== '' && value !== false && value !== null;
+  }).length;
 
   const hasActiveFilters = activeFiltersCount > 0;
 

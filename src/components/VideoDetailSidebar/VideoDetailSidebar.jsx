@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TagBadge from '../TagBadge/TagBadge';
 import TutorialCard from '../TutorialCard/TutorialCard';
 import './VideoDetailSidebar.css';
 
 const VideoDetailSidebar = ({ video }) => {
+  const navigate = useNavigate();
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
   if (!video) {
     return null;
   }
 
   const hasFeature = (feature) => {
     return video[feature] === true;
+  };
+
+  const handleCategoryClick = (categoryId) => {
+    navigate(`/?category_id=${categoryId}`);
   };
 
   const features = [
@@ -22,30 +30,32 @@ const VideoDetailSidebar = ({ video }) => {
 
   return (
     <div className="video-detail-sidebar">
+      <div className="sidebar-top-actions">
+        {video.category && (
+          <button
+            onClick={() => handleCategoryClick(video.category.id)}
+            className="category-link"
+          >
+            {video.category.name}
+          </button>
+        )}
+      </div>
       <div className="sidebar-header">
         <h2 className="video-title">{video.title}</h2>
-        {video.category && (
-          <span className="video-category-badge">{video.category.name}</span>
-        )}
       </div>
 
       {video.public_summary && (
         <div className="sidebar-section">
           <h3>Description</h3>
-          <p className="video-summary">{video.public_summary}</p>
+          <div 
+            className={`description-container ${!isDescriptionExpanded ? 'collapsed' : ''}`}
+            onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+          >
+            <p className="video-summary">{video.public_summary}</p>
+          </div>
         </div>
       )}
 
-      <div className="sidebar-section">
-        <a
-          href={video.source_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="source-link"
-        >
-          Open Original →
-        </a>
-      </div>
 
       {video.tags && video.tags.length > 0 && (
         <div className="sidebar-section">
@@ -54,6 +64,25 @@ const VideoDetailSidebar = ({ video }) => {
             {video.tags.map((tag) => (
               <TagBadge key={tag.id} tag={tag} />
             ))}
+          </div>
+        </div>
+      )}
+
+      {features.filter(feature => hasFeature(feature.key)).length > 0 && (
+        <div className="sidebar-section">
+          <h3>Features</h3>
+          <div className="features-list">
+            {features
+              .filter(feature => hasFeature(feature.key))
+              .map((feature) => (
+                <div
+                  key={feature.key}
+                  className="feature-item active"
+                >
+                  <span className="feature-icon">✓</span>
+                  <span className="feature-label">{feature.label}</span>
+                </div>
+              ))}
           </div>
         </div>
       )}
@@ -68,23 +97,6 @@ const VideoDetailSidebar = ({ video }) => {
           </div>
         </div>
       )}
-
-      <div className="sidebar-section">
-        <h3>Features</h3>
-        <div className="features-list">
-          {features.map((feature) => (
-            <div
-              key={feature.key}
-              className={`feature-item ${hasFeature(feature.key) ? 'active' : ''}`}
-            >
-              <span className="feature-icon">
-                {hasFeature(feature.key) ? '✓' : '○'}
-              </span>
-              <span className="feature-label">{feature.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {video.details_public && Object.keys(video.details_public).length > 0 && (
         <div className="sidebar-section">

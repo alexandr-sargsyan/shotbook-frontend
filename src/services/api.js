@@ -37,9 +37,13 @@ export const getCategory = async (id) => {
   return api.get(`/categories/${id}`);
 };
 
-// Get all tags
-export const getTags = async () => {
-  return api.get('/tags');
+// Get all tags with optional search
+export const getTags = async (search = '') => {
+  const params = {};
+  if (search) {
+    params.search = search;
+  }
+  return api.get('/tags', { params });
 };
 
 export default api;
