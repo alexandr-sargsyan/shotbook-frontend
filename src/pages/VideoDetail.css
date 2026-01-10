@@ -23,6 +23,28 @@
   background-color: white;
 }
 
+.open-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: inline-block;
+}
+
+.open-button:hover {
+  background-color: #0056b3;
+}
+
+
 .video-detail-container {
   display: flex;
   height: 100vh;
@@ -37,10 +59,11 @@
   overflow: hidden;
   padding: 20px;
   box-sizing: border-box;
+  position: relative;
 }
 
 .video-detail-sidebar-wrapper {
-  width: 400px;
+  width: 500px; /* Увеличено на 25% (было 400px) */
   flex-shrink: 0;
   background-color: white;
   overflow-y: auto;
@@ -64,7 +87,7 @@
 
 @media (max-width: 1024px) {
   .video-detail-sidebar-wrapper {
-    width: 350px;
+    width: 438px; /* Увеличено на 25% (было 350px) */
   }
 }
 
@@ -88,6 +111,13 @@
   .back-button {
     top: 10px;
     left: 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .open-button {
+    top: 10px;
+    right: 10px;
     padding: 8px 16px;
     font-size: 14px;
   }

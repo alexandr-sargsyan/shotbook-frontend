@@ -42,11 +42,21 @@ const VideoDetail = () => {
 
   return (
     <div className="video-detail-page">
-      <button className="back-button" onClick={() => navigate('/')}>
-        ← Back
-      </button>
       <div className="video-detail-container">
         <div className="video-detail-main">
+          <button className="back-button" onClick={() => navigate('/')}>
+            ← Back
+          </button>
+          {video.source_url && (
+            <a
+              href={video.source_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="open-button"
+            >
+              Open →
+            </a>
+          )}
           <VideoDetailView video={video} />
         </div>
         <div className="video-detail-sidebar-wrapper">
