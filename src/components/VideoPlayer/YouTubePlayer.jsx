@@ -8,7 +8,7 @@ const YouTubePlayer = ({ videoId, autoplay, muted, loop }) => {
     const params = new URLSearchParams({
       controls: '0',
       autoplay: autoplay ? '1' : '0',
-      mute: muted ? '1' : '0',
+      mute: '0', // Всегда включен звук для YouTube
       rel: '0',
       playsinline: '1',
       enablejsapi: '1',
