@@ -4,17 +4,19 @@ const TikTokPlayer = ({ videoId, autoplay, muted, loop }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // Параметры для TikTok iframe
+    // Параметры для TikTok player v1 (официальный Embed Player для разработчиков)
     const params = new URLSearchParams({
-      controls: '0',
       autoplay: autoplay ? '1' : '0',
-      muted: muted ? '1' : '0',
       loop: loop ? '1' : '0',
+      muted: '0', // Всегда включен звук для TikTok
+      controls: '1', // Показать контролы
+      description: '0', // Скрыть описание
+      music_info: '0', // Скрыть информацию о музыке
       rel: '0',
     });
 
-    // TikTok embed URL - используем стандартный формат
-    const embedUrl = `https://www.tiktok.com/embed/v2/${videoId}?${params.toString()}`;
+    // TikTok player v1 URL - это видеоплеер, а не карточка поста
+    const embedUrl = `https://www.tiktok.com/player/v1/${videoId}?${params.toString()}`;
 
     // Создать iframe
     if (containerRef.current) {
