@@ -64,4 +64,3 @@ const UnifiedVideoPlayer = ({
 UnifiedVideoPlayer.displayName = 'UnifiedVideoPlayer';
 
 export default UnifiedVideoPlayer;
-

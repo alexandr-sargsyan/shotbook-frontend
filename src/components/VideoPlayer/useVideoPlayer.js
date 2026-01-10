@@ -110,4 +110,3 @@ export const useVideoPlayer = (initialMuted = true) => {
     updateMutedState,
   };
 };
-

@@ -4,10 +4,8 @@ import './VideoOverlay.css';
 const VideoOverlay = ({ 
   platform, 
   isPlaying = false, 
-  isMuted = true,
   onPlay,
   onPause,
-  onToggleMute,
 }) => {
   // Для Instagram не показываем overlay, так как у него свой интерфейс
   if (platform === 'instagram') {
@@ -30,15 +28,6 @@ const VideoOverlay = ({
     }
   };
 
-  const handleMuteClick = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    // Для звука не перезапускаем видео
-    if (onToggleMute) {
-      onToggleMute();
-    }
-  };
-
   return (
     <div className="video-overlay">
       {!isPlaying && (
@@ -51,15 +40,8 @@ const VideoOverlay = ({
           ⏸
         </button>
       )}
-      <button 
-        className="mute-button" 
-        onClick={handleMuteClick}
-      >
-        {isMuted ? '🔇' : '🔊'}
-      </button>
     </div>
   );
 };
 
 export default VideoOverlay;
-
