@@ -1,9 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import YouTubePlayer from './YouTubePlayer';
 import TikTokPlayer from './TikTokPlayer';
 import InstagramPlayer from './InstagramPlayer';
-import VideoOverlay from './VideoOverlay';
-import { useVideoPlayer } from './useVideoPlayer';
 import './UnifiedVideoPlayer.css';
 
 const UnifiedVideoPlayer = ({ 
@@ -14,30 +12,6 @@ const UnifiedVideoPlayer = ({
   muted = true,
   loop = false,
 }) => {
-  const youtubePlayerRef = useRef(null);
-  const tiktokPlayerRef = useRef(null);
-  const videoPlayer = useVideoPlayer(muted);
-
-  // Обработчик изменения состояния от плеера
-  const handleStateChange = (playing, isMuted) => {
-    videoPlayer.updatePlayingState(playing);
-    videoPlayer.updateMutedState(isMuted);
-  };
-
-  // Устанавливаем ref плеера в хук после инициализации
-  React.useEffect(() => {
-    // Небольшая задержка для инициализации плеера
-    const timer = setTimeout(() => {
-      if (platform === 'youtube' && youtubePlayerRef.current) {
-        videoPlayer.setPlayer(youtubePlayerRef.current);
-      } else if (platform === 'tiktok' && tiktokPlayerRef.current) {
-        videoPlayer.setPlayer(tiktokPlayerRef.current);
-      }
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [platform, platformVideoId, videoPlayer]);
-
   // Определение, какой плеер использовать
   const renderPlayer = () => {
     if (!platform || !platformVideoId) {
@@ -48,24 +22,20 @@ const UnifiedVideoPlayer = ({
       case 'youtube':
         return (
           <YouTubePlayer
-            ref={youtubePlayerRef}
             videoId={platformVideoId}
             autoplay={autoplay}
             muted={muted}
             loop={loop}
-            onStateChange={handleStateChange}
           />
         );
       
       case 'tiktok':
         return (
           <TikTokPlayer
-            ref={tiktokPlayerRef}
             videoId={platformVideoId}
             autoplay={autoplay}
             muted={muted}
             loop={loop}
-            onStateChange={handleStateChange}
           />
         );
       
@@ -87,17 +57,11 @@ const UnifiedVideoPlayer = ({
       <div className="video-container">
         {renderPlayer()}
       </div>
-      <VideoOverlay 
-        platform={platform}
-        isPlaying={videoPlayer.isPlaying}
-        isMuted={videoPlayer.isMuted}
-        onPlay={videoPlayer.play}
-        onPause={videoPlayer.pause}
-        onToggleMute={videoPlayer.toggleMute}
-      />
     </div>
   );
 };
+
+UnifiedVideoPlayer.displayName = 'UnifiedVideoPlayer';
 
 export default UnifiedVideoPlayer;
 

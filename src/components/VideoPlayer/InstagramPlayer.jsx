@@ -33,5 +33,7 @@ const InstagramPlayer = ({ postId, sourceUrl }) => {
   return <div ref={containerRef} className="instagram-player" />;
 };
 
+InstagramPlayer.displayName = 'InstagramPlayer';
+
 export default InstagramPlayer;
 
