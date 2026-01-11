@@ -16,7 +16,7 @@
 .video-preview {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 aspect ratio */
+  padding-top: 177.78%; /* 9:16 aspect ratio (вертикальное, как в TikTok) */
   background-color: #000;
   overflow: hidden;
 }
@@ -112,18 +112,23 @@
 
 .video-info {
   padding: 8px 12px;
+  height: 40px; /* Фиксированная высота блока */
+  display: flex;
+  align-items: center;
 }
 
 .video-title {
   margin: 0;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 13px; /* Размер как в Google Docs */
+  font-weight: 300; /* Тонкий текст */
+  font-style: italic; /* Легкий курсив */
   color: #333;
   line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -133,10 +138,13 @@
 
   .video-info {
     padding: 6px 10px;
+    height: 36px; /* Фиксированная высота для мобильных */
   }
 
   .video-title {
-    font-size: 11px;
+    font-size: 12px; /* Немного меньше на мобильных */
+    font-weight: 300; /* Тонкий текст */
+    font-style: italic; /* Легкий курсив */
   }
 }
 
