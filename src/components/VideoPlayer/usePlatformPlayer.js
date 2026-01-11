@@ -2,18 +2,12 @@ import React from 'react';
 import YouTubePlayer from './YouTubePlayer';
 import TikTokPlayer from './TikTokPlayer';
 import InstagramPlayer from './InstagramPlayer';
-import './UnifiedVideoPlayer.css';
 
-const UnifiedVideoPlayer = ({ 
-  platform, 
-  platformVideoId, 
-  sourceUrl,
-  autoplay = true,
-  muted = true,
-  loop = false,
-}) => {
-  // Определение, какой плеер использовать
-  const renderPlayer = () => {
+/**
+ * Хук для выбора и рендеринга правильного плеера в зависимости от платформы
+ */
+export const usePlatformPlayer = (platform, platformVideoId, sourceUrl) => {
+  const renderPlayer = (playerProps = {}) => {
     if (!platform || !platformVideoId) {
       return <div className="video-error">Video not available</div>;
     }
@@ -23,9 +17,10 @@ const UnifiedVideoPlayer = ({
         return (
           <YouTubePlayer
             videoId={platformVideoId}
-            autoplay={autoplay}
-            muted={muted}
-            loop={loop}
+            autoplay={playerProps.autoplay}
+            muted={playerProps.muted}
+            loop={playerProps.loop}
+            controls={playerProps.controls}
           />
         );
       
@@ -33,9 +28,10 @@ const UnifiedVideoPlayer = ({
         return (
           <TikTokPlayer
             videoId={platformVideoId}
-            autoplay={autoplay}
-            muted={muted}
-            loop={loop}
+            autoplay={playerProps.autoplay}
+            muted={playerProps.muted}
+            loop={playerProps.loop}
+            controls={playerProps.controls}
           />
         );
       
@@ -52,15 +48,6 @@ const UnifiedVideoPlayer = ({
     }
   };
 
-  return (
-    <div className="unified-video-player">
-      <div className="video-container">
-        {renderPlayer()}
-      </div>
-    </div>
-  );
+  return { renderPlayer };
 };
 
-UnifiedVideoPlayer.displayName = 'UnifiedVideoPlayer';
-
-export default UnifiedVideoPlayer;

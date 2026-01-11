@@ -44,14 +44,14 @@
   pointer-events: auto;
 }
 
-.video-player-wrapper .unified-video-player {
+.video-player-wrapper .video-list-player {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-.video-player-wrapper .video-container {
+.video-player-wrapper .video-list-player .video-container {
   width: 100%;
   height: 100%;
   padding-bottom: 0;

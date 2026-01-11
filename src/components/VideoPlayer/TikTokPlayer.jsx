@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-const TikTokPlayer = ({ videoId, autoplay, muted, loop }) => {
+const TikTokPlayer = ({ videoId, autoplay, muted, loop, controls = false }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -8,8 +8,8 @@ const TikTokPlayer = ({ videoId, autoplay, muted, loop }) => {
     const params = new URLSearchParams({
       autoplay: autoplay ? '1' : '0',
       loop: loop ? '1' : '0',
-      muted: '0', // Всегда включен звук для TikTok
-      controls: '1', // Показать контролы
+      muted: muted ? '1' : '0',  // Учитываем параметр muted
+      controls: controls ? '1' : '0',  // Контролы в зависимости от пропса
       description: '0', // Скрыть описание
       music_info: '0', // Скрыть информацию о музыке
       rel: '0',
@@ -31,7 +31,7 @@ const TikTokPlayer = ({ videoId, autoplay, muted, loop }) => {
       containerRef.current.innerHTML = '';
       containerRef.current.appendChild(iframe);
     }
-  }, [videoId, autoplay, muted, loop]);
+  }, [videoId, autoplay, muted, loop, controls]);
 
   return <div ref={containerRef} className="tiktok-player" />;
 };

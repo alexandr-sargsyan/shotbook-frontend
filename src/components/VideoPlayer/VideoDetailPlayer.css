@@ -1,4 +1,5 @@
-.unified-video-player {
+/* Стили для VideoDetailPlayer - используется на детальной странице */
+.video-detail-player {
   position: relative;
   width: 100%;
   margin: 0.5cm auto; /* 0.5 см сверху и снизу */
@@ -6,7 +7,7 @@
   box-sizing: border-box;
 }
 
-.video-container {
+.video-detail-player .video-container {
   position: relative;
   width: 100%;
   padding-bottom: 177.78%; /* 9:16 aspect ratio */
@@ -16,8 +17,8 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.video-container iframe,
-.video-container blockquote {
+.video-detail-player .video-container iframe,
+.video-detail-player .video-container blockquote {
   position: absolute;
   top: 0;
   left: 0;
@@ -26,7 +27,7 @@
   border: none;
 }
 
-.video-error {
+.video-detail-player .video-error {
   position: absolute;
   top: 0;
   left: 0;
@@ -42,14 +43,14 @@
 
 /* Адаптивность - мобильные устройства */
 @media (max-width: 480px) {
-  .unified-video-player {
+  .video-detail-player {
     max-width: 100%;
     width: calc(100% - 10mm); /* 5 мм с каждой стороны */
     margin: 0.5cm auto;
     padding: 0;
   }
 
-  .video-container {
+  .video-detail-player .video-container {
     padding-bottom: 177.78%;
     border-radius: 0;
   }
@@ -57,7 +58,7 @@
 
 /* Планшеты (портрет) */
 @media (min-width: 481px) and (max-width: 768px) {
-  .unified-video-player {
+  .video-detail-player {
     max-width: 380px;
     width: calc(100% - 10mm); /* 5 мм с каждой стороны */
     margin: 0.5cm auto;
@@ -66,7 +67,7 @@
 
 /* Планшеты (ландшафт) и маленькие ноутбуки */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .unified-video-player {
+  .video-detail-player {
     max-width: 420px;
     width: calc(100% - 10mm);
     margin: 0.5cm auto;
@@ -75,7 +76,7 @@
 
 /* Средние экраны */
 @media (min-width: 1025px) and (max-width: 1440px) {
-  .unified-video-player {
+  .video-detail-player {
     max-width: 460px;
     width: calc(100% - 10mm);
     margin: 0.5cm auto;
@@ -84,7 +85,7 @@
 
 /* Большие экраны */
 @media (min-width: 1441px) {
-  .unified-video-player {
+  .video-detail-player {
     max-width: 500px;
     width: calc(100% - 10mm);
     margin: 0.5cm auto;

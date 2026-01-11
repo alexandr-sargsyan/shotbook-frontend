@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 
-const YouTubePlayer = ({ videoId, autoplay, muted, loop }) => {
+const YouTubePlayer = ({ videoId, autoplay, muted, loop, controls = false }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
     // Параметры для YouTube iframe
     const params = new URLSearchParams({
-      controls: '0',
+      controls: controls ? '1' : '0',  // Контролы в зависимости от пропса
       autoplay: autoplay ? '1' : '0',
-      mute: '0', // Всегда включен звук для YouTube
+      mute: muted ? '1' : '0',  // Учитываем параметр muted
       rel: '0',
       playsinline: '1',
       enablejsapi: '1',
@@ -36,7 +36,7 @@ const YouTubePlayer = ({ videoId, autoplay, muted, loop }) => {
       containerRef.current.innerHTML = '';
       containerRef.current.appendChild(iframe);
     }
-  }, [videoId, autoplay, muted, loop]);
+  }, [videoId, autoplay, muted, loop, controls]);
 
   return <div ref={containerRef} className="youtube-player" />;
 };

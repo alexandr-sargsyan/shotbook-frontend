@@ -1,0 +1,45 @@
+/* Стили для VideoListPlayer - используется в списке видео (VideoCard) */
+.video-list-player {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.video-list-player .video-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 0; /* Переопределяем padding-bottom из базовых стилей */
+  background: #000;
+  border-radius: 0; /* Без скругления в списке */
+  overflow: hidden;
+  box-shadow: none; /* Без тени в списке */
+}
+
+.video-list-player .video-container iframe,
+.video-list-player .video-container blockquote {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.video-list-player .video-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+  background: #f5f5f5;
+}
+

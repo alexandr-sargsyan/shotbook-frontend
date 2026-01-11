@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import UnifiedVideoPlayer from '../VideoPlayer/UnifiedVideoPlayer';
+import VideoListPlayer from '../VideoPlayer/VideoListPlayer';
 import './VideoCard.css';
 
 const VideoCard = ({ video }) => {
@@ -77,13 +77,11 @@ const VideoCard = ({ video }) => {
       <div className="video-preview">
         {hasVideo && shouldLoad ? (
           <div className="video-player-wrapper">
-            <UnifiedVideoPlayer
+            <VideoListPlayer
               platform={video.platform}
               platformVideoId={video.platform_video_id}
               sourceUrl={video.source_url}
-              autoplay={isVisible}
-              muted={true}
-              loop={true}
+              isVisible={isVisible}
             />
           </div>
         ) : hasPreview ? (
