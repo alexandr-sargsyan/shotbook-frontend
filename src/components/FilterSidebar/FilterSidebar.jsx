@@ -13,7 +13,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   const tagDropdownRef = useRef(null);
 
   const [filters, setFilters] = useState({
-    platform: currentFilters.platform || '',
+    platform: currentFilters.platform || [],
     pacing: currentFilters.pacing || '',
     production_level: currentFilters.production_level || '',
     has_visual_effects: currentFilters.has_visual_effects || false,
@@ -86,7 +86,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     const newTagIds = currentFilters.tag_ids || [];
     setSelectedTagIds(newTagIds);
     setFilters({
-      platform: currentFilters.platform || '',
+      platform: currentFilters.platform || [],
       pacing: currentFilters.pacing || '',
       production_level: currentFilters.production_level || '',
       has_visual_effects: currentFilters.has_visual_effects || false,
@@ -139,9 +139,24 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     }
   };
 
+  const handlePlatformToggle = (platformValue) => {
+    const newPlatforms = filters.platform.includes(platformValue)
+      ? filters.platform.filter((p) => p !== platformValue)
+      : [...filters.platform, platformValue];
+    
+    const newFilters = {
+      ...filters,
+      platform: newPlatforms,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
   const handleReset = () => {
     const resetFilters = {
-      platform: '',
+      platform: [],
       pacing: '',
       production_level: '',
       has_visual_effects: false,
@@ -162,7 +177,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   };
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'tag_ids') {
+    if (key === 'tag_ids' || key === 'platform') {
       return Array.isArray(value) && value.length > 0;
     }
     return value !== '' && value !== false;
@@ -173,16 +188,40 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
       <div className="filter-list">
         <div className="filter-group">
           <label>Platform</label>
-          <select
-            value={filters.platform}
-            onChange={(e) => handleChange('platform', e.target.value)}
-          >
-            <option value="">All platforms</option>
-            <option value="youtube">YouTube</option>
-            <option value="instagram">Instagram</option>
-            <option value="tiktok">TikTok</option>
-            <option value="facebook">Facebook</option>
-          </select>
+          <div className="platform-checkboxes">
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('youtube')}
+                onChange={() => handlePlatformToggle('youtube')}
+              />
+              YouTube
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('instagram')}
+                onChange={() => handlePlatformToggle('instagram')}
+              />
+              Instagram
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('tiktok')}
+                onChange={() => handlePlatformToggle('tiktok')}
+              />
+              TikTok
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('facebook')}
+                onChange={() => handlePlatformToggle('facebook')}
+              />
+              Facebook
+            </label>
+          </div>
         </div>
 
         <div className="filter-group">
