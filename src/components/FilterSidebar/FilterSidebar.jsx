@@ -181,6 +181,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
             <option value="youtube">YouTube</option>
             <option value="instagram">Instagram</option>
             <option value="tiktok">TikTok</option>
+            <option value="facebook">Facebook</option>
           </select>
         </div>
 
