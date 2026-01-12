@@ -29,6 +29,51 @@
   border: none;
 }
 
+/* Специальные стили для Instagram в списке */
+.video-list-player .instagram-player {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Instagram blockquote - убираем все отступы и выравниваем */
+.video-list-player .instagram-player blockquote.instagram-media {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  transform: none !important;
+}
+
+/* Instagram iframe (когда embed.js заменил blockquote) */
+.video-list-player .instagram-player iframe {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  transform: none !important;
+}
+
 .video-list-player .video-error {
   position: absolute;
   top: 0;
