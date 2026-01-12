@@ -26,6 +26,7 @@ const VideoDetailPlayer = ({
           muted: false,          // Со звуком
           loop: false,           // Без зацикливания
           controls: true,        // С контролами
+          showText: false,       // Для Facebook: не показывать текст поста (как в списке)
         })}
       </div>
     </div>

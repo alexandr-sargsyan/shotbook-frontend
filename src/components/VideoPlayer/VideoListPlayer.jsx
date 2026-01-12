@@ -27,6 +27,7 @@ const VideoListPlayer = ({
           muted: true,           // Без звука
           loop: true,            // С зацикливанием
           controls: false,       // Без контролов
+          showText: false,       // Для Facebook: не показывать текст поста в списке
         })}
       </div>
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import YouTubePlayer from './YouTubePlayer';
 import TikTokPlayer from './TikTokPlayer';
 import InstagramPlayer from './InstagramPlayer';
+import FacebookPlayer from './FacebookPlayer';
 
 /**
  * Хук для выбора и рендеринга правильного плеера в зависимости от платформы
@@ -40,6 +41,14 @@ export const usePlatformPlayer = (platform, platformVideoId, sourceUrl) => {
           <InstagramPlayer
             postId={platformVideoId}
             sourceUrl={sourceUrl}
+          />
+        );
+      
+      case 'facebook':
+        return (
+          <FacebookPlayer
+            sourceUrl={sourceUrl}
+            showText={playerProps.showText}
           />
         );
       

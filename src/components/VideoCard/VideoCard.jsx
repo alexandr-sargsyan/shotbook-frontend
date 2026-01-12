@@ -17,6 +17,8 @@ const VideoCard = ({ video }) => {
         return '📷';
       case 'tiktok':
         return '🎵';
+      case 'facebook':
+        return '📘';
       default:
         return '🎬';
     }
