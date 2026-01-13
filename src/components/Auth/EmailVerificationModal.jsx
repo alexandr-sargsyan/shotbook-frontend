@@ -14,7 +14,7 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
 
   const handleSendCode = async () => {
     if (!email) {
-      setError('Введите email');
+      setError('Please enter your email');
       return;
     }
 
@@ -27,7 +27,7 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
       setCodeSent(true);
       setCountdown(60); // 60 секунд до возможности повторной отправки
     } else {
-      setError(result.error || 'Ошибка отправки кода');
+      setError(result.error || 'Error sending code');
     }
 
     setSendingCode(false);
@@ -64,14 +64,14 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
     const result = await verifyCode(email, code);
 
     if (result.success) {
-      // После подтверждения нужно войти вручную
-      setError('Email подтвержден. Пожалуйста, войдите.');
+      // After verification, user needs to sign in manually
+      setError('Email verified. Please sign in.');
       setTimeout(() => {
         onClose();
         onSuccess?.({ showLogin: true, email });
       }, 2000);
     } else {
-      setError(result.error || 'Неверный код');
+      setError(result.error || 'Invalid code');
     }
 
     setLoading(false);
@@ -81,12 +81,12 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
-          <h2>Подтверждение email</h2>
+          <h2>Email Verification</h2>
           <button className="auth-modal-close" onClick={onClose}>×</button>
         </div>
         <form className="auth-modal-body" onSubmit={handleVerify}>
           {error && (
-            <div className={`auth-message ${error.includes('подтвержден') ? 'success' : 'error'}`}>
+            <div className={`auth-message ${error.includes('verified') ? 'success' : 'error'}`}>
               {error}
             </div>
           )}
@@ -110,23 +110,20 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
                 onClick={handleSendCode}
                 disabled={sendingCode || !email}
               >
-                {sendingCode ? 'Отправка...' : 'Отправить код'}
+                {sendingCode ? 'Sending...' : 'Send Code'}
               </button>
             </>
           ) : (
             <>
               <p className="auth-info">
-                {codeAlreadySent 
-                  ? <>Код подтверждения отправлен на <strong>{email}</strong></>
-                  : <>Код подтверждения отправлен на <strong>{email}</strong></>
-                }
+                Verification code has been sent to <strong>{email}</strong>
               </p>
               <p className="auth-info-small">
-                Введите 6-значный код из письма. Код действителен 15 минут.
+                Enter the 6-digit code from the email. The code is valid for 15 minutes.
               </p>
 
               <div className="auth-form-group">
-                <label htmlFor="verification-code">Код подтверждения</label>
+                <label htmlFor="verification-code">Verification Code</label>
                 <input
                   type="text"
                   id="verification-code"
@@ -154,19 +151,19 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
                 className="auth-button primary"
                 disabled={loading || code.length !== 6}
               >
-                {loading ? 'Проверка...' : 'Подтвердить'}
+                {loading ? 'Verifying...' : 'Verify'}
               </button>
 
               <div className="auth-modal-footer">
                 <p>
-                  Не получили код?{' '}
+                  Didn't receive the code?{' '}
                   <button
                     type="button"
                     className="auth-link-button"
                     onClick={handleSendCode}
                     disabled={countdown > 0 || sendingCode}
                   >
-                    {countdown > 0 ? `Отправить повторно (${countdown}с)` : 'Отправить повторно'}
+                    {countdown > 0 ? `Resend (${countdown}s)` : 'Resend'}
                   </button>
                 </p>
               </div>

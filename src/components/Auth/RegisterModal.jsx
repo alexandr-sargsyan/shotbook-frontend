@@ -22,7 +22,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
       onSuccess?.({ showVerification: true, email: formData.email });
       onClose();
     } else {
-      setError(result.error || 'Ошибка регистрации');
+      setError(result.error || 'Registration error');
     }
 
     setLoading(false);
@@ -40,14 +40,14 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
-          <h2>Регистрация</h2>
+          <h2>Sign Up</h2>
           <button className="auth-modal-close" onClick={onClose}>×</button>
         </div>
         <form className="auth-modal-body" onSubmit={handleSubmit}>
           {error && <div className="auth-error">{error}</div>}
           
           <div className="auth-form-group">
-            <label htmlFor="name">Имя</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
               id="name"
@@ -55,7 +55,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
               value={formData.name}
               onChange={handleChange}
               required
-              placeholder="Ваше имя"
+              placeholder="Your name"
             />
           </div>
 
@@ -73,7 +73,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
           </div>
 
           <div className="auth-form-group">
-            <label htmlFor="password">Пароль</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -82,7 +82,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
               onChange={handleChange}
               required
               minLength={8}
-              placeholder="Минимум 8 символов"
+              placeholder="Minimum 8 characters"
             />
           </div>
 
@@ -91,12 +91,12 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
             className="auth-button primary"
             disabled={loading}
           >
-            {loading ? 'Регистрация...' : 'Зарегистрироваться'}
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
 
           <div className="auth-modal-footer">
             <p>
-              Уже есть аккаунт?{' '}
+              Already have an account?{' '}
               <button
                 type="button"
                 className="auth-link-button"
@@ -105,7 +105,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
                   onSwitchToLogin?.();
                 }}
               >
-                Войти
+                Sign In
               </button>
             </p>
           </div>

@@ -15,14 +15,14 @@ const CollectionItemButton = ({ collection, videoId, savedCollectionIds = [], on
     >
       <span className="collection-name">{collection.name}</span>
       {collection.is_default && (
-        <span className="collection-badge">По умолчанию</span>
+        <span className="collection-badge">Default</span>
       )}
       {hasVideo && (
-        <span className="collection-saved-badge">✓ Сохранено</span>
+        <span className="collection-saved-badge">✓ Saved</span>
       )}
       {collection.video_references_count > 0 && (
         <span className="collection-count">
-          {collection.video_references_count} видео
+          {collection.video_references_count} videos
         </span>
       )}
     </button>
@@ -120,7 +120,7 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false 
       <button
         className={`save-to-collection-button ${isSaved ? 'saved' : ''}`}
         onClick={handleClick}
-        title={isSaved ? 'Видео сохранено в каталоге' : 'Сохранить в каталог'}
+        title={isSaved ? 'Video saved in collection' : 'Save to collection'}
       >
         <svg
           width="20"
@@ -134,24 +134,24 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false 
         >
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
         </svg>
-        <span>Сохранить</span>
+        <span>Save</span>
       </button>
 
       {showModal && (
         <div className="collection-modal-overlay" onClick={() => setShowModal(false)}>
           <div className="collection-modal" onClick={(e) => e.stopPropagation()}>
             <div className="collection-modal-header">
-              <h3>Выберите каталог</h3>
+              <h3>Select Collection</h3>
               <button className="collection-modal-close" onClick={() => setShowModal(false)}>×</button>
             </div>
             <div className="collection-modal-body">
               {isLoading ? (
-                <div className="loading">Загрузка каталогов...</div>
+                <div className="loading">Loading collections...</div>
               ) : collections.length === 0 ? (
                 <div className="empty-collections">
-                  <p>У вас пока нет каталогов</p>
+                  <p>You don't have any collections yet</p>
                   <a href="/collections" className="create-collection-link">
-                    Создать каталог
+                    Create Collection
                   </a>
                 </div>
               ) : (

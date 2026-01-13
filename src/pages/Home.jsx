@@ -6,6 +6,7 @@ import SearchBar from '../components/SearchBar/SearchBar';
 import CategorySidebar from '../components/CategorySidebar/CategorySidebar';
 import FilterSidebar from '../components/FilterSidebar/FilterSidebar';
 import Navigation from '../components/Navigation/Navigation';
+import Logo from '../components/Logo/Logo';
 import LoginModal from '../components/Auth/LoginModal';
 import RegisterModal from '../components/Auth/RegisterModal';
 import EmailVerificationModal from '../components/Auth/EmailVerificationModal';
@@ -145,6 +146,7 @@ const Home = () => {
   return (
     <div className="home-page">
       <div className="home-header">
+        <Logo />
         <div className="search-container">
           <button
             className={`categories-toggle-btn ${selectedCategoryIds.length > 0 ? 'has-filters' : ''}`}

@@ -84,7 +84,7 @@ const Navigation = () => {
                       setShowUserMenu(false);
                     }}
                   >
-                    Профиль
+                    Profile
                   </button>
                   <button
                     className="user-menu-item"
@@ -93,11 +93,11 @@ const Navigation = () => {
                       setShowUserMenu(false);
                     }}
                   >
-                    Мои каталоги
+                    My Collections
                   </button>
                   <div className="user-menu-divider" />
                   <button className="user-menu-item" onClick={handleLogout}>
-                    Выйти
+                    Logout
                   </button>
                 </div>
               </>
@@ -109,13 +109,13 @@ const Navigation = () => {
               className="auth-button login"
               onClick={() => setShowLoginModal(true)}
             >
-              Войти
+              Sign In
             </button>
             <button
               className="auth-button register"
               onClick={() => setShowRegisterModal(true)}
             >
-              Зарегистрироваться
+              Sign Up
             </button>
           </div>
         )}

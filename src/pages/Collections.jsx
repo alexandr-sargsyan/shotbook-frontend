@@ -63,10 +63,10 @@ const Collections = () => {
 
   const handleDelete = (id, isDefault) => {
     if (isDefault) {
-      alert('Нельзя удалить каталог по умолчанию');
+      alert('Cannot delete default collection');
       return;
     }
-    if (window.confirm('Вы уверены, что хотите удалить этот каталог?')) {
+    if (window.confirm('Are you sure you want to delete this collection?')) {
       deleteMutation.mutate(id);
     }
   };
@@ -74,21 +74,24 @@ const Collections = () => {
   return (
     <div className="collections-page">
       <div className="collections-container">
+        <button className="back-button" onClick={() => navigate('/')}>
+          ← Back
+        </button>
         <div className="collections-header">
-          <h1>Мои каталоги</h1>
+          <h1>My Collections</h1>
           <button
             className="create-collection-button"
             onClick={() => setShowCreateModal(true)}
           >
-            + Создать каталог
+            + Create Collection
           </button>
         </div>
 
         {isLoading ? (
-          <div className="loading">Загрузка...</div>
+          <div className="loading">Loading...</div>
         ) : collections.length === 0 ? (
           <div className="empty-collections">
-            <p>У вас пока нет каталогов</p>
+            <p>You don't have any collections yet</p>
           </div>
         ) : (
           <div className="collections-grid">
@@ -100,10 +103,10 @@ const Collections = () => {
               >
                 <h3>{collection.name}</h3>
                 {collection.is_default && (
-                  <span className="default-badge">По умолчанию</span>
+                  <span className="default-badge">Default</span>
                 )}
                 <p className="collection-count">
-                  {collection.video_references_count || 0} видео
+                  {collection.video_references_count || 0} videos
                 </p>
                 {!collection.is_default && (
                   <button
@@ -113,7 +116,7 @@ const Collections = () => {
                       handleDelete(collection.id, collection.is_default);
                     }}
                   >
-                    Удалить
+                    Delete
                   </button>
                 )}
               </div>
@@ -125,19 +128,19 @@ const Collections = () => {
       {showCreateModal && (
         <div className="modal-overlay" onClick={() => setShowCreateModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>Создать каталог</h2>
+            <h2>Create Collection</h2>
             <form onSubmit={handleCreate}>
               <input
                 type="text"
                 value={newCollectionName}
                 onChange={(e) => setNewCollectionName(e.target.value)}
-                placeholder="Название каталога"
+                placeholder="Collection name"
                 required
                 autoFocus
               />
               <div className="modal-actions">
                 <button type="submit" disabled={createMutation.isLoading}>
-                  {createMutation.isLoading ? 'Создание...' : 'Создать'}
+                  {createMutation.isLoading ? 'Creating...' : 'Create'}
                 </button>
                 <button
                   type="button"
@@ -146,7 +149,7 @@ const Collections = () => {
                     setNewCollectionName('');
                   }}
                 >
-                  Отмена
+                  Cancel
                 </button>
               </div>
             </form>

@@ -49,6 +49,7 @@ export const usePlatformPlayer = (platform, platformVideoId, sourceUrl) => {
           <FacebookPlayer
             sourceUrl={sourceUrl}
             showText={playerProps.showText}
+            autoplay={playerProps.autoplay}
           />
         );
       

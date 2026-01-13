@@ -56,7 +56,7 @@ const CollectionDetail = () => {
   if (collectionLoading) {
     return (
       <div className="collection-detail-page">
-        <div className="loading">Загрузка...</div>
+        <div className="loading">Loading...</div>
       </div>
     );
   }
@@ -64,9 +64,9 @@ const CollectionDetail = () => {
   if (!collection) {
     return (
       <div className="collection-detail-page">
-        <div className="error">Каталог не найден</div>
+        <div className="error">Collection not found</div>
         <button onClick={() => navigate('/collections')} className="back-button">
-          Назад к каталогам
+          Back to Collections
         </button>
       </div>
     );
@@ -77,23 +77,23 @@ const CollectionDetail = () => {
       <div className="collection-detail-container">
         <div className="collection-detail-header">
           <button className="back-button" onClick={() => navigate('/collections')}>
-            ← Назад
+            ← Back
           </button>
           <div className="collection-info">
             <h1>{collection.name}</h1>
             {collection.is_default && (
-              <span className="default-badge">По умолчанию</span>
+              <span className="default-badge">Default</span>
             )}
-            <p className="collection-count">{videos.length} видео</p>
+            <p className="collection-count">{videos.length} videos</p>
           </div>
         </div>
 
         <div className="collection-videos">
           {videosLoading ? (
-            <div className="loading">Загрузка видео...</div>
+            <div className="loading">Loading videos...</div>
           ) : videos.length === 0 ? (
             <div className="empty-videos">
-              <p>В этом каталоге пока нет видео</p>
+              <p>This collection is empty</p>
             </div>
           ) : (
             <VideoGrid videos={videos} loading={videosLoading} />

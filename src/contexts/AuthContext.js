@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Ошибка регистрации',
+        error: error.response?.data?.message || 'Registration error',
       };
     }
   };
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Ошибка входа',
+        error: error.response?.data?.message || 'Sign in error',
         requiresVerification: error.response?.status === 403,
       };
     }
@@ -95,7 +95,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Ошибка отправки кода',
+        error: error.response?.data?.message || 'Error sending code',
       };
     }
   };
@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.response?.data?.message || 'Неверный код',
+        error: error.response?.data?.message || 'Invalid code',
       };
     }
   };

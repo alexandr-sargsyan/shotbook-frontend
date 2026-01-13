@@ -27,7 +27,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
         setRequiresVerification(true);
         setUserEmail(formData.email);
       } else {
-        setError(result.error || 'Ошибка входа');
+        setError(result.error || 'Sign in error');
       }
     }
 
@@ -47,12 +47,12 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
       <div className="auth-modal-overlay" onClick={onClose}>
         <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
           <div className="auth-modal-header">
-            <h2>Email не подтвержден</h2>
+            <h2>Email Not Verified</h2>
             <button className="auth-modal-close" onClick={onClose}>×</button>
           </div>
           <div className="auth-modal-body">
-            <p>Для входа необходимо подтвердить email адрес.</p>
-            <p>Пожалуйста, проверьте почту и введите код подтверждения.</p>
+            <p>You need to verify your email address to sign in.</p>
+            <p>Please check your email and enter the verification code.</p>
             <button
               className="auth-button primary"
               onClick={() => {
@@ -61,7 +61,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
                 onClose();
               }}
             >
-              Ввести код подтверждения
+              Enter Verification Code
             </button>
           </div>
         </div>
@@ -73,7 +73,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
-          <h2>Вход</h2>
+          <h2>Sign In</h2>
           <button className="auth-modal-close" onClick={onClose}>×</button>
         </div>
         <form className="auth-modal-body" onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
           </div>
 
           <div className="auth-form-group">
-            <label htmlFor="password">Пароль</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -101,7 +101,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
               value={formData.password}
               onChange={handleChange}
               required
-              placeholder="Введите пароль"
+              placeholder="Enter your password"
             />
           </div>
 
@@ -110,12 +110,12 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
             className="auth-button primary"
             disabled={loading}
           >
-            {loading ? 'Вход...' : 'Войти'}
+            {loading ? 'Signing in...' : 'Sign In'}
           </button>
 
           <div className="auth-modal-footer">
             <p>
-              Нет аккаунта?{' '}
+              Don't have an account?{' '}
               <button
                 type="button"
                 className="auth-link-button"
@@ -124,7 +124,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
                   onSwitchToRegister?.();
                 }}
               >
-                Зарегистрироваться
+                Sign Up
               </button>
             </p>
           </div>

@@ -40,7 +40,7 @@ const LikeButton = ({ videoId, initialLiked = false, initialLikesCount = 0, onAu
       className={`like-button ${liked ? 'liked' : ''}`}
       onClick={handleClick}
       disabled={loading}
-      title={!isAuthenticated() ? 'Войдите, чтобы лайкать видео' : liked ? 'Убрать лайк' : 'Лайкнуть'}
+      title={!isAuthenticated() ? 'Sign in to like videos' : liked ? 'Unlike' : 'Like'}
     >
       <svg
         width="20"

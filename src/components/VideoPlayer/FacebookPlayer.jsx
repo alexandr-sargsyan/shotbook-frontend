@@ -41,8 +41,9 @@ const normalizeFacebookUrl = (url) => {
  * 
  * @param {string} sourceUrl - URL видео Facebook
  * @param {boolean} showText - Показывать ли текст поста (по умолчанию false)
+ * @param {boolean} autoplay - Автозапуск видео (по умолчанию false)
  */
-const FacebookPlayer = ({ sourceUrl, showText = false }) => {
+const FacebookPlayer = ({ sourceUrl, showText = false, autoplay = false }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -54,7 +55,9 @@ const FacebookPlayer = ({ sourceUrl, showText = false }) => {
       const encodedUrl = encodeURIComponent(normalizedUrl);
       
       // Собрать embed URL с width=400 (число в пикселях, не процент!)
-      const embedUrl = `https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=${showText ? '1' : '0'}&width=400`;
+      // Facebook может не поддерживать autoplay через параметр URL напрямую,
+      // но пересоздание iframe при изменении autoplay может помочь
+      const embedUrl = `https://www.facebook.com/plugins/video.php?href=${encodedUrl}&show_text=${showText ? '1' : '0'}&width=400&autoplay=${autoplay ? '1' : '0'}`;
       
       const iframe = document.createElement('iframe');
       iframe.src = embedUrl;
@@ -78,7 +81,7 @@ const FacebookPlayer = ({ sourceUrl, showText = false }) => {
       containerRef.current.innerHTML = '';
       containerRef.current.appendChild(iframe);
     }
-  }, [sourceUrl, showText]);
+  }, [sourceUrl, showText, autoplay]);
 
   return <div ref={containerRef} className="facebook-player" />;
 };

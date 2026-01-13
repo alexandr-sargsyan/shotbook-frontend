@@ -52,18 +52,18 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
         className="filters-toggle"
         onClick={() => setIsOpen(!isOpen)}
       >
-        Фильтры {hasActiveFilters && <span className="filter-badge">●</span>}
+        Filters {hasActiveFilters && <span className="filter-badge">●</span>}
       </button>
 
       {isOpen && (
         <div className="filters-panel">
           <div className="filter-group">
-            <label>Категория</label>
+            <label>Category</label>
             <select
               value={filters.category_id}
               onChange={(e) => handleChange('category_id', e.target.value)}
             >
-              <option value="">Все категории</option>
+              <option value="">All Categories</option>
               {categories.map((cat) => (
                 <option key={cat.id} value={cat.id}>
                   {cat.name}
@@ -73,12 +73,12 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
           </div>
 
           <div className="filter-group">
-            <label>Платформа</label>
+            <label>Platform</label>
             <select
               value={filters.platform}
               onChange={(e) => handleChange('platform', e.target.value)}
             >
-              <option value="">Все платформы</option>
+              <option value="">All Platforms</option>
               <option value="youtube">YouTube</option>
               <option value="instagram">Instagram</option>
               <option value="tiktok">TikTok</option>
@@ -86,28 +86,28 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
           </div>
 
           <div className="filter-group">
-            <label>Темп</label>
+            <label>Pacing</label>
             <select
               value={filters.pacing}
               onChange={(e) => handleChange('pacing', e.target.value)}
             >
-              <option value="">Любой</option>
-              <option value="slow">Медленный</option>
-              <option value="fast">Быстрый</option>
-              <option value="mixed">Смешанный</option>
+              <option value="">Any</option>
+              <option value="slow">Slow</option>
+              <option value="fast">Fast</option>
+              <option value="mixed">Mixed</option>
             </select>
           </div>
 
           <div className="filter-group">
-            <label>Уровень продакшена</label>
+            <label>Production Level</label>
             <select
               value={filters.production_level}
               onChange={(e) => handleChange('production_level', e.target.value)}
             >
-              <option value="">Любой</option>
-              <option value="low">Низкий</option>
-              <option value="mid">Средний</option>
-              <option value="high">Высокий</option>
+              <option value="">Any</option>
+              <option value="low">Low</option>
+              <option value="mid">Mid</option>
+              <option value="high">High</option>
             </select>
           </div>
 
@@ -118,7 +118,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 checked={filters.has_visual_effects}
                 onChange={(e) => handleChange('has_visual_effects', e.target.checked)}
               />
-              Визуальные эффекты
+              Visual Effects
             </label>
             <label>
               <input
@@ -134,7 +134,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 checked={filters.has_animations}
                 onChange={(e) => handleChange('has_animations', e.target.checked)}
               />
-              Анимации
+              Animations
             </label>
             <label>
               <input
@@ -142,7 +142,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 checked={filters.has_typography}
                 onChange={(e) => handleChange('has_typography', e.target.checked)}
               />
-              Типографика
+              Typography
             </label>
             <label>
               <input
@@ -150,7 +150,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 checked={filters.has_sound_design}
                 onChange={(e) => handleChange('has_sound_design', e.target.checked)}
               />
-              Звуковой дизайн
+              Sound Design
             </label>
             <label>
               <input
@@ -158,12 +158,12 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 checked={filters.has_tutorial}
                 onChange={(e) => handleChange('has_tutorial', e.target.checked)}
               />
-              Есть урок
+              Has Tutorial
             </label>
           </div>
 
           <button className="filter-reset" onClick={handleReset}>
-            Сбросить фильтры
+            Reset Filters
           </button>
         </div>
       )}

@@ -51,7 +51,7 @@ const Profile = () => {
   if (isLoading) {
     return (
       <div className="profile-page">
-        <div className="loading">Загрузка...</div>
+        <div className="loading">Loading...</div>
       </div>
     );
   }
@@ -66,31 +66,34 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <div className="profile-container">
-        <h1>Профиль</h1>
+        <button className="back-button" onClick={() => navigate('/')}>
+          ← Back
+        </button>
+        <h1>Profile</h1>
         <div className="profile-content">
           {!isEditing ? (
             <>
               <div className="profile-info">
                 <div className="profile-field">
-                  <label>Имя</label>
-                  <p>{profileUser?.name || 'Не указано'}</p>
+                  <label>Name</label>
+                  <p>{profileUser?.name || 'Not specified'}</p>
                 </div>
                 <div className="profile-field">
                   <label>Email</label>
-                  <p>{profileUser?.email || 'Не указано'}</p>
+                  <p>{profileUser?.email || 'Not specified'}</p>
                 </div>
               </div>
               <button
                 className="edit-button"
                 onClick={() => setIsEditing(true)}
               >
-                Редактировать
+                Edit
               </button>
             </>
           ) : (
             <form onSubmit={handleSubmit} className="profile-form">
               <div className="profile-field">
-                <label htmlFor="name">Имя</label>
+                <label htmlFor="name">Name</label>
                 <input
                   type="text"
                   id="name"
@@ -101,7 +104,7 @@ const Profile = () => {
               </div>
               <div className="profile-actions">
                 <button type="submit" className="save-button" disabled={updateMutation.isLoading}>
-                  {updateMutation.isLoading ? 'Сохранение...' : 'Сохранить'}
+                  {updateMutation.isLoading ? 'Saving...' : 'Save'}
                 </button>
                 <button
                   type="button"
@@ -111,7 +114,7 @@ const Profile = () => {
                     setFormData({ name: profileUser?.name || '' });
                   }}
                 >
-                  Отмена
+                  Cancel
                 </button>
               </div>
             </form>
