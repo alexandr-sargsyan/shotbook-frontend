@@ -1,0 +1,182 @@
+.save-to-collection-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.save-to-collection-button:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.save-to-collection-button.saved {
+  color: #3b82f6;
+}
+
+.save-to-collection-button.saved:hover:not(:disabled) {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.save-to-collection-button:not(.saved):hover:not(:disabled) {
+  color: #3b82f6;
+}
+
+
+.save-to-collection-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.collection-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.collection-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.collection-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.collection-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.collection-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.collection-modal-close:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.collection-modal-body {
+  padding: 20px;
+}
+
+.collections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.collection-item:hover {
+  background-color: #f9fafb;
+  border-color: #3b82f6;
+}
+
+.collection-name {
+  font-weight: 500;
+  color: #111827;
+  flex: 1;
+}
+
+.collection-badge {
+  font-size: 12px;
+  color: #6b7280;
+  background-color: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.collection-count {
+  font-size: 12px;
+  color: #6b7280;
+  margin-left: 8px;
+}
+
+.empty-collections {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6b7280;
+}
+
+.create-collection-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.create-collection-link:hover {
+  text-decoration: underline;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #6b7280;
+}
+
+.collection-item.has-video {
+  background-color: #eff6ff;
+  border-color: #3b82f6;
+}
+
+.collection-saved-badge {
+  font-size: 12px;
+  color: #3b82f6;
+  font-weight: 600;
+  margin-left: 8px;
+}
+

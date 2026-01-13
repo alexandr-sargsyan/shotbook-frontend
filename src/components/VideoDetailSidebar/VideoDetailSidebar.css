@@ -38,11 +38,18 @@
 }
 
 .video-title {
-  margin: 0;
+  margin: 0 0 12px 0;
   font-size: 18px;
   font-weight: 700;
   color: #333;
   line-height: 1.4;
+}
+
+.video-actions-sidebar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 

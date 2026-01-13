@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TagBadge from '../TagBadge/TagBadge';
 import TutorialCard from '../TutorialCard/TutorialCard';
+import LikeButton from '../LikeButton/LikeButton';
+import SaveToCollectionButton from '../SaveToCollection/SaveToCollectionButton';
 import './VideoDetailSidebar.css';
 
-const VideoDetailSidebar = ({ video }) => {
+const VideoDetailSidebar = ({ video, onAuthRequired }) => {
   const navigate = useNavigate();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
@@ -42,6 +44,18 @@ const VideoDetailSidebar = ({ video }) => {
       </div>
       <div className="sidebar-header">
         <h2 className="video-title">{video.title}</h2>
+        <div className="video-actions-sidebar">
+          <LikeButton
+            videoId={video.id}
+            initialLiked={video.is_liked || false}
+            initialLikesCount={video.likes_count || 0}
+            onAuthRequired={onAuthRequired}
+          />
+          <SaveToCollectionButton
+            videoId={video.id}
+            onAuthRequired={onAuthRequired}
+          />
+        </div>
       </div>
 
       {video.public_summary && (

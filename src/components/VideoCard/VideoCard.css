@@ -171,23 +171,37 @@
 
 .video-info {
   padding: 8px 12px;
-  height: 40px; /* Фиксированная высота блока */
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.video-info-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
 }
 
 .video-title {
   margin: 0;
-  font-size: 13px; /* Размер как в Google Docs */
-  font-weight: 300; /* Тонкий текст */
-  font-style: italic; /* Легкий курсив */
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
   color: #333;
   line-height: 1.3;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%;
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+}
+
+.video-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -197,7 +211,7 @@
 
   .video-info {
     padding: 6px 10px;
-    height: 36px; /* Фиксированная высота для мобильных */
+    min-height: 36px;
   }
 
   .video-title {

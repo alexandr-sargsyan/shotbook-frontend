@@ -2,7 +2,7 @@ import React from 'react';
 import VideoCard from '../VideoCard/VideoCard';
 import './VideoGrid.css';
 
-const VideoGrid = ({ videos = [], loading = false }) => {
+const VideoGrid = ({ videos = [], loading = false, onAuthRequired }) => {
   if (loading) {
     return (
       <div className="video-grid loading">
@@ -22,7 +22,7 @@ const VideoGrid = ({ videos = [], loading = false }) => {
   return (
     <div className="video-grid">
       {videos.map((video) => (
-        <VideoCard key={video.id} video={video} />
+        <VideoCard key={video.id} video={video} onAuthRequired={onAuthRequired} />
       ))}
     </div>
   );

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VideoListPlayer from '../VideoPlayer/VideoListPlayer';
+import LikeButton from '../LikeButton/LikeButton';
 import './VideoCard.css';
 
-const VideoCard = ({ video }) => {
+const VideoCard = ({ video, onAuthRequired }) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -98,7 +99,17 @@ const VideoCard = ({ video }) => {
         )}
       </div>
       <div className="video-info">
-        <h3 className="video-title">{video.title}</h3>
+        <div className="video-info-header">
+          <h3 className="video-title">{video.title}</h3>
+          <div className="video-actions" onClick={(e) => e.stopPropagation()}>
+            <LikeButton
+              videoId={video.id}
+              initialLiked={video.is_liked || false}
+              initialLikesCount={video.likes_count || 0}
+              onAuthRequired={onAuthRequired}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

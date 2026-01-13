@@ -1,0 +1,71 @@
+.collection-detail-page {
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-color: #f9fafb;
+}
+
+.collection-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.collection-detail-header {
+  margin-bottom: 32px;
+}
+
+.back-button {
+  padding: 8px 16px;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: background-color 0.2s;
+}
+
+.back-button:hover {
+  background-color: #e5e7eb;
+}
+
+.collection-info h1 {
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.default-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.collection-count {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.collection-videos {
+  margin-top: 24px;
+}
+
+.loading,
+.error,
+.empty-videos {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+.error {
+  color: #ef4444;
+}
+

@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import VideoDetailView from '../components/VideoDetailView/VideoDetailView';
 import VideoDetailSidebar from '../components/VideoDetailSidebar/VideoDetailSidebar';
+import LoginModal from '../components/Auth/LoginModal';
+import RegisterModal from '../components/Auth/RegisterModal';
+import EmailVerificationModal from '../components/Auth/EmailVerificationModal';
 import { getVideoReference } from '../services/api';
 import './VideoDetail.css';
 
 const VideoDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  const [verificationEmail, setVerificationEmail] = useState('');
+  const [codeAlreadySent, setCodeAlreadySent] = useState(false);
 
   const { data: videoData, isLoading } = useQuery({
     queryKey: ['videoReference', id],
@@ -20,6 +28,33 @@ const VideoDetail = () => {
   });
 
   const video = videoData?.data;
+
+  const handleAuthRequired = () => {
+    setShowRegisterModal(true);
+  };
+
+  const handleLoginSuccess = (data) => {
+    if (data?.showVerification) {
+      setVerificationEmail(data.email);
+      setShowVerificationModal(true);
+    }
+  };
+
+  const handleRegisterSuccess = (data) => {
+    if (data?.showVerification) {
+      setVerificationEmail(data.email);
+      setShowVerificationModal(true);
+      // Код уже отправлен при регистрации, передаем это в модалку
+      setCodeAlreadySent(true);
+    }
+  };
+
+  const handleVerificationSuccess = (data) => {
+    if (data?.showLogin) {
+      setVerificationEmail(data.email);
+      setShowLoginModal(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -60,9 +95,40 @@ const VideoDetail = () => {
           <VideoDetailView video={video} />
         </div>
         <div className="video-detail-sidebar-wrapper">
-          <VideoDetailSidebar video={video} />
+          <VideoDetailSidebar video={video} onAuthRequired={handleAuthRequired} />
         </div>
       </div>
+
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onSwitchToRegister={() => {
+          setShowLoginModal(false);
+          setShowRegisterModal(true);
+        }}
+        onSuccess={handleLoginSuccess}
+      />
+
+      <RegisterModal
+        isOpen={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
+        onSwitchToLogin={() => {
+          setShowRegisterModal(false);
+          setShowLoginModal(true);
+        }}
+        onSuccess={handleRegisterSuccess}
+      />
+
+      <EmailVerificationModal
+        isOpen={showVerificationModal}
+        onClose={() => {
+          setShowVerificationModal(false);
+          setCodeAlreadySent(false);
+        }}
+        email={verificationEmail}
+        codeAlreadySent={codeAlreadySent}
+        onSuccess={handleVerificationSuccess}
+      />
     </div>
   );
 };
