@@ -73,7 +73,6 @@ const VideoCard = ({ video, onAuthRequired }) => {
 
   // Определяем, что показывать
   const hasVideo = video.platform && video.platform_video_id;
-  const hasPreview = video.preview_url;
 
   return (
     <div className="video-card" onClick={handleClick} ref={cardRef}>
@@ -87,8 +86,6 @@ const VideoCard = ({ video, onAuthRequired }) => {
               isVisible={isVisible}
             />
           </div>
-        ) : hasPreview ? (
-          <img src={video.preview_url} alt={video.title} />
         ) : (
           <div className="video-placeholder">
             <span className="video-icon">{getPlatformIcon(video.platform)}</span>

@@ -66,7 +66,7 @@ npm run build
 
 - **Видео-плеер/превью**: 
   - UnifiedVideoPlayer для активных видео (YouTube, TikTok, Instagram)
-  - Приоритет: активное видео → preview_url → placeholder
+  - Приоритет: активное видео → placeholder
   - Автозапуск с muted звуком
 - **Правая боковая панель**:
   - Название и категория

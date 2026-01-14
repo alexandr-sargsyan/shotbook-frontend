@@ -16,8 +16,6 @@ const VideoDetailView = ({ video }) => {
             platformVideoId={video.platform_video_id}
             sourceUrl={video.source_url}
           />
-        ) : video.preview_url ? (
-          <img src={video.preview_url} alt={video.title} className="video-preview-image" />
         ) : (
           <div className="video-placeholder-large">
             <span className="video-icon-large">🎬</span>
