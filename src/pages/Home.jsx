@@ -95,11 +95,11 @@ const Home = () => {
 
   // Подсчет количества активных фильтров
   const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
-    // Проверяем массивы (platform, tag_ids)
+    // Проверяем массивы (platform, tag_ids, pacing, production_level)
     if (Array.isArray(value)) {
       return value.length > 0;
     }
-    // Проверяем строки (pacing, production_level)
+    // Проверяем строки (hook_type и другие строковые поля)
     if (typeof value === 'string') {
       return value !== '';
     }

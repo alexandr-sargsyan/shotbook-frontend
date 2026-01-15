@@ -14,8 +14,8 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
 
   const [filters, setFilters] = useState({
     platform: currentFilters.platform || [],
-    pacing: currentFilters.pacing || '',
-    production_level: currentFilters.production_level || '',
+    pacing: Array.isArray(currentFilters.pacing) ? currentFilters.pacing : (currentFilters.pacing ? [currentFilters.pacing] : []),
+    production_level: Array.isArray(currentFilters.production_level) ? currentFilters.production_level : (currentFilters.production_level ? [currentFilters.production_level] : []),
     has_visual_effects: currentFilters.has_visual_effects || false,
     has_3d: currentFilters.has_3d || false,
     has_animations: currentFilters.has_animations || false,
@@ -87,8 +87,8 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     setSelectedTagIds(newTagIds);
     setFilters({
       platform: currentFilters.platform || [],
-      pacing: currentFilters.pacing || '',
-      production_level: currentFilters.production_level || '',
+      pacing: Array.isArray(currentFilters.pacing) ? currentFilters.pacing : (currentFilters.pacing ? [currentFilters.pacing] : []),
+      production_level: Array.isArray(currentFilters.production_level) ? currentFilters.production_level : (currentFilters.production_level ? [currentFilters.production_level] : []),
       has_visual_effects: currentFilters.has_visual_effects || false,
       has_3d: currentFilters.has_3d || false,
       has_animations: currentFilters.has_animations || false,
@@ -154,11 +154,42 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     }
   };
 
+
+  const handlePacingToggle = (pacingValue) => {
+    const newPacing = filters.pacing.includes(pacingValue)
+      ? filters.pacing.filter((p) => p !== pacingValue)
+      : [...filters.pacing, pacingValue];
+    
+    const newFilters = {
+      ...filters,
+      pacing: newPacing,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
+  const handleProductionLevelToggle = (levelValue) => {
+    const newLevels = filters.production_level.includes(levelValue)
+      ? filters.production_level.filter((l) => l !== levelValue)
+      : [...filters.production_level, levelValue];
+    
+    const newFilters = {
+      ...filters,
+      production_level: newLevels,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
   const handleReset = () => {
     const resetFilters = {
       platform: [],
-      pacing: '',
-      production_level: '',
+      pacing: [],
+      production_level: [],
       has_visual_effects: false,
       has_3d: false,
       has_animations: false,
@@ -177,7 +208,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   };
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'tag_ids' || key === 'platform') {
+    if (key === 'tag_ids' || key === 'platform' || key === 'pacing' || key === 'production_level') {
       return Array.isArray(value) && value.length > 0;
     }
     return value !== '' && value !== false;
@@ -185,76 +216,105 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
 
   return (
     <div className="filter-sidebar">
-      {hasActiveFilters && (
-        <div className="filter-sidebar-header">
+      <div className="filter-sidebar-header">
+        <h3>Filters</h3>
+        {hasActiveFilters && (
           <button className="filter-reset-btn" onClick={handleReset}>
             Reset Filters
           </button>
-        </div>
-      )}
+        )}
+      </div>
       <div className="filter-list">
-        <div className="filter-group">
+        <div className="filter-group checkboxes">
           <label>Platform</label>
-          <div className="platform-checkboxes">
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('youtube')}
-                onChange={() => handlePlatformToggle('youtube')}
-              />
-              YouTube
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('instagram')}
-                onChange={() => handlePlatformToggle('instagram')}
-              />
-              Instagram
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('tiktok')}
-                onChange={() => handlePlatformToggle('tiktok')}
-              />
-              TikTok
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('facebook')}
-                onChange={() => handlePlatformToggle('facebook')}
-              />
-              Facebook
-            </label>
-          </div>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.platform.includes('youtube')}
+              onChange={() => handlePlatformToggle('youtube')}
+            />
+            YouTube
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.platform.includes('instagram')}
+              onChange={() => handlePlatformToggle('instagram')}
+            />
+            Instagram
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.platform.includes('tiktok')}
+              onChange={() => handlePlatformToggle('tiktok')}
+            />
+            TikTok
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.platform.includes('facebook')}
+              onChange={() => handlePlatformToggle('facebook')}
+            />
+            Facebook
+          </label>
         </div>
 
-        <div className="filter-group">
+        <div className="filter-group checkboxes">
           <label>Pacing</label>
-          <select
-            value={filters.pacing}
-            onChange={(e) => handleChange('pacing', e.target.value)}
-          >
-            <option value="">Any</option>
-            <option value="slow">Slow</option>
-            <option value="fast">Fast</option>
-            <option value="mixed">Mixed</option>
-          </select>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.pacing.includes('slow')}
+              onChange={() => handlePacingToggle('slow')}
+            />
+            Slow
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.pacing.includes('fast')}
+              onChange={() => handlePacingToggle('fast')}
+            />
+            Fast
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.pacing.includes('mixed')}
+              onChange={() => handlePacingToggle('mixed')}
+            />
+            Mixed
+          </label>
         </div>
 
-        <div className="filter-group">
+        <div className="filter-group checkboxes">
           <label>Production Level</label>
-          <select
-            value={filters.production_level}
-            onChange={(e) => handleChange('production_level', e.target.value)}
-          >
-            <option value="">Any</option>
-            <option value="low">Low</option>
-            <option value="mid">Mid</option>
-            <option value="high">High</option>
-          </select>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.production_level.includes('low')}
+              onChange={() => handleProductionLevelToggle('low')}
+            />
+            Low
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.production_level.includes('mid')}
+              onChange={() => handleProductionLevelToggle('mid')}
+            />
+            Mid
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              checked={filters.production_level.includes('high')}
+              onChange={() => handleProductionLevelToggle('high')}
+            />
+            High
+          </label>
         </div>
 
         <div className="filter-group">
