@@ -64,12 +64,14 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
     const result = await verifyCode(email, code);
 
     if (result.success) {
-      // After verification, user needs to sign in manually
-      setError('Email verified. Please sign in.');
+      // После успешной верификации пользователь автоматически авторизован
+      setError('');
       setTimeout(() => {
         onClose();
-        onSuccess?.({ showLogin: true, email });
-      }, 2000);
+        onSuccess?.({ verified: true, email });
+        // Можно обновить страницу или перенаправить пользователя
+        window.location.reload();
+      }, 1000);
     } else {
       setError(result.error || 'Invalid code');
     }

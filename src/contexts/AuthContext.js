@@ -105,9 +105,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.verifyCode({ email, code });
       
-      // После подтверждения автоматически входим
-      // Нужно получить пароль из состояния или запросить его снова
-      // Для упрощения, пользователь должен будет войти вручную
+      // После подтверждения автоматически авторизуем пользователя
+      if (response.data.access_token && response.data.user) {
+        const { access_token, user: userData } = response.data;
+        
+        // Сохраняем токен
+        localStorage.setItem('auth_token', access_token);
+        setToken(access_token);
+        setUser(userData);
+      }
+      
       return { success: true, data: response.data };
     } catch (error) {
       return {
