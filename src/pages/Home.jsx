@@ -217,7 +217,13 @@ const Home = () => {
 
       <div className="home-content">
         <div className="video-content">
-          <VideoGrid videos={videos} loading={isLoading} onAuthRequired={handleAuthRequired} />
+          <VideoGrid 
+            videos={videos} 
+            loading={isLoading} 
+            onAuthRequired={handleAuthRequired}
+            queryParams={queryParams}
+            pagination={videosData?.meta}
+          />
         </div>
       </div>
 

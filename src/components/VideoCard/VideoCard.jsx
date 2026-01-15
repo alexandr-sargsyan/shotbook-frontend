@@ -5,7 +5,7 @@ import LikeButton from '../LikeButton/LikeButton';
 import SaveToCollectionButton from '../SaveToCollection/SaveToCollectionButton';
 import './VideoCard.css';
 
-const VideoCard = ({ video, onAuthRequired }) => {
+const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1 }) => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
@@ -34,7 +34,14 @@ const VideoCard = ({ video, onAuthRequired }) => {
   };
 
   const handleClick = () => {
-    navigate(`/video/${video.id}`);
+    navigate(`/video/${video.id}`, {
+      state: {
+        videoList: videoList,
+        currentIndex: currentIndex,
+        queryParams: videoList.queryParams || {}, // Сохраняем параметры запроса для пагинации
+        pagination: videoList.pagination || {}, // Сохраняем информацию о пагинации
+      }
+    });
   };
 
   // Lazy loading через Intersection Observer

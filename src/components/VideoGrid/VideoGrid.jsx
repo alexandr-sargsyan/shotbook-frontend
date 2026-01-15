@@ -2,7 +2,7 @@ import React from 'react';
 import VideoCard from '../VideoCard/VideoCard';
 import './VideoGrid.css';
 
-const VideoGrid = ({ videos = [], loading = false, onAuthRequired }) => {
+const VideoGrid = ({ videos = [], loading = false, onAuthRequired, queryParams = {}, pagination = {} }) => {
   if (loading) {
     return (
       <div className="video-grid loading">
@@ -21,8 +21,14 @@ const VideoGrid = ({ videos = [], loading = false, onAuthRequired }) => {
 
   return (
     <div className="video-grid">
-      {videos.map((video) => (
-        <VideoCard key={video.id} video={video} onAuthRequired={onAuthRequired} />
+      {videos.map((video, index) => (
+        <VideoCard 
+          key={video.id} 
+          video={video} 
+          onAuthRequired={onAuthRequired}
+          videoList={{ videos, queryParams, pagination }}
+          currentIndex={index}
+        />
       ))}
     </div>
   );
