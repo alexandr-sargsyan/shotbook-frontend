@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VideoListPlayer from '../VideoPlayer/VideoListPlayer';
 import LikeButton from '../LikeButton/LikeButton';
+import SaveToCollectionButton from '../SaveToCollection/SaveToCollectionButton';
 import './VideoCard.css';
 
 const VideoCard = ({ video, onAuthRequired }) => {
@@ -76,6 +77,12 @@ const VideoCard = ({ video, onAuthRequired }) => {
 
   return (
     <div className="video-card" onClick={handleClick} ref={cardRef}>
+      {/* Верхний блок - только тайтл */}
+      <div className="video-title-top">
+        <h3 className="video-title">{video.title}</h3>
+      </div>
+
+      {/* Видео-превью */}
       <div className="video-preview">
         {hasVideo && shouldLoad ? (
           <div className="video-player-wrapper">
@@ -95,17 +102,28 @@ const VideoCard = ({ video, onAuthRequired }) => {
           <div className="video-duration">{formatDuration(video.duration_sec)}</div>
         )}
       </div>
-      <div className="video-info">
-        <div className="video-info-header">
-          <h3 className="video-title">{video.title}</h3>
-          <div className="video-actions" onClick={(e) => e.stopPropagation()}>
-            <LikeButton
-              videoId={video.id}
-              initialLiked={video.is_liked || false}
-              initialLikesCount={video.likes_count || 0}
-              onAuthRequired={onAuthRequired}
-            />
-          </div>
+
+      {/* Нижний блок - лайк слева, кнопка Details в центре, Save справа */}
+      <div className="video-info-bottom">
+        <div className="video-actions-left" onClick={(e) => e.stopPropagation()}>
+          <LikeButton
+            videoId={video.id}
+            initialLiked={video.is_liked || false}
+            initialLikesCount={video.likes_count || 0}
+            onAuthRequired={onAuthRequired}
+          />
+        </div>
+        <button 
+          className="details-button"
+        >
+          Details
+        </button>
+        <div className="video-actions-right" onClick={(e) => e.stopPropagation()}>
+          <SaveToCollectionButton
+            videoId={video.id}
+            onAuthRequired={onAuthRequired}
+            showText={false}
+          />
         </div>
       </div>
     </div>

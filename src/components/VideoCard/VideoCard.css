@@ -169,22 +169,13 @@
   pointer-events: none;
 }
 
-.video-info {
+/* Верхний блок - только тайтл */
+.video-title-top {
   padding: 8px 12px;
-  min-height: 40px;
-  display: flex;
-  flex-direction: column;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.video-info-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-}
-
-.video-title {
+.video-title-top .video-title {
   margin: 0;
   font-size: 13px;
   font-weight: 300;
@@ -194,14 +185,56 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
 }
 
-.video-actions {
+/* Нижний блок - лайк слева, кнопка Details в центре, Save справа */
+.video-info-bottom {
+  padding: 8px 12px 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.video-actions-left {
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  margin-left: 0;
+  padding-left: 12px;
+}
+
+.video-actions-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.details-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
+
+.details-button:active {
+  background-color: #004085;
 }
 
 @media (max-width: 768px) {
@@ -209,15 +242,23 @@
     margin-bottom: 16px;
   }
 
-  .video-info {
+  .video-title-top {
     padding: 6px 10px;
-    min-height: 36px;
   }
 
-  .video-title {
-    font-size: 12px; /* Немного меньше на мобильных */
-    font-weight: 300; /* Тонкий текст */
-    font-style: italic; /* Легкий курсив */
+  .video-title-top .video-title {
+    font-size: 12px;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .video-info-bottom {
+    padding: 6px 10px;
+  }
+
+  .details-button {
+    padding: 5px 12px;
+    font-size: 12px;
   }
 }
 

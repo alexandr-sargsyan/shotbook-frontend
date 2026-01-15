@@ -26,13 +26,15 @@ const Home = () => {
   const [verificationEmail, setVerificationEmail] = useState('');
   const [codeAlreadySent, setCodeAlreadySent] = useState(false);
 
-  // Обработка URL параметра category_id при загрузке страницы или изменении URL
+  // Обработка URL параметра category_ids при загрузке страницы или изменении URL
   useEffect(() => {
-    const categoryIdParam = searchParams.get('category_id');
-    if (categoryIdParam) {
-      const categoryId = parseInt(categoryIdParam, 10);
-      if (!isNaN(categoryId)) {
-        setSelectedCategoryIds([categoryId]);
+    const categoryIdsParam = searchParams.getAll('category_ids[]');
+    if (categoryIdsParam.length > 0) {
+      const categoryIds = categoryIdsParam
+        .map(id => parseInt(id, 10))
+        .filter(id => !isNaN(id));
+      if (categoryIds.length > 0) {
+        setSelectedCategoryIds(categoryIds);
       }
     }
   }, [searchParams]);
@@ -60,10 +62,7 @@ const Home = () => {
 
   // Add selected category IDs to filters
   if (selectedCategoryIds.length > 0) {
-    // Если выбрано несколько категорий, отправляем массив
-    queryParams.category_id = selectedCategoryIds.length === 1 
-      ? selectedCategoryIds[0] 
-      : selectedCategoryIds;
+    queryParams.category_ids = selectedCategoryIds;
   }
 
   // Remove undefined and empty values
@@ -96,10 +95,20 @@ const Home = () => {
 
   // Подсчет количества активных фильтров
   const activeFiltersCount = Object.entries(filters).filter(([key, value]) => {
-    if (key === 'tag_ids') {
-      return Array.isArray(value) && value.length > 0;
+    // Проверяем массивы (platform, tag_ids)
+    if (Array.isArray(value)) {
+      return value.length > 0;
     }
-    return value !== '' && value !== false && value !== null;
+    // Проверяем строки (pacing, production_level)
+    if (typeof value === 'string') {
+      return value !== '';
+    }
+    // Проверяем булевы значения (has_visual_effects, has_3d, etc.)
+    if (typeof value === 'boolean') {
+      return value === true;
+    }
+    // Игнорируем null, undefined, false, пустые строки
+    return value !== null && value !== undefined && value !== false && value !== '';
   }).length;
 
   const hasActiveFilters = activeFiltersCount > 0;
@@ -190,6 +199,7 @@ const Home = () => {
             selectedCategoryIds={selectedCategoryIds}
             onCategoryToggle={handleCategoryToggle}
             onClose={() => setSidebarOpen(false)}
+            onReset={() => setSelectedCategoryIds([])}
           />
         </div>
       )}

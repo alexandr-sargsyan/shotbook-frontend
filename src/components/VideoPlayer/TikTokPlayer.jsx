@@ -5,14 +5,22 @@ const TikTokPlayer = ({ videoId, autoplay, muted, loop, controls = false }) => {
 
   useEffect(() => {
     // Параметры для TikTok player v1 (официальный Embed Player для разработчиков)
+    // Настройки согласно TikTok Settings
     const params = new URLSearchParams({
       autoplay: autoplay ? '1' : '0',
       loop: loop ? '1' : '0',
-      muted: muted ? '1' : '0',  // Учитываем параметр muted
-      controls: controls ? '1' : '0',  // Контролы в зависимости от пропса
-      description: '0', // Скрыть описание
-      music_info: '0', // Скрыть информацию о музыке
-      rel: '0',
+      muted: muted ? '1' : '0',
+      controls: controls ? '1' : '0',
+      progress_bar: '1',           // Показывать прогресс-бар
+      play_button: '0',            // Скрыть кнопку воспроизведения
+      volume_control: '0',         // Скрыть контроль громкости
+      fullscreen_button: '0',      // Скрыть кнопку полноэкранного режима
+      timestamp: '1',              // Показывать временную метку
+      music_info: '0',             // Скрыть информацию о музыке
+      description: '0',             // Скрыть описание
+      rel: '0',                     // Не показывать связанные видео
+      native_context_menu: '0',    // Отключить нативное контекстное меню
+      closed_caption: '0',         // Отключить субтитры
     });
 
     // TikTok player v1 URL - это видеоплеер, а не карточка поста

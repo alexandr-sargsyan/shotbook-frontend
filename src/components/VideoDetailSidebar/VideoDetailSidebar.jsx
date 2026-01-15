@@ -19,7 +19,7 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
   };
 
   const handleCategoryClick = (categoryId) => {
-    navigate(`/?category_id=${categoryId}`);
+    navigate(`/?category_ids[]=${categoryId}`);
   };
 
   const features = [
@@ -33,13 +33,18 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
   return (
     <div className="video-detail-sidebar">
       <div className="sidebar-top-actions">
-        {video.category && (
-          <button
-            onClick={() => handleCategoryClick(video.category.id)}
-            className="category-link"
-          >
-            {video.category.name}
-          </button>
+        {video.categories && video.categories.length > 0 && (
+          <div className="categories-container">
+            {video.categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryClick(category.id)}
+                className="category-link"
+              >
+                {category.name}
+              </button>
+            ))}
+          </div>
         )}
       </div>
       <div className="sidebar-header">

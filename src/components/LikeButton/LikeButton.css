@@ -1,16 +1,25 @@
-.like-button {
+.like-button-wrapper {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 8px;
   border-radius: 8px;
   transition: all 0.2s;
   color: #6b7280;
   font-size: 14px;
   font-weight: 500;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 }
 
 .like-button:hover:not(:disabled) {
@@ -51,6 +60,8 @@
   font-weight: 600;
   min-width: 20px;
   text-align: left;
+  pointer-events: none;
+  user-select: none;
 }
 
 .like-button.liked .like-count {

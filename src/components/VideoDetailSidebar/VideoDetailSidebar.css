@@ -15,6 +15,12 @@
   border-bottom: none;
 }
 
+.categories-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .category-link {
   background: none;
   border: none;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './CategorySidebar.css';
 
-const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategoryToggle, onClose }) => {
+const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategoryToggle, onClose, onReset }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
 
   // Ensure categories is always an array
@@ -93,8 +93,17 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
 
   const rootCategories = categoriesArray.filter((cat) => !cat.parent_id);
 
+  const hasSelectedCategories = selectedCategoryIds.length > 0;
+
   return (
     <div className="category-sidebar">
+      {hasSelectedCategories && onReset && (
+        <div className="category-sidebar-header">
+          <button className="category-reset-btn" onClick={onReset}>
+            Reset Categories
+          </button>
+        </div>
+      )}
       <div className="category-list">
         {rootCategories.length > 0 ? (
           rootCategories.map((category) => renderCategory(category))

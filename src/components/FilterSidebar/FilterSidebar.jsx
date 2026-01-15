@@ -185,6 +185,13 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
 
   return (
     <div className="filter-sidebar">
+      {hasActiveFilters && (
+        <div className="filter-sidebar-header">
+          <button className="filter-reset-btn" onClick={handleReset}>
+            Reset Filters
+          </button>
+        </div>
+      )}
       <div className="filter-list">
         <div className="filter-group">
           <label>Platform</label>
@@ -362,12 +369,6 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
             Has Tutorial
           </label>
         </div>
-
-        {hasActiveFilters && (
-          <button className="filter-reset" onClick={handleReset}>
-            Reset Filters
-          </button>
-        )}
       </div>
     </div>
   );
