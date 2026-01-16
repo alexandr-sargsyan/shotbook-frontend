@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getCollections, createCollection, deleteCollection } from '../services/api';
+import { getCollections, createCollection, deleteCollection, updateCollection } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import './Collections.css';
 
@@ -14,6 +14,10 @@ const Collections = () => {
   const [showShareModal, setShowShareModal] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingCollection, setEditingCollection] = useState(null);
+  const [editCollectionName, setEditCollectionName] = useState('');
 
   const { data: collectionsData, isLoading } = useQuery({
     queryKey: ['collections'],
@@ -42,8 +46,34 @@ const Collections = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['collections']);
+      setOpenMenuId(null);
     },
   });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, name }) => {
+      const response = await updateCollection(id, { name });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['collections']);
+      setShowEditModal(false);
+      setEditingCollection(null);
+      setEditCollectionName('');
+      setOpenMenuId(null);
+    },
+  });
+
+  // Закрытие меню при клике вне его
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setOpenMenuId(null);
+    };
+    if (openMenuId) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [openMenuId]);
 
   React.useEffect(() => {
     if (!isAuthenticated()) {
@@ -96,6 +126,35 @@ const Collections = () => {
     }
   };
 
+  const handleMenuToggle = (e, collectionId) => {
+    e.stopPropagation();
+    setOpenMenuId(openMenuId === collectionId ? null : collectionId);
+  };
+
+  const handleEdit = (e, collection) => {
+    e.stopPropagation();
+    setEditingCollection(collection);
+    setEditCollectionName(collection.name);
+    setShowEditModal(true);
+    setOpenMenuId(null);
+  };
+
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    if (editingCollection && editCollectionName.trim()) {
+      updateMutation.mutate({
+        id: editingCollection.id,
+        name: editCollectionName.trim(),
+      });
+    }
+  };
+
+  const handleDeleteFromMenu = (e, collection) => {
+    e.stopPropagation();
+    setOpenMenuId(null);
+    handleDelete(collection.id, collection.is_default);
+  };
+
   return (
     <div className="collections-page">
       <div className="collections-container">
@@ -126,32 +185,47 @@ const Collections = () => {
                 className="collection-card"
                 onClick={() => navigate(`/collections/${collection.id}`)}
               >
-                <h3>{collection.name}</h3>
-                {collection.is_default && (
-                  <span className="default-badge">Default</span>
-                )}
-                <p className="collection-count">
-                  {collection.video_references_count || 0} videos
-                </p>
-                <div className="collection-actions">
-                  <button
-                    className="share-collection-button"
-                    onClick={(e) => handleShare(e, collection)}
-                    title="Share collection"
-                  >
-                    Share
-                  </button>
-                  {!collection.is_default && (
+                <button
+                  className="collection-menu-button"
+                  onClick={(e) => handleMenuToggle(e, collection.id)}
+                  title="Menu"
+                >
+                  ⋯
+                </button>
+                {openMenuId === collection.id && (
+                  <div className="collection-menu" onClick={(e) => e.stopPropagation()}>
                     <button
-                      className="delete-collection-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(collection.id, collection.is_default);
-                      }}
+                      className="menu-item"
+                      onClick={(e) => handleShare(e, collection)}
                     >
-                      Delete
+                      Share
                     </button>
+                    <button
+                      className="menu-item"
+                      onClick={(e) => handleEdit(e, collection)}
+                    >
+                      Edit
+                    </button>
+                    {!collection.is_default && (
+                      <button
+                        className="menu-item menu-item-danger"
+                        onClick={(e) => handleDeleteFromMenu(e, collection)}
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
+                )}
+                <div className="collection-content">
+                  <h3 className="collection-name" title={collection.name}>
+                    {collection.name}
+                  </h3>
+                  {collection.is_default && (
+                    <span className="default-badge">Default</span>
                   )}
+                  <p className="collection-count">
+                    {collection.video_references_count || 0} videos
+                  </p>
                 </div>
               </div>
             ))}
@@ -246,6 +320,43 @@ const Collections = () => {
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {showEditModal && editingCollection && (
+        <div className="modal-overlay" onClick={() => {
+          setShowEditModal(false);
+          setEditingCollection(null);
+          setEditCollectionName('');
+        }}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Edit Collection</h2>
+            <form onSubmit={handleUpdate}>
+              <input
+                type="text"
+                value={editCollectionName}
+                onChange={(e) => setEditCollectionName(e.target.value)}
+                placeholder="Collection name"
+                required
+                autoFocus
+              />
+              <div className="modal-actions">
+                <button type="submit" disabled={updateMutation.isLoading}>
+                  {updateMutation.isLoading ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setEditingCollection(null);
+                    setEditCollectionName('');
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

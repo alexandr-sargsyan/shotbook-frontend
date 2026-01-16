@@ -70,6 +70,10 @@
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  height: 100%;
 }
 
 .collection-card:hover {
@@ -77,11 +81,93 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.collection-card h3 {
+.collection-menu-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  z-index: 10;
+  line-height: 1;
+  padding: 0;
+}
+
+.collection-menu-button:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.collection-menu {
+  position: absolute;
+  top: 44px;
+  right: 12px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 120px;
+  z-index: 20;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: left;
+  background: white;
+  border: none;
+  color: #374151;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f9fafb;
+}
+
+.menu-item-danger {
+  color: #ef4444;
+}
+
+.menu-item-danger:hover {
+  background-color: #fef2f2;
+}
+
+.collection-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.collection-name {
   margin: 0 0 8px 0;
   font-size: 18px;
   font-weight: 600;
   color: #111827;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.4;
+  min-height: 50.4px;
+  max-height: 50.4px;
 }
 
 .default-badge {
@@ -92,49 +178,14 @@
   border-radius: 4px;
   font-size: 12px;
   margin-bottom: 8px;
+  width: fit-content;
 }
 
 .collection-count {
-  margin: 8px 0 0 0;
+  margin: auto 0 0 0;
   font-size: 14px;
   color: #6b7280;
-}
-
-.collection-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-  justify-content: flex-end;
-}
-
-.share-collection-button {
-  padding: 6px 12px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.share-collection-button:hover {
-  background-color: #2563eb;
-}
-
-.delete-collection-button {
-  padding: 6px 12px;
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.delete-collection-button:hover {
-  background-color: #dc2626;
+  padding-top: 8px;
 }
 
 .empty-collections {
