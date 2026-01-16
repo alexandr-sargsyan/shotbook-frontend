@@ -100,10 +100,29 @@
   color: #6b7280;
 }
 
+.collection-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.share-collection-button {
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.share-collection-button:hover {
+  background-color: #2563eb;
+}
+
 .delete-collection-button {
-  position: absolute;
-  top: 12px;
-  right: 12px;
   padding: 6px 12px;
   background-color: #ef4444;
   color: white;

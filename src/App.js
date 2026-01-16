@@ -7,6 +7,7 @@ import VideoDetail from './pages/VideoDetail';
 import Profile from './pages/Profile';
 import Collections from './pages/Collections';
 import CollectionDetail from './pages/CollectionDetail';
+import SharedCollectionView from './pages/SharedCollectionView';
 import './App.css';
 import './styles/responsive.css';
 
@@ -31,6 +32,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/collections" element={<Collections />} />
               <Route path="/collections/:id" element={<CollectionDetail />} />
+              <Route path="/shared/collection/:token" element={<SharedCollectionView />} />
             </Routes>
           </div>
         </Router>

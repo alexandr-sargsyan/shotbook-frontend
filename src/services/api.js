@@ -149,6 +149,11 @@ export const checkVideoSaved = async (videoId) => {
   return api.get(`/video-references/${videoId}/saved`);
 };
 
+// Получить расшаренную коллекцию по токену (публичный роут)
+export const getSharedCollection = async (token) => {
+  return api.get(`/shared/collections/${token}/videos`);
+};
+
 // ==================== Профиль ====================
 
 // Получить профиль

@@ -11,6 +11,9 @@ const Collections = () => {
   const queryClient = useQueryClient();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [selectedCollection, setSelectedCollection] = useState(null);
+  const [copySuccess, setCopySuccess] = useState(false);
 
   const { data: collectionsData, isLoading } = useQuery({
     queryKey: ['collections'],
@@ -71,6 +74,28 @@ const Collections = () => {
     }
   };
 
+  const handleShare = (e, collection) => {
+    e.stopPropagation();
+    setSelectedCollection(collection);
+    setShowShareModal(true);
+  };
+
+  const getShareUrl = (shareToken) => {
+    return `${window.location.origin}/shared/collection/${shareToken}`;
+  };
+
+  const handleCopyLink = () => {
+    if (selectedCollection?.share_token) {
+      const shareUrl = getShareUrl(selectedCollection.share_token);
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        setCopySuccess(true);
+        setTimeout(() => {
+          setCopySuccess(false);
+        }, 2000);
+      });
+    }
+  };
+
   return (
     <div className="collections-page">
       <div className="collections-container">
@@ -108,17 +133,26 @@ const Collections = () => {
                 <p className="collection-count">
                   {collection.video_references_count || 0} videos
                 </p>
-                {!collection.is_default && (
+                <div className="collection-actions">
                   <button
-                    className="delete-collection-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(collection.id, collection.is_default);
-                    }}
+                    className="share-collection-button"
+                    onClick={(e) => handleShare(e, collection)}
+                    title="Share collection"
                   >
-                    Delete
+                    Share
                   </button>
-                )}
+                  {!collection.is_default && (
+                    <button
+                      className="delete-collection-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(collection.id, collection.is_default);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -153,6 +187,65 @@ const Collections = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showShareModal && selectedCollection && (
+        <div className="modal-overlay" onClick={() => setShowShareModal(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h2>Share Collection</h2>
+            <p style={{ marginBottom: '16px', color: '#6b7280' }}>
+              Share this collection with others by sending them this link:
+            </p>
+            <div style={{ marginBottom: '16px' }}>
+              <input
+                type="text"
+                value={getShareUrl(selectedCollection.share_token)}
+                readOnly
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#f9fafb',
+                }}
+              />
+              {copySuccess && (
+                <div
+                  style={{
+                    marginTop: '8px',
+                    color: '#10b981',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                  }}
+                >
+                  Copied
+                </div>
+              )}
+            </div>
+            <div className="modal-actions">
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                }}
+              >
+                Copy Link
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowShareModal(false);
+                  setSelectedCollection(null);
+                }}
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
