@@ -18,6 +18,7 @@ const Collections = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingCollection, setEditingCollection] = useState(null);
   const [editCollectionName, setEditCollectionName] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { data: collectionsData, isLoading } = useQuery({
     queryKey: ['collections'],
@@ -85,7 +86,16 @@ const Collections = () => {
     return null;
   }
 
-  const collections = collectionsData?.data || [];
+  const allCollections = collectionsData?.data || [];
+  
+  // Фильтрация коллекций по поисковому запросу
+  const collections = allCollections.filter((collection) => {
+    if (!searchQuery.trim()) {
+      return true;
+    }
+    const query = searchQuery.toLowerCase().trim();
+    return collection.name.toLowerCase().includes(query);
+  });
 
   const handleCreate = (e) => {
     e.preventDefault();
@@ -163,6 +173,15 @@ const Collections = () => {
         </button>
         <div className="collections-header">
           <h1>My Collections</h1>
+          <div className="collections-header-center">
+            <input
+              type="text"
+              className="collections-search-input"
+              placeholder="Search collections..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
           <button
             className="create-collection-button"
             onClick={() => setShowCreateModal(true)}
@@ -175,7 +194,11 @@ const Collections = () => {
           <div className="loading">Loading...</div>
         ) : collections.length === 0 ? (
           <div className="empty-collections">
-            <p>You don't have any collections yet</p>
+            <p>
+              {searchQuery.trim()
+                ? 'No collections found matching your search'
+                : "You don't have any collections yet"}
+            </p>
           </div>
         ) : (
           <div className="collections-grid">
