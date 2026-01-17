@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../contexts/AuthContext';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import SearchBar from '../components/SearchBar/SearchBar';
 import CategorySidebar from '../components/CategorySidebar/CategorySidebar';
@@ -14,6 +15,7 @@ import { searchVideoReferences, getCategories } from '../services/api';
 import './Home.css';
 
 const Home = () => {
+  const { isAuthenticated, getAndClearPendingAction } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState({});
@@ -129,6 +131,19 @@ const Home = () => {
     setShowRegisterModal(true);
   };
 
+  // Выполняем pending action после авторизации
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const pendingAction = getAndClearPendingAction?.();
+      if (pendingAction) {
+        // Здесь можно выполнить действие, например, показать уведомление
+        // или автоматически выполнить like/save
+        console.log('Pending action:', pendingAction);
+        // В будущем можно добавить автоматическое выполнение действия
+      }
+    }
+  }, [isAuthenticated, getAndClearPendingAction]);
+
   const handleLoginSuccess = (data) => {
     if (data?.showVerification) {
       setVerificationEmail(data.email);
@@ -191,28 +206,51 @@ const Home = () => {
         <Navigation />
       </div>
 
-      {/* Боковая панель с категориями (слева) */}
+      {/* Overlay для sidebar с категориями */}
       {sidebarOpen && (
-        <div className="empty-sidebar">
-          <CategorySidebar
-            categories={categories}
-            selectedCategoryIds={selectedCategoryIds}
-            onCategoryToggle={handleCategoryToggle}
-            onClose={() => setSidebarOpen(false)}
-            onReset={() => setSelectedCategoryIds([])}
+        <>
+          <div 
+            className="sidebar-overlay" 
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close sidebar"
           />
-        </div>
+          <div className="empty-sidebar">
+            <CategorySidebar
+              categories={categories}
+              selectedCategoryIds={selectedCategoryIds}
+              onCategoryToggle={handleCategoryToggle}
+              onClose={() => setSidebarOpen(false)}
+              onReset={() => setSelectedCategoryIds([])}
+            />
+          </div>
+        </>
       )}
 
-      {/* Боковая панель с фильтрами (справа) */}
+      {/* Overlay для sidebar с фильтрами */}
       {filtersSidebarOpen && (
-        <div className="filters-sidebar">
-          <FilterSidebar
-            categories={categories}
-            onFilterChange={handleFilterChange}
-            currentFilters={filters}
+        <>
+          <div 
+            className="sidebar-overlay" 
+            onClick={() => setFiltersSidebarOpen(false)}
+            aria-label="Close filters sidebar"
           />
-        </div>
+          <div className="filters-sidebar">
+            <div className="filters-sidebar-header-close">
+              <button 
+                className="filters-sidebar-close-btn"
+                onClick={() => setFiltersSidebarOpen(false)}
+                aria-label="Close filters"
+              >
+                ✕
+              </button>
+            </div>
+            <FilterSidebar
+              categories={categories}
+              onFilterChange={handleFilterChange}
+              currentFilters={filters}
+            />
+          </div>
+        </>
       )}
 
       <div className="home-content">

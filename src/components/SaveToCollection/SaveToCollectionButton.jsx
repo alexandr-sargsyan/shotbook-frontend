@@ -6,33 +6,41 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import './SaveToCollectionButton.css';
 
 // Компонент для элемента коллекции в модальном окне
-const CollectionItem = ({ collection, savedCollectionIds = [], onToggle }) => {
+const CollectionItem = ({ collection, savedCollectionIds = [], onToggle, isPending = false }) => {
   const isSelected = savedCollectionIds.includes(collection.id);
 
   return (
-    <div className="collection-item" onClick={() => onToggle(collection.id)}>
+    <div 
+      className={`collection-item ${isPending ? 'pending' : ''}`} 
+      onClick={() => !isPending && onToggle(collection.id)}
+    >
       <input
         type="checkbox"
         checked={isSelected}
-        onChange={() => onToggle(collection.id)}
+        onChange={() => !isPending && onToggle(collection.id)}
         className="collection-checkbox"
+        disabled={isPending}
       />
       <span className="collection-name">{collection.name}</span>
       {isSelected && (
         <span className="collection-added">Added</span>
+      )}
+      {isPending && (
+        <span className="collection-pending">...</span>
       )}
     </div>
   );
 };
 
 const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false, showText = true }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, setPendingAction } = useAuth();
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const [isSaved, setIsSaved] = useState(initialSaved);
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
+  const [pendingCollections, setPendingCollections] = useState(new Set());
 
   // Проверяем, сохранено ли видео в каталогах
   const { data: savedData } = useQuery({
@@ -74,6 +82,10 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
     e.stopPropagation();
 
     if (!isAuthenticated()) {
+      // Сохраняем pending action
+      if (setPendingAction) {
+        setPendingAction({ type: 'save', videoId });
+      }
       onAuthRequired?.();
       return;
     }
@@ -119,11 +131,28 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
   };
 
   const handleToggleCollection = async (collectionId) => {
-    const isSelected = savedCollectionIds.includes(collectionId);
-    if (isSelected) {
-      await handleRemoveFromCollection(collectionId);
-    } else {
-      await handleAddToCollection(collectionId);
+    // Блокируем повторный клик на ту же коллекцию
+    if (pendingCollections.has(collectionId)) {
+      return;
+    }
+
+    // Добавляем в pending
+    setPendingCollections(prev => new Set([...prev, collectionId]));
+
+    try {
+      const isSelected = savedCollectionIds.includes(collectionId);
+      if (isSelected) {
+        await handleRemoveFromCollection(collectionId);
+      } else {
+        await handleAddToCollection(collectionId);
+      }
+    } finally {
+      // Убираем из pending после завершения
+      setPendingCollections(prev => {
+        const next = new Set(prev);
+        next.delete(collectionId);
+        return next;
+      });
     }
   };
 
@@ -229,6 +258,7 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
                       collection={collection}
                       savedCollectionIds={savedCollectionIds}
                       onToggle={handleToggleCollection}
+                      isPending={pendingCollections.has(collection.id)}
                     />
                   ))}
                 </div>

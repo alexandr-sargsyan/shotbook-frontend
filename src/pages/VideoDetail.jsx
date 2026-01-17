@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../contexts/AuthContext';
 import VideoDetailView from '../components/VideoDetailView/VideoDetailView';
 import VideoDetailSidebar from '../components/VideoDetailSidebar/VideoDetailSidebar';
 import LoginModal from '../components/Auth/LoginModal';
@@ -13,11 +14,13 @@ const VideoDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, getAndClearPendingAction } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
   const [codeAlreadySent, setCodeAlreadySent] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Получаем информацию о списке видео из location.state
   const [videoListState, setVideoListState] = useState(location.state || null);
@@ -63,6 +66,17 @@ const VideoDetail = () => {
       loadVideoList();
     }
   }, [id, location.state]);
+
+  // Выполняем pending action после авторизации
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const pendingAction = getAndClearPendingAction?.();
+      if (pendingAction) {
+        console.log('Pending action:', pendingAction);
+        // В будущем можно добавить автоматическое выполнение действия
+      }
+    }
+  }, [isAuthenticated, getAndClearPendingAction]);
 
   const handleAuthRequired = () => {
     setShowRegisterModal(true);
@@ -196,8 +210,17 @@ const VideoDetail = () => {
             canSwipePrev={videoListState ? currentVideoIndex > 0 : false}
           />
         </div>
-        <div className="video-detail-sidebar-wrapper">
-          <VideoDetailSidebar video={video} onAuthRequired={handleAuthRequired} />
+        <div className={`video-detail-sidebar-wrapper ${sidebarCollapsed ? 'collapsed' : ''}`}>
+          <button
+            className="sidebar-toggle-btn"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            aria-label={sidebarCollapsed ? 'Show details' : 'Hide details'}
+          >
+            {sidebarCollapsed ? '▶' : '▼'}
+          </button>
+          {!sidebarCollapsed && (
+            <VideoDetailSidebar video={video} onAuthRequired={handleAuthRequired} />
+          )}
         </div>
       </div>
 

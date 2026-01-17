@@ -185,8 +185,9 @@ const Collections = () => {
           <button
             className="create-collection-button"
             onClick={() => setShowCreateModal(true)}
+            disabled={createMutation.isLoading}
           >
-            + Create Collection
+            {createMutation.isLoading ? 'Creating...' : '+ Create Collection'}
           </button>
         </div>
 
@@ -220,12 +221,14 @@ const Collections = () => {
                     <button
                       className="menu-item"
                       onClick={(e) => handleShare(e, collection)}
+                      disabled={deleteMutation.isLoading || updateMutation.isLoading}
                     >
                       Share
                     </button>
                     <button
                       className="menu-item"
                       onClick={(e) => handleEdit(e, collection)}
+                      disabled={deleteMutation.isLoading || updateMutation.isLoading}
                     >
                       Edit
                     </button>
@@ -233,8 +236,9 @@ const Collections = () => {
                       <button
                         className="menu-item menu-item-danger"
                         onClick={(e) => handleDeleteFromMenu(e, collection)}
+                        disabled={deleteMutation.isLoading || updateMutation.isLoading}
                       >
-                        Delete
+                        {deleteMutation.isLoading ? 'Deleting...' : 'Delete'}
                       </button>
                     )}
                   </div>

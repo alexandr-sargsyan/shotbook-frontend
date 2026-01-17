@@ -127,3 +127,27 @@
   margin: 4px 0;
 }
 
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .auth-button {
+    min-width: 44px; /* Touch target по Apple HIG */
+    min-height: 44px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .user-menu-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 10px;
+  }
+
+  .user-name {
+    display: none; /* Скрываем имя на очень маленьких экранах */
+  }
+
+  .auth-buttons {
+    gap: 8px;
+  }
+}
+

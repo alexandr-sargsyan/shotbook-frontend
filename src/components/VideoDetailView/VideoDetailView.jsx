@@ -8,7 +8,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
   const [touchEnd, setTouchEnd] = useState(null);
   const [mouseStart, setMouseStart] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [wheelAccumulator, setWheelAccumulator] = useState(0);
+  const wheelAccumulatorRef = useRef(0);
   const [isWheelLocked, setIsWheelLocked] = useState(false);
   const [isSwipeLocked, setIsSwipeLocked] = useState(false);
 
@@ -80,7 +80,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
 
   // Сброс аккумулятора при изменении видео
   useEffect(() => {
-    setWheelAccumulator(0);
+    wheelAccumulatorRef.current = 0;
   }, [video?.id]);
 
   if (!video) {
@@ -191,19 +191,20 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
       return;
     }
 
-    // Накапливаем вертикальную прокрутку
-    const newAccumulator = wheelAccumulator + e.deltaY;
+    // Накапливаем вертикальную прокрутку в ref (без ререндера)
+    wheelAccumulatorRef.current += e.deltaY;
 
     // Проверяем, достигли ли минимального расстояния
-    if (Math.abs(newAccumulator) >= minWheelDistance) {
+    if (Math.abs(wheelAccumulatorRef.current) >= minWheelDistance) {
       // Блокируем сразу перед переключением
       setIsWheelLocked(true);
-      setWheelAccumulator(0);
+      const accumulator = wheelAccumulatorRef.current;
+      wheelAccumulatorRef.current = 0;
 
-      if (newAccumulator < 0 && canSwipeNext && onSwipe) {
+      if (accumulator < 0 && canSwipeNext && onSwipe) {
         // Прокрутка вверх (отрицательное deltaY) → следующее видео
         onSwipe('next');
-      } else if (newAccumulator > 0 && canSwipePrev && onSwipe) {
+      } else if (accumulator > 0 && canSwipePrev && onSwipe) {
         // Прокрутка вниз (положительное deltaY) → предыдущее видео
         onSwipe('prev');
       }
@@ -211,11 +212,8 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
       // Разблокируем через 500ms (увеличено для предотвращения множественных переключений)
       setTimeout(() => {
         setIsWheelLocked(false);
-        setWheelAccumulator(0);
+        wheelAccumulatorRef.current = 0;
       }, 500);
-    } else {
-      // Продолжаем накапливать, если не достигли минимума
-      setWheelAccumulator(newAccumulator);
     }
 
     // Предотвращаем стандартную прокрутку страницы

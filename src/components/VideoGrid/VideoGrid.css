@@ -33,12 +33,19 @@
 
 @media (min-width: 1024px) {
   .video-grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
 }
 
-@media (min-width: 1440px) {
+@media (min-width: 1280px) {
+  .video-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1600px) {
   .video-grid {
     grid-template-columns: repeat(6, 1fr);
     gap: 24px;

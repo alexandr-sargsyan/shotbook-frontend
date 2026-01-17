@@ -176,6 +176,24 @@
   background-color: #fef2f2;
 }
 
+.menu-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.menu-item:disabled:hover {
+  background-color: white;
+}
+
+.create-collection-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.create-collection-button:disabled:hover {
+  background-color: #3b82f6;
+}
+
 .collection-content {
   flex: 1;
   display: flex;
@@ -249,6 +267,8 @@
   padding: 24px;
   width: 90%;
   max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal h2 {

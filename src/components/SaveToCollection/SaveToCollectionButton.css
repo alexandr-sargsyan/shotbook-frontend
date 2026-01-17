@@ -61,7 +61,9 @@
   border-radius: 12px;
   width: 100%;
   max-width: 400px;
-  height: 500px; /* Фиксированная высота */
+  height: auto;
+  max-height: calc(100vh - 40px); /* С учетом padding overlay (20px * 2) */
+  max-height: 90vh; /* Fallback для старых браузеров */
   display: flex;
   flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -151,7 +153,7 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  height: 100%; /* Занимает всё доступное пространство */
+  max-height: calc(90vh - 200px); /* Header + actions примерно 200px */
 }
 
 .collections-list {
@@ -170,8 +172,22 @@
   border-radius: 6px;
 }
 
-.collection-item:hover {
+.collection-item:hover:not(.pending) {
   background-color: #f9fafb;
+}
+
+.collection-item.pending {
+  opacity: 0.6;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.collection-pending {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 400;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .collection-checkbox {

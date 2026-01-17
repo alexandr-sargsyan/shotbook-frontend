@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pendingAction, setPendingAction] = useState(null);
 
   // Загружаем токен из localStorage при инициализации
   useEffect(() => {
@@ -62,7 +63,7 @@ export const AuthProvider = ({ children }) => {
       setToken(access_token);
       setUser(userData);
       
-      return { success: true, data: response.data };
+      return { success: true, data: response.data, hasPendingAction: !!pendingAction };
     } catch (error) {
       return {
         success: false,
@@ -115,7 +116,7 @@ export const AuthProvider = ({ children }) => {
         setUser(userData);
       }
       
-      return { success: true, data: response.data };
+      return { success: true, data: response.data, hasPendingAction: !!pendingAction };
     } catch (error) {
       return {
         success: false,
@@ -134,6 +135,28 @@ export const AuthProvider = ({ children }) => {
     return user?.email_verified_at !== null;
   };
 
+  // Сохранить pending action
+  const setPendingActionHandler = useCallback((action) => {
+    setPendingAction(action);
+  }, []);
+
+  // Получить и очистить pending action
+  const getAndClearPendingAction = useCallback(() => {
+    const action = pendingAction;
+    setPendingAction(null);
+    return action;
+  }, [pendingAction]);
+
+  // Выполнить pending action если есть
+  const executePendingAction = useCallback(async (action) => {
+    if (!action) return;
+    
+    // Здесь можно добавить логику выполнения различных типов действий
+    // Например, для like: await toggleLike(action.videoId)
+    // Для save: открыть модалку сохранения
+    return action;
+  }, []);
+
   const value = {
     user,
     token,
@@ -146,6 +169,10 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     isEmailVerified,
     checkAuth,
+    setPendingAction: setPendingActionHandler,
+    getAndClearPendingAction,
+    executePendingAction,
+    pendingAction,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -117,6 +117,27 @@
   min-width: 0;
 }
 
+/* Overlay для sidebar */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Боковая панель с категориями */
 .empty-sidebar {
   position: fixed;
@@ -161,12 +182,44 @@
   z-index: 1001;
   animation: slideInRight 0.3s ease-out;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-sidebar-header-close {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.filters-sidebar-close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filters-sidebar-close-btn:hover {
+  background-color: #f0f0f0;
 }
 
 
 @media (max-width: 768px) {
   .home-header {
-    padding: 14px 18px;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .home-content {
@@ -180,9 +233,10 @@
 
   .search-container {
     max-width: 100%;
+    min-width: unset; /* Убрать min-width для предотвращения переполнения */
     order: 3;
     width: 100%;
-    margin: 12px 0 0 0;
+    margin: 8px 0 0 0;
   }
 
   /* Логотип на мобильных */
@@ -190,18 +244,29 @@
     order: 1;
   }
 
-  .categories-toggle-btn {
+  /* Navigation на мобильных - убеждаемся что виден */
+  .home-header > .navigation {
+    order: 2;
+    flex-shrink: 0;
+  }
+
+  .categories-toggle-btn,
+  .filters-toggle-btn {
     font-size: 16px;
-    padding: 6px 10px;
+    min-width: 44px; /* Touch target по Apple HIG */
+    min-height: 44px;
+    padding: 10px;
   }
 
   .empty-sidebar {
-    width: 280px;
+    width: calc(100% - 60px); /* На mobile занимает почти весь экран, оставляя 60px */
+    max-width: 320px;
     top: 61px; /* На мобильных после фиксированного header */
   }
 
   .filters-sidebar {
-    width: 280px;
+    width: calc(100% - 60px); /* На mobile занимает почти весь экран, оставляя 60px */
+    max-width: 320px;
     top: 61px; /* На мобильных после фиксированного header */
   }
 }
