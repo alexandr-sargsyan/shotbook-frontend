@@ -20,7 +20,6 @@ const VideoDetail = () => {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [verificationEmail, setVerificationEmail] = useState('');
   const [codeAlreadySent, setCodeAlreadySent] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Получаем информацию о списке видео из location.state
   const [videoListState, setVideoListState] = useState(location.state || null);
@@ -210,17 +209,8 @@ const VideoDetail = () => {
             canSwipePrev={videoListState ? currentVideoIndex > 0 : false}
           />
         </div>
-        <div className={`video-detail-sidebar-wrapper ${sidebarCollapsed ? 'collapsed' : ''}`}>
-          <button
-            className="sidebar-toggle-btn"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            aria-label={sidebarCollapsed ? 'Show details' : 'Hide details'}
-          >
-            {sidebarCollapsed ? '▶' : '▼'}
-          </button>
-          {!sidebarCollapsed && (
-            <VideoDetailSidebar video={video} onAuthRequired={handleAuthRequired} />
-          )}
+        <div className="video-detail-sidebar-wrapper">
+          <VideoDetailSidebar video={video} onAuthRequired={handleAuthRequired} />
         </div>
       </div>
 
