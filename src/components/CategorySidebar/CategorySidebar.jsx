@@ -97,13 +97,14 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
 
   return (
     <div className="category-sidebar">
-      {hasSelectedCategories && onReset && (
-        <div className="category-sidebar-header">
+      <div className="category-sidebar-header">
+        <h3>Categories</h3>
+        {hasSelectedCategories && onReset && (
           <button className="category-reset-btn" onClick={onReset}>
             Reset Categories
           </button>
-        </div>
-      )}
+        )}
+      </div>
       <div className="category-list">
         {rootCategories.length > 0 ? (
           rootCategories.map((category) => renderCategory(category))

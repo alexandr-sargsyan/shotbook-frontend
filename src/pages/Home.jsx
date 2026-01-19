@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
@@ -51,6 +51,24 @@ const Home = () => {
   });
 
   const categories = categoriesData?.data || [];
+
+  // Создаем плоский список всех категорий (включая дочерние) для работы с parent_id
+  const allCategories = useMemo(() => {
+    const flattenCategories = (categoriesList, flatList = []) => {
+      categoriesList.forEach(category => {
+        flatList.push(category);
+        if (category.children && Array.isArray(category.children) && category.children.length > 0) {
+          // Добавляем parent_id к дочерним категориям для удобства
+          category.children.forEach(child => {
+            child.parent_id = category.id;
+          });
+          flattenCategories(category.children, flatList);
+        }
+      });
+      return flatList;
+    };
+    return flattenCategories(categories);
+  }, [categories]);
 
   // Build query params
   const queryParams = {
@@ -115,15 +133,79 @@ const Home = () => {
 
   const hasActiveFilters = activeFiltersCount > 0;
 
+  // Функция для рекурсивного получения всех дочерних категорий
+  const getAllChildCategoryIds = useCallback((categoryId) => {
+    const childIds = [];
+    
+    const findChildren = (parentId) => {
+      allCategories.forEach(category => {
+        if (category.parent_id === parentId) {
+          childIds.push(category.id);
+          // Рекурсивно ищем дочерние для этой категории
+          findChildren(category.id);
+        }
+      });
+    };
+    
+    findChildren(categoryId);
+    return childIds;
+  }, [allCategories]);
+
+  // Функция для получения родительской категории
+  const getParentCategoryId = useCallback((categoryId) => {
+    const category = allCategories.find(cat => cat.id === categoryId);
+    return category?.parent_id || null;
+  }, [allCategories]);
+
+  // Функция для проверки, является ли категория родительской (имеет дочерние)
+  const isParentCategory = useCallback((categoryId) => {
+    return allCategories.some(cat => cat.parent_id === categoryId);
+  }, [allCategories]);
+
   const handleCategoryToggle = useCallback((categoryId) => {
     setSelectedCategoryIds((prev) => {
-      if (prev.includes(categoryId)) {
-        return prev.filter((id) => id !== categoryId);
+      const isCurrentlySelected = prev.includes(categoryId);
+      
+      if (isCurrentlySelected) {
+        // Снимаем выбор
+        let newIds = prev.filter((id) => id !== categoryId);
+        
+        // Получаем все дочерние категории и снимаем с них выбор
+        const childIds = getAllChildCategoryIds(categoryId);
+        newIds = newIds.filter((id) => !childIds.includes(id));
+        
+        return newIds;
       } else {
-        return [...prev, categoryId];
+        // Выбираем категорию
+        let newIds = [...prev, categoryId];
+        
+        // Если это родительская категория, выбираем все дочерние
+        if (isParentCategory(categoryId)) {
+          const childIds = getAllChildCategoryIds(categoryId);
+          childIds.forEach(childId => {
+            if (!newIds.includes(childId)) {
+              newIds.push(childId);
+            }
+          });
+        }
+        
+        // Если это дочерняя категория и родительская была выбрана, снимаем выбор с родительской
+        const parentId = getParentCategoryId(categoryId);
+        if (parentId && prev.includes(parentId)) {
+          newIds = newIds.filter((id) => id !== parentId);
+          // Также снимаем выбор со всех других дочерних этой родительской
+          const siblingIds = getAllChildCategoryIds(parentId);
+          siblingIds.forEach(siblingId => {
+            if (siblingId !== categoryId) {
+              newIds = newIds.filter((id) => id !== siblingId);
+            }
+          });
+        }
+        
+        return newIds;
       }
     });
-  }, []);
+  }, [getAllChildCategoryIds, getParentCategoryId, isParentCategory]);
 
   const videos = videosData?.data || [];
 
@@ -235,15 +317,6 @@ const Home = () => {
             aria-label="Close filters sidebar"
           />
           <div className="filters-sidebar">
-            <div className="filters-sidebar-header-close">
-              <button 
-                className="filters-sidebar-close-btn"
-                onClick={() => setFiltersSidebarOpen(false)}
-                aria-label="Close filters"
-              >
-                ✕
-              </button>
-            </div>
             <FilterSidebar
               categories={categories}
               onFilterChange={handleFilterChange}

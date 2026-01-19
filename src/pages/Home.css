@@ -194,35 +194,6 @@
   flex-direction: column;
 }
 
-.filters-sidebar-header-close {
-  padding: 12px 16px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
-  flex-shrink: 0;
-}
-
-.filters-sidebar-close-btn {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #666;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  min-width: 44px;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.filters-sidebar-close-btn:hover {
-  background-color: #f0f0f0;
-}
-
-
 @media (max-width: 768px) {
   .home-header {
     padding: 12px 16px;

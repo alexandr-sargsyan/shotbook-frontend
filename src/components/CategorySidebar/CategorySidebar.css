@@ -13,16 +13,25 @@
   border-bottom: 1px solid #e0e0e0;
   background-color: #f9fafb;
   flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-sidebar-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
 }
 
 .category-reset-btn {
-  width: 100%;
-  padding: 8px 16px;
+  padding: 6px 12px;
   background-color: #f3f4f6;
   color: #374151;
   border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
@@ -33,11 +42,6 @@
   border-color: #9ca3af;
 }
 
-.category-list {
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-}
 
 
 .category-expand-btn,
@@ -104,6 +108,9 @@
 }
 
 .category-list {
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
