@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getTags } from '../../services/api';
+import { getTags, getHooks } from '../../services/api';
 import './FilterSidebar.css';
 
 const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} }) => {
@@ -16,6 +16,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     platform: currentFilters.platform || [],
     pacing: Array.isArray(currentFilters.pacing) ? currentFilters.pacing : (currentFilters.pacing ? [currentFilters.pacing] : []),
     production_level: Array.isArray(currentFilters.production_level) ? currentFilters.production_level : (currentFilters.production_level ? [currentFilters.production_level] : []),
+    hook_ids: currentFilters.hook_ids || [],
     has_visual_effects: currentFilters.has_visual_effects || false,
     has_3d: currentFilters.has_3d || false,
     has_animations: currentFilters.has_animations || false,
@@ -78,8 +79,18 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     enabled: selectedTagIds.length > 0,
   });
 
+  // Загрузка хуков
+  const { data: hooksData } = useQuery({
+    queryKey: ['hooks'],
+    queryFn: async () => {
+      const response = await getHooks();
+      return response.data;
+    },
+  });
+
   const tags = tagsData?.data || [];
   const selectedTags = selectedTagsData?.data || [];
+  const hooks = hooksData?.data || [];
 
   // Синхронизируем с currentFilters при изменении извне
   useEffect(() => {
@@ -89,6 +100,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
       platform: currentFilters.platform || [],
       pacing: Array.isArray(currentFilters.pacing) ? currentFilters.pacing : (currentFilters.pacing ? [currentFilters.pacing] : []),
       production_level: Array.isArray(currentFilters.production_level) ? currentFilters.production_level : (currentFilters.production_level ? [currentFilters.production_level] : []),
+      hook_ids: currentFilters.hook_ids || [],
       has_visual_effects: currentFilters.has_visual_effects || false,
       has_3d: currentFilters.has_3d || false,
       has_animations: currentFilters.has_animations || false,
@@ -185,11 +197,27 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     }
   };
 
+  const handleHookToggle = (hookId) => {
+    const newHookIds = filters.hook_ids.includes(hookId)
+      ? filters.hook_ids.filter((id) => id !== hookId)
+      : [...filters.hook_ids, hookId];
+    
+    const newFilters = {
+      ...filters,
+      hook_ids: newHookIds,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
   const handleReset = () => {
     const resetFilters = {
       platform: [],
       pacing: [],
       production_level: [],
+      hook_ids: [],
       has_visual_effects: false,
       has_3d: false,
       has_animations: false,
@@ -208,7 +236,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   };
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'tag_ids' || key === 'platform' || key === 'pacing' || key === 'production_level') {
+    if (key === 'tag_ids' || key === 'platform' || key === 'pacing' || key === 'production_level' || key === 'hook_ids') {
       return Array.isArray(value) && value.length > 0;
     }
     return value !== '' && value !== false;
@@ -315,6 +343,20 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
             />
             High
           </label>
+        </div>
+
+        <div className="filter-group checkboxes">
+          <label>Hooks</label>
+          {hooks.map((hook) => (
+            <label key={hook.id}>
+              <input
+                type="checkbox"
+                checked={filters.hook_ids.includes(hook.id)}
+                onChange={() => handleHookToggle(hook.id)}
+              />
+              {hook.name}
+            </label>
+          ))}
         </div>
 
         <div className="filter-group">

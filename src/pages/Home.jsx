@@ -179,7 +179,7 @@ const Home = () => {
           >
             {sidebarOpen ? '✕' : '☰'}
             {selectedCategoryIds.length > 0 && (
-              <span className="filter-badge">{selectedCategoryIds.length}</span>
+              <span className="filter-badge"></span>
             )}
           </button>
           <SearchBar onSearch={handleSearch} />
@@ -199,7 +199,7 @@ const Home = () => {
               </svg>
             )}
             {hasActiveFilters && (
-              <span className="filter-badge">{activeFiltersCount}</span>
+              <span className="filter-badge"></span>
             )}
           </button>
         </div>

@@ -205,4 +205,9 @@ export const getTags = async (search = '') => {
   return api.get('/tags', { params });
 };
 
+// Get all hooks
+export const getHooks = async () => {
+  return api.get('/hooks');
+};
+
 export default api;

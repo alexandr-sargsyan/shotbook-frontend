@@ -71,12 +71,20 @@
 .categories-toggle-btn .filter-badge,
 .filters-toggle-btn .filter-badge {
   position: absolute;
-  top: -8px;
-  right: -6px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #007bff;
-  line-height: 1;
+  top: -3px;
+  right: -3px;
+  width: 6px;
+  height: 6px;
+  background-color: #007bff;
+  border-radius: 50%;
+  display: block;
+  padding: 0;
+  margin: 0;
+  min-width: 6px;
+  min-height: 6px;
+  max-width: 6px;
+  max-height: 6px;
+  box-sizing: border-box;
 }
 
 .filters-toggle-btn {
