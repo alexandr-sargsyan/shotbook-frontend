@@ -153,7 +153,37 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  max-height: calc(90vh - 200px); /* Header + actions примерно 200px */
+  max-height: calc(90vh - 280px); /* Header + actions + footer примерно 280px */
+}
+
+.collection-modal-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  background-color: #f9fafb;
+}
+
+.collection-save-btn {
+  padding: 10px 24px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.collection-save-btn:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.collection-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .collections-list {
@@ -165,11 +195,16 @@
 .collection-item {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding: 12px;
   cursor: pointer;
   transition: background-color 0.2s;
   border-radius: 6px;
+}
+
+.collection-item input[type="checkbox"] {
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .collection-item:hover:not(.pending) {
@@ -191,11 +226,14 @@
 }
 
 .collection-checkbox {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
   cursor: pointer;
   accent-color: #007bff;
   flex-shrink: 0;
+  margin: 0;
 }
 
 .collection-name {
@@ -203,6 +241,11 @@
   color: #111827;
   font-size: 14px;
   font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .collection-added {

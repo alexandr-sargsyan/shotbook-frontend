@@ -6,29 +6,19 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import './SaveToCollectionButton.css';
 
 // Компонент для элемента коллекции в модальном окне
-const CollectionItem = ({ collection, savedCollectionIds = [], onToggle, isPending = false }) => {
-  const isSelected = savedCollectionIds.includes(collection.id);
+const CollectionItem = ({ collection, selectedCollectionIds = [], onToggle }) => {
+  const isSelected = selectedCollectionIds.includes(collection.id);
 
   return (
-    <div 
-      className={`collection-item ${isPending ? 'pending' : ''}`} 
-      onClick={() => !isPending && onToggle(collection.id)}
-    >
+    <label className="collection-item">
       <input
         type="checkbox"
         checked={isSelected}
-        onChange={() => !isPending && onToggle(collection.id)}
+        onChange={() => onToggle(collection.id)}
         className="collection-checkbox"
-        disabled={isPending}
       />
       <span className="collection-name">{collection.name}</span>
-      {isSelected && (
-        <span className="collection-added">Added</span>
-      )}
-      {isPending && (
-        <span className="collection-pending">...</span>
-      )}
-    </div>
+    </label>
   );
 };
 
@@ -40,7 +30,9 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newCollectionName, setNewCollectionName] = useState('');
-  const [pendingCollections, setPendingCollections] = useState(new Set());
+  const [selectedCollectionIds, setSelectedCollectionIds] = useState([]);
+  const [initialCollectionIds, setInitialCollectionIds] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Проверяем, сохранено ли видео в каталогах
   const { data: savedData } = useQuery({
@@ -61,6 +53,15 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
   }, [savedData]);
 
   const savedCollectionIds = savedData?.collection_ids || [];
+
+  // Инициализируем выбранные коллекции при открытии модального окна
+  useEffect(() => {
+    if (showModal) {
+      const initialIds = savedCollectionIds.length > 0 ? [...savedCollectionIds] : [];
+      setSelectedCollectionIds(initialIds);
+      setInitialCollectionIds(initialIds);
+    }
+  }, [showModal, savedCollectionIds]);
 
   const { data: collectionsData, isLoading } = useQuery({
     queryKey: ['collections'],
@@ -93,6 +94,13 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
     // Обновляем данные о сохраненности при открытии модалки
     queryClient.invalidateQueries(['videoSaved', videoId]);
     setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    // Отменяем изменения - восстанавливаем исходное состояние
+    setSelectedCollectionIds([...initialCollectionIds]);
+    setSearchQuery('');
+    setShowModal(false);
   };
 
   const handleAddToCollection = async (collectionId) => {
@@ -130,29 +138,48 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
     }
   };
 
-  const handleToggleCollection = async (collectionId) => {
-    // Блокируем повторный клик на ту же коллекцию
-    if (pendingCollections.has(collectionId)) {
-      return;
-    }
-
-    // Добавляем в pending
-    setPendingCollections(prev => new Set([...prev, collectionId]));
-
-    try {
-      const isSelected = savedCollectionIds.includes(collectionId);
-      if (isSelected) {
-        await handleRemoveFromCollection(collectionId);
+  const handleToggleCollection = (collectionId) => {
+    // Только обновляем локальное состояние, без запросов
+    setSelectedCollectionIds(prev => {
+      if (prev.includes(collectionId)) {
+        return prev.filter(id => id !== collectionId);
       } else {
-        await handleAddToCollection(collectionId);
+        return [...prev, collectionId];
       }
+    });
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Определяем, какие коллекции нужно добавить и удалить
+      const toAdd = selectedCollectionIds.filter(id => !savedCollectionIds.includes(id));
+      const toRemove = savedCollectionIds.filter(id => !selectedCollectionIds.includes(id));
+
+      // Выполняем все операции параллельно
+      const promises = [
+        ...toAdd.map(collectionId => addVideoToCollection(collectionId, videoId)),
+        ...toRemove.map(collectionId => removeVideoFromCollection(collectionId, videoId))
+      ];
+
+      await Promise.all(promises);
+
+      // Обновляем данные
+      queryClient.invalidateQueries(['videoSaved', videoId]);
+      queryClient.invalidateQueries(['collections']);
+      
+      // Проверяем, осталось ли видео в других каталогах
+      const response = await checkVideoSaved(videoId);
+      setIsSaved(response.data.is_saved);
+
+      // Закрываем модальное окно
+      setShowModal(false);
+      setSearchQuery('');
+    } catch (error) {
+      console.error('Error saving collections:', error);
+      // Можно добавить уведомление об ошибке
     } finally {
-      // Убираем из pending после завершения
-      setPendingCollections(prev => {
-        const next = new Set(prev);
-        next.delete(collectionId);
-        return next;
-      });
+      setIsSaving(false);
     }
   };
 
@@ -163,14 +190,13 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
     },
     onSuccess: async (data) => {
       const newCollection = data.data;
-      // Добавляем видео в новую коллекцию
-      await addVideoToCollection(newCollection.id, videoId);
-      // Обновляем данные
+      // Добавляем новую коллекцию в выбранные (локальное состояние)
+      setSelectedCollectionIds(prev => [...prev, newCollection.id]);
+      // Обновляем список коллекций
       queryClient.invalidateQueries(['collections']);
-      queryClient.invalidateQueries(['videoSaved', videoId]);
       setShowCreateModal(false);
       setNewCollectionName('');
-      setIsSaved(true);
+      // Не добавляем видео сразу - пользователь должен нажать Save
     },
   });
 
@@ -207,10 +233,7 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
       </button>
 
       {showModal && createPortal(
-        <div className="collection-modal-overlay" onClick={() => {
-          setShowModal(false);
-          setSearchQuery('');
-        }}>
+        <div className="collection-modal-overlay" onClick={handleCloseModal}>
           <div className="collection-modal" onClick={(e) => e.stopPropagation()}>
             <div className="collection-modal-header">
               <h3>Collections</h3>
@@ -256,13 +279,21 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
                     <CollectionItem
                       key={collection.id}
                       collection={collection}
-                      savedCollectionIds={savedCollectionIds}
+                      selectedCollectionIds={selectedCollectionIds}
                       onToggle={handleToggleCollection}
-                      isPending={pendingCollections.has(collection.id)}
                     />
                   ))}
                 </div>
               )}
+            </div>
+            <div className="collection-modal-footer">
+              <button
+                className="collection-save-btn"
+                onClick={handleSave}
+                disabled={isSaving}
+              >
+                {isSaving ? 'Saving...' : 'Save'}
+              </button>
             </div>
           </div>
         </div>,
