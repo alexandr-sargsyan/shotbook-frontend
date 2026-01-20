@@ -12,9 +12,9 @@ const Logo = () => {
   return (
     <div className="logo-container" onClick={handleClick} title="Go to home">
       <div className="logo-icon">
-        <span className="logo-letter">P</span>
+        <span className="logo-letter">S</span>
       </div>
-      <span className="logo-text">project_x</span>
+      <span className="logo-text">ShotBook</span>
     </div>
   );
 };
