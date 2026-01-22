@@ -63,14 +63,21 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
         </div>
       </div>
 
-      {video.public_summary && (
+      {(video.public_summary_html || video.public_summary) && (
         <div className="sidebar-section">
           <h3>Description</h3>
           <div 
             className={`description-container ${!isDescriptionExpanded ? 'collapsed' : ''}`}
             onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
           >
-            <p className="video-summary">{video.public_summary}</p>
+            {video.public_summary_html ? (
+              <div 
+                className="video-summary" 
+                dangerouslySetInnerHTML={{ __html: video.public_summary_html }}
+              />
+            ) : (
+              <p className="video-summary">{video.public_summary}</p>
+            )}
           </div>
         </div>
       )}
