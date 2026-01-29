@@ -13,6 +13,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
     has_animations: currentFilters.has_animations || false,
     has_typography: currentFilters.has_typography || false,
     has_sound_design: currentFilters.has_sound_design || false,
+    has_ai: currentFilters.has_ai || false,
     has_tutorial: currentFilters.has_tutorial || false,
   });
 
@@ -36,6 +37,7 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
       has_animations: false,
       has_typography: false,
       has_sound_design: false,
+      has_ai: false,
       has_tutorial: false,
     };
     setFilters(resetFilters);
@@ -151,6 +153,14 @@ const Filters = ({ categories = [], onFilterChange, currentFilters = {} }) => {
                 onChange={(e) => handleChange('has_sound_design', e.target.checked)}
               />
               Sound Design
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.has_ai}
+                onChange={(e) => handleChange('has_ai', e.target.checked)}
+              />
+              AI
             </label>
             <label>
               <input

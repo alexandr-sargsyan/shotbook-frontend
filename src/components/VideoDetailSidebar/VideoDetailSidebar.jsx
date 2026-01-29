@@ -28,6 +28,7 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
     { key: 'has_animations', label: 'Animations' },
     { key: 'has_typography', label: 'Typography' },
     { key: 'has_sound_design', label: 'Sound Design' },
+    { key: 'has_ai', label: 'AI' },
   ];
 
   return (
