@@ -45,9 +45,7 @@ const Sidebar = ({
 
                     {/* Filters Section */}
                     <div className="sidebar-section">
-                        <div className="sidebar-section-header">
-                            <h3>Filters</h3>
-                        </div>
+                        {/* Removed header as requested */}
                         <div className="sidebar-section-body">
                             <FilterSidebar
                                 categories={categories} // FilterSidebar might use categories too?

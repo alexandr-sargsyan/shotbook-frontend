@@ -51,11 +51,15 @@ const CategorySidebar = ({
     const isExpanded = expandedCategories[category.id];
     const isSelected = selectedCategoryIds.includes(category.id);
 
+    // Увеличенный отступ для явности иерархии (32px на уровень)
+    // Removed base offset to align with filters (was + 12)
+    const paddingLeft = level * 32;
+
     return (
       <div key={category.id} className="category-item">
         <div
           className={`category-row ${isSelected ? 'active' : ''}`}
-          style={{ paddingLeft: `${level * 20 + 12}px` }}
+          style={{ paddingLeft: `${paddingLeft}px` }}
         >
           {/* Чекбокс */}
           <input

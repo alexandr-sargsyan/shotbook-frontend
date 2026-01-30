@@ -4,7 +4,7 @@
    =========================================== */
 
 .category-sidebar {
-  background-color: var(--color-surface);
+  background-color: transparent;
   padding: 0;
   height: 100%;
   overflow-y: auto;
@@ -15,8 +15,10 @@
 
 .category-sidebar.embedded {
   background-color: transparent;
-  height: auto;
+  height: auto !important;
+  min-height: 0 !important;
   overflow-y: visible;
+  flex: 0 0 auto !important;
 }
 
 /* ===== HEADER ===== */
@@ -135,7 +137,8 @@
 }
 
 .category-sidebar.embedded .category-list {
-  padding: 0 var(--spacing-md) var(--spacing-md);
+  padding: 0 var(--spacing-md) 0;
+  /* Removed bottom padding */
   overflow-y: visible;
   flex: 0 0 auto;
 }
@@ -148,22 +151,31 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-xs) 0;
+  padding: 0.25rem 0;
+  /* Adjusted padding to match filters */
   cursor: pointer;
   border-radius: var(--radius-xs);
-  transition: background-color var(--transition-fast);
+  transition: all var(--transition-fast);
 }
 
 .category-row:hover {
-  background-color: var(--color-surface-elevated);
+  background-color: transparent;
+  /* Removed background hover */
+}
+
+/* Hover effect: change text color */
+.category-row:hover .category-name {
+  color: var(--color-text);
 }
 
 .category-checkbox {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  /* Matched to filters (was 18px) */
+  height: 16px;
   cursor: pointer;
   flex-shrink: 0;
   accent-color: var(--color-accent);
+  border-radius: 4px;
 }
 
 .category-toggle {
@@ -185,7 +197,8 @@
 
 .category-toggle:hover {
   color: var(--color-accent);
-  background-color: var(--color-accent-subtle);
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Subtle bg for toggle only */
 }
 
 .category-spacer {
@@ -199,10 +212,13 @@
   cursor: pointer;
   text-align: left;
   font-size: var(--text-meta);
-  color: var(--color-text);
+  font-weight: var(--weight-regular);
+  /* Default weight */
+  color: var(--color-text-dim);
+  /* Dim by default */
   padding: 0.25rem var(--spacing-xs);
   border-radius: var(--radius-xs);
-  transition: all var(--transition-fast);
+  transition: color var(--transition-fast);
   flex: 1;
   user-select: none;
 }
@@ -212,7 +228,8 @@
 }
 
 .category-row.active {
-  background-color: var(--color-accent-subtle);
+  background-color: transparent;
+  /* No background for active */
 }
 
 .category-row.active .category-name {

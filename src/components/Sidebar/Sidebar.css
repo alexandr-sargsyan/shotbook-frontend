@@ -25,12 +25,15 @@
     display: flex;
     flex-direction: column;
     padding-bottom: var(--spacing-xl);
+    padding-top: var(--spacing-md);
 }
 
 /* Sections */
 .sidebar-section {
     display: flex;
     flex-direction: column;
+    margin-bottom: 0;
+    /* Align tightly */
 }
 
 .sidebar-section-header {
@@ -49,14 +52,13 @@
     margin: 0;
 }
 
-.sidebar-section-body {
-    /* padding: var(--spacing-xs) 0; */
-}
+/* Removed empty .sidebar-section-body rule */
 
 .sidebar-divider {
     height: 1px;
     background-color: var(--color-border);
-    margin: var(--spacing-sm) 0;
+    margin: var(--spacing-xs) 0;
+    /* Reduced from sm to xs (or implicit large value) */
 }
 
 /* Overlay for Mobile */
@@ -83,13 +85,11 @@
 @media (max-width: 1023px) {
     .main-sidebar {
         position: fixed;
-        top: 0;
+        top: var(--header-height);
         left: -100%;
-        /* Hidden by default */
         bottom: 0;
-        height: 100vh;
+        height: calc(100vh - var(--header-height));
         width: 320px;
-        /* Wider drawer on mobile/tablet */
         max-width: 85vw;
 
         z-index: var(--z-modal);
@@ -100,6 +100,10 @@
 
     .main-sidebar.open {
         left: 0;
+    }
+
+    .sidebar-overlay {
+        top: var(--header-height);
     }
 }
 
