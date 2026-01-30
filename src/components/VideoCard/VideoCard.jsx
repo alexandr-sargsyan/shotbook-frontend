@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VideoListPlayer from '../VideoPlayer/VideoListPlayer';
 import BookmarkButton from '../BookmarkButton/BookmarkButton';
+import LikeButton from '../LikeButton/LikeButton';
 import './VideoCard.css';
 
 const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, viewMode = 'grid' }) => {
@@ -162,6 +163,12 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
 
         {/* Actions */}
         <div className="video-actions" onClick={(e) => e.stopPropagation()}>
+          <LikeButton
+            videoId={video.id}
+            initialLiked={video.is_liked || false}
+            initialLikesCount={video.likes_count || 0}
+            onAuthRequired={onAuthRequired}
+          />
           <BookmarkButton
             videoId={video.id}
             onAuthRequired={onAuthRequired}

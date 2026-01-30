@@ -50,30 +50,19 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
       </div>
       <div className="sidebar-header">
         <h2 className="video-title">{video.title}</h2>
-        <div className="video-actions-sidebar">
-          <LikeButton
-            videoId={video.id}
-            initialLiked={video.is_liked || false}
-            initialLikesCount={video.likes_count || 0}
-            onAuthRequired={onAuthRequired}
-          />
-          <SaveToCollectionButton
-            videoId={video.id}
-            onAuthRequired={onAuthRequired}
-          />
-        </div>
+        {/* Buttons moved under the video player */}
       </div>
 
       {(video.public_summary_html || video.public_summary) && (
         <div className="sidebar-section">
           <h3>Description</h3>
-          <div 
+          <div
             className={`description-container ${!isDescriptionExpanded ? 'collapsed' : ''}`}
             onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
           >
             {video.public_summary_html ? (
-              <div 
-                className="video-summary" 
+              <div
+                className="video-summary"
                 dangerouslySetInnerHTML={{ __html: video.public_summary_html }}
               />
             ) : (

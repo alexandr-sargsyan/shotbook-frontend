@@ -123,7 +123,7 @@ const VideoDetail = () => {
           );
           const newVideos = response.data.data || [];
           const newPagination = response.data.meta || {};
-          
+
           if (newVideos.length > 0) {
             const updatedVideoList = {
               videos: [...videos, ...newVideos],
@@ -202,11 +202,12 @@ const VideoDetail = () => {
               Open →
             </a>
           )}
-          <VideoDetailView 
-            video={video} 
+          <VideoDetailView
+            video={video}
             onSwipe={videoListState ? navigateToVideo : undefined}
             canSwipeNext={videoListState ? (currentVideoIndex < (videoListState.videos?.length || 0) - 1 || (videoListState.pagination?.current_page || 0) < (videoListState.pagination?.last_page || 0)) : false}
             canSwipePrev={videoListState ? currentVideoIndex > 0 : false}
+            onAuthRequired={handleAuthRequired}
           />
         </div>
         <div className="video-detail-sidebar-wrapper">

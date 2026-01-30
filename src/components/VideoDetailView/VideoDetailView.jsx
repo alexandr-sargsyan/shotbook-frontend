@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import VideoDetailPlayer from '../VideoPlayer/VideoDetailPlayer';
+import LikeButton from '../LikeButton/LikeButton';
+import SaveToCollectionButton from '../SaveToCollection/SaveToCollectionButton';
 import './VideoDetailView.css';
 
-const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
+const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev, onAuthRequired }) => {
   const containerRef = useRef(null);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
@@ -37,7 +39,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
       e.preventDefault();
     };
 
-      const handleMouseUp = (e) => {
+    const handleMouseUp = (e) => {
       if (!mouseStart || isSwipeLocked) {
         setIsDragging(false);
         setMouseStart(null);
@@ -222,7 +224,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
 
 
   return (
-    <div 
+    <div
       className="video-detail-view"
       ref={containerRef}
       onTouchStart={onTouchStart}
@@ -249,7 +251,24 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
           </div>
         )}
       </div>
-      
+
+      <div className="video-meta-actions">
+        <div className="video-meta-left">
+          <LikeButton
+            videoId={video.id}
+            initialLiked={video.is_liked || false}
+            initialLikesCount={video.likes_count || 0}
+            onAuthRequired={onAuthRequired}
+          />
+        </div>
+        <div className="video-meta-right">
+          <SaveToCollectionButton
+            videoId={video.id}
+            onAuthRequired={onAuthRequired}
+          />
+        </div>
+      </div>
+
       {/* Кнопки-стрелки для десктопа */}
       <div className="video-navigation-arrows">
         <button
@@ -259,7 +278,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
           aria-label="Next video"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 15l-6-6-6 6"/>
+            <path d="M18 15l-6-6-6 6" />
           </svg>
         </button>
         <button
@@ -269,7 +288,7 @@ const VideoDetailView = ({ video, onSwipe, canSwipeNext, canSwipePrev }) => {
           aria-label="Previous video"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6 9l6 6 6-6"/>
+            <path d="M6 9l6 6 6-6" />
           </svg>
         </button>
       </div>
