@@ -1,18 +1,19 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f5f5;
+/* ===========================================
+   SHOTBOOK - INDEX STYLES
+   Root element and critical CSS
+   =========================================== */
+
+/* Prevent FOUC (Flash of Unstyled Content) */
+html {
+  background-color: #0A0A0A;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  margin: 0;
+  background-color: #0A0A0A;
 }
 
 #root {
   min-height: 100vh;
+  background-color: #0A0A0A;
 }

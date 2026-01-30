@@ -1,252 +1,188 @@
+/* ===========================================
+   HOME PAGE STYLES
+   Dark Theme with Frosted Glass Header
+   =========================================== */
+
 .home-page {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--color-bg);
   position: relative;
 }
 
+/* ===== HEADER ===== */
 .home-header {
-  background: white;
-  padding: 18px 24px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1002;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
+  z-index: var(--z-sticky);
 
-/* Логотип слева */
-.home-header > .logo-container {
-  order: 1;
-  flex-shrink: 0;
-}
+  /* Frosted glass effect */
+  background: rgba(10, 10, 10, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 
-/* Поисковая строка в центре верхней панели */
-.search-container {
-  flex: 1;
-  min-width: 200px;
-  max-width: 600px;
-  margin: 0 auto;
+  /* Border */
+  border-bottom: 1px solid var(--color-border);
+
+  /* Layout */
   display: flex;
   align-items: center;
-  gap: 8px;
-  order: 2; /* После логотипа */
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+
+  /* Shadow on scroll (optional, controlled by JS) */
+  transition: box-shadow var(--transition-normal);
 }
 
-/* Navigation справа */
-.home-header > .navigation {
-  order: 3;
+.home-header.scrolled {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo positioning */
+.home-header>.logo-container {
   flex-shrink: 0;
 }
 
-.categories-toggle-btn {
-  background: none;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 20px;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: background-color 0.2s, border-color 0.2s;
+/* ===== SEARCH CONTAINER ===== */
+.search-container {
+  flex: 1;
+  max-width: 600px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* ===== TOGGLE BUTTONS (Mobile Menu) ===== */
+.mobile-menu-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
-  z-index: 1002;
+  width: 40px;
+  height: 40px;
+
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+
+  color: var(--color-text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
   position: relative;
-  pointer-events: auto;
+  flex-shrink: 0;
 }
 
-.categories-toggle-btn:hover {
-  background-color: #f0f0f0;
-  border-color: #d0d0d0;
+.mobile-menu-btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
-.categories-toggle-btn .filter-badge,
-.filters-toggle-btn .filter-badge {
+.mobile-menu-btn.has-filters {
+  border-color: var(--color-accent);
+}
+
+/* Filter badge indicator */
+.mobile-menu-btn .filter-badge {
   position: absolute;
   top: -3px;
   right: -3px;
-  width: 6px;
-  height: 6px;
-  background-color: #007bff;
-  border-radius: 50%;
-  display: block;
-  padding: 0;
-  margin: 0;
-  min-width: 6px;
-  min-height: 6px;
-  max-width: 6px;
-  max-height: 6px;
-  box-sizing: border-box;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent);
+  border-radius: var(--radius-full);
 }
 
-.filters-toggle-btn {
-  background: none;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 8px 12px;
-  font-size: 20px;
-  cursor: pointer;
+/* Navigation positioning */
+.home-header>.navigation {
   flex-shrink: 0;
-  transition: background-color 0.2s, border-color 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #333;
-  z-index: 1002;
-  position: relative;
-  pointer-events: auto;
 }
 
-.filters-toggle-btn:hover {
-  background-color: #f0f0f0;
-  border-color: #d0d0d0;
-}
-
-
+/* ===== MAIN CONTENT ===== */
 .home-content {
   display: flex;
-  max-width: 1600px;
+  /* max-width: var(--max-content-width); */
+  width: 100%;
   margin: 0 auto;
-  padding-top: 82px; /* Отступ для фиксированного header */
-  min-height: calc(100vh - 82px);
+  padding-top: calc(var(--header-height) + var(--spacing-md));
+  min-height: calc(100vh - var(--header-height));
+  position: relative;
 }
 
 .video-content {
   flex: 1;
-  padding: 20px;
+  padding: var(--spacing-md) var(--spacing-lg);
   min-width: 0;
+  transition: padding-left var(--transition-normal);
 }
 
-/* Overlay для sidebar */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  animation: fadeIn 0.2s ease-out;
-}
+/* ===== DESKTOP SIDEBAR OFFSET ===== */
+@media (min-width: 1024px) {
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+  /* Sidebar is sticky on left, content is pushed */
+  .video-content {
+    margin-left: var(--sidebar-width);
   }
-  to {
-    opacity: 1;
+
+  /* Hide mobile menu button on desktop */
+  .mobile-menu-btn {
+    display: none;
   }
 }
 
-/* Боковая панель с категориями */
-.empty-sidebar {
-  position: fixed;
-  left: 0;
-  top: 73px; /* Начинается после фиксированного header (padding + border) */
-  bottom: 0;
-  width: 300px;
-  background-color: white;
-  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
-  z-index: 1001;
-  animation: slideIn 0.3s ease-out;
-  overflow-y: auto;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-/* Боковая панель с фильтрами (справа) */
-.filters-sidebar {
-  position: fixed;
-  right: 0;
-  top: 73px; /* Начинается после фиксированного header (padding + border) */
-  bottom: 0;
-  width: 300px;
-  background-color: white;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
-  z-index: 1001;
-  animation: slideInRight 0.3s ease-out;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-@media (max-width: 768px) {
+/* ===== MOBILE STYLES ===== */
+@media (max-width: 767px) {
   .home-header {
-    padding: 12px 16px;
+    padding: var(--spacing-sm) var(--spacing-sm);
+    gap: var(--spacing-sm);
     flex-wrap: wrap;
-    gap: 8px;
   }
 
   .home-content {
-    padding-top: 70px; /* Отступ для фиксированного header на мобильных */
-    min-height: calc(100vh - 70px);
+    padding-top: calc(var(--header-height-mobile) + var(--spacing-sm));
+    min-height: calc(100vh - var(--header-height-mobile));
   }
 
   .video-content {
-    padding: 16px;
+    padding: var(--spacing-sm);
+    margin-left: 0;
+    /* No offset on mobile */
   }
 
   .search-container {
-    max-width: 100%;
-    min-width: unset; /* Убрать min-width для предотвращения переполнения */
     order: 3;
-    width: 100%;
-    margin: 8px 0 0 0;
+    flex: 1 1 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: var(--spacing-xs);
   }
 
-  /* Логотип на мобильных */
-  .home-header > .logo-container {
+  .home-header>.logo-container {
     order: 1;
   }
 
-  /* Navigation на мобильных - убеждаемся что виден */
-  .home-header > .navigation {
+  .home-header>.navigation {
     order: 2;
-    flex-shrink: 0;
   }
 
-  .categories-toggle-btn,
-  .filters-toggle-btn {
+  .mobile-menu-btn {
+    width: 44px;
+    height: 44px;
     font-size: 16px;
-    min-width: 44px; /* Touch target по Apple HIG */
-    min-height: 44px;
-    padding: 10px;
-  }
-
-  .empty-sidebar {
-    width: calc(100% - 60px); /* На mobile занимает почти весь экран, оставляя 60px */
-    max-width: 320px;
-    top: 61px; /* На мобильных после фиксированного header */
-  }
-
-  .filters-sidebar {
-    width: calc(100% - 60px); /* На mobile занимает почти весь экран, оставляя 60px */
-    max-width: 320px;
-    top: 61px; /* На мобильных после фиксированного header */
   }
 }
 
+/* ===== TABLET STYLES ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .home-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .video-content {
+    padding: var(--spacing-md);
+    margin-left: 0;
+    /* Sidebar is drawer on tablet too */
+  }
+}

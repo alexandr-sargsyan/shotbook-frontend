@@ -1,11 +1,15 @@
+/* ===========================================
+   LOGO COMPONENT
+   Green dot accent design
+   =========================================== */
+
 .logo-container {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-xs);
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity var(--transition-fast);
   flex-shrink: 0;
-  z-index: 1002;
   position: relative;
 }
 
@@ -13,45 +17,38 @@
   opacity: 0.8;
 }
 
+/* Green dot indicator */
 .logo-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent);
   flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 8px var(--color-accent-glow);
 }
 
-.logo-letter {
-  color: white;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1;
-}
-
+/* Logo text */
 .logo-text {
-  color: #3b82f6;
-  font-size: 18px;
-  font-weight: 600;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: var(--weight-semibold);
   letter-spacing: -0.5px;
   white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-  .logo-icon {
-    width: 32px;
-    height: 32px;
-  }
-
-  .logo-letter {
-    font-size: 18px;
-  }
-
-  .logo-text {
-    font-size: 16px;
-  }
+/* Hide the "S" letter - we use green dot instead */
+.logo-letter {
+  display: none;
 }
 
+/* Mobile */
+@media (max-width: 767px) {
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .logo-icon {
+    width: 6px;
+    height: 6px;
+  }
+}

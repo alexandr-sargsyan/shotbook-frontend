@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './CategorySidebar.css';
 
-const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategoryToggle, onClose, onReset }) => {
+const CategorySidebar = ({
+  categories = [],
+  selectedCategoryIds = [],
+  onCategoryToggle,
+  onClose,
+  onReset,
+  embedded = false
+}) => {
   const [expandedCategories, setExpandedCategories] = useState({});
 
   // Ensure categories is always an array
@@ -58,7 +65,7 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
             onChange={(e) => handleCheckboxChange(category.id, e)}
             onClick={(e) => e.stopPropagation()}
           />
-          
+
           {/* Название категории */}
           <label
             className="category-name"
@@ -70,7 +77,7 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
           >
             {category.name}
           </label>
-          
+
           {/* Стрелка для раскрытия подкатегорий (в конце) */}
           {hasChildren && (
             <button
@@ -92,19 +99,30 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
   };
 
   const rootCategories = categoriesArray.filter((cat) => !cat.parent_id);
-
   const hasSelectedCategories = selectedCategoryIds.length > 0;
 
   return (
-    <div className="category-sidebar">
-      <div className="category-sidebar-header">
-        <h3>Categories</h3>
-        {hasSelectedCategories && onReset && (
+    <div className={`category-sidebar ${embedded ? 'embedded' : ''}`}>
+      {!embedded && (
+        <div className="category-sidebar-header">
+          <h3>Categories</h3>
+          {hasSelectedCategories && onReset && (
+            <button className="category-reset-btn" onClick={onReset}>
+              Reset Categories
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* If embedded, we show reset button differently or rely on parent */}
+      {embedded && hasSelectedCategories && onReset && (
+        <div className="category-embedded-actions">
           <button className="category-reset-btn" onClick={onReset}>
-            Reset Categories
+            Reset
           </button>
-        )}
-      </div>
+        </div>
+      )}
+
       <div className="category-list">
         {rootCategories.length > 0 ? (
           rootCategories.map((category) => renderCategory(category))
@@ -117,4 +135,3 @@ const CategorySidebar = ({ categories = [], selectedCategoryIds = [], onCategory
 };
 
 export default CategorySidebar;
-
