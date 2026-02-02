@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './AuthModal.css';
 
@@ -36,7 +37,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
     setError('');
   };
 
-  return (
+  return createPortal(
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
@@ -45,7 +46,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
         </div>
         <form className="auth-modal-body" onSubmit={handleSubmit}>
           {error && <div className="auth-error">{error}</div>}
-          
+
           <div className="auth-form-group">
             <label htmlFor="name">Name</label>
             <input
@@ -111,9 +112,9 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin, onSuccess }) => {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
 export default RegisterModal;
-

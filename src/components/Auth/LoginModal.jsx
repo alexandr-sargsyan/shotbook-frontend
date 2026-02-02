@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './AuthModal.css';
 
@@ -43,7 +44,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
   };
 
   if (requiresVerification) {
-    return (
+    return createPortal(
       <div className="auth-modal-overlay" onClick={onClose}>
         <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
           <div className="auth-modal-header">
@@ -65,11 +66,12 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
             </button>
           </div>
         </div>
-      </div>
+      </div>,
+      document.body
     );
   }
 
-  return (
+  return createPortal(
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
@@ -78,7 +80,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
         </div>
         <form className="auth-modal-body" onSubmit={handleSubmit}>
           {error && <div className="auth-error">{error}</div>}
-          
+
           <div className="auth-form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -130,9 +132,9 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister, onSuccess }) => {
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
 export default LoginModal;
-
