@@ -21,13 +21,13 @@ const YouTubePlayer = ({ videoId, autoplay, muted, loop, controls = false }) => 
       params.append('playlist', videoId);
     }
 
-    const embedUrl = `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?${params.toString()}&origin=${window.location.origin}`;
 
     // Создать iframe
     if (containerRef.current) {
       const iframe = document.createElement('iframe');
       iframe.src = embedUrl;
-      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;
       iframe.style.width = '100%';
       iframe.style.height = '100%';

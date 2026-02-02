@@ -121,7 +121,7 @@
   opacity: 1;
 }
 
-/* ===== PLAY OVERLAY ===== */
+/* ===== OVERLAY BUTTONS ===== */
 .play-overlay {
   position: absolute;
   top: 0;
@@ -137,23 +137,50 @@
   opacity: 0;
 
   transition: opacity var(--transition-normal);
+  backdrop-filter: blur(2px);
 }
 
 .play-overlay.visible {
   opacity: 1;
 }
 
-.play-overlay svg {
-  width: 48px;
-  height: 48px;
-  color: var(--color-text);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
-  transform: scale(0.9);
-  transition: transform var(--transition-normal);
+.overlay-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
 }
 
-.video-card:hover .play-overlay svg {
-  transform: scale(1);
+.overlay-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  background-color: rgba(255, 255, 255, 0.1);
+  min-width: 80px;
+}
+
+.overlay-btn:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  transform: translateY(-2px);
+}
+
+.overlay-btn svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.overlay-btn span {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
 }
 
 /* ===== CARD CONTENT ===== */
@@ -204,6 +231,27 @@
   align-items: center;
   margin-top: auto;
   /* Push to bottom if needed */
+  padding-top: var(--spacing-xs);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-dim);
+  transition: all var(--transition-fast);
+  width: 40px;
+  height: 40px;
+}
+
+.action-btn:hover {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
 }
 
 /* ===== LIST VIEW ===== */

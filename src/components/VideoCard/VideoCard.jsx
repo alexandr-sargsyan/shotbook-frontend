@@ -10,6 +10,7 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
   const [isVisible, setIsVisible] = useState(false);
   const [shouldLoad, setShouldLoad] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isPlayingInGrid, setIsPlayingInGrid] = useState(false);
   const cardRef = useRef(null);
 
   const getPlatformIcon = (platform) => {
@@ -54,7 +55,17 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    // If we are playing in grid, clicking the wrapper should probably do nothing (or pause?)
+    // But we want to let the user interact with controls.
+    // If specifically clicking the 'Details' button, this function is called.
+
+    // If e is present (event), check if we should navigate
+    if (e && isPlayingInGrid) {
+      // If playing, we don't navigate on card click.
+      return;
+    }
+
     navigate(`/video/${video.id}`, {
       state: {
         videoList: videoList,
@@ -80,6 +91,8 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
           } else {
             setIsVisible(false);
             setShouldLoad(false);
+            // Optional: reset playing state when scrolled out
+            if (isPlayingInGrid) setIsPlayingInGrid(false);
           }
         });
       },
@@ -96,21 +109,29 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
         observer.unobserve(cardRef.current);
       }
     };
-  }, []);
+  }, [isPlayingInGrid]); // Added dependency to reset if needed
 
   const hasVideo = video.platform && video.platform_video_id;
   const isListView = viewMode === 'list';
 
   return (
     <div
-      className={`video-card ${isListView ? 'list-view' : ''}`}
-      onClick={handleClick}
+      className={`video-card ${isListView ? 'list-view' : ''} ${isPlayingInGrid ? 'playing' : ''}`}
+      onClick={(e) => isPlayingInGrid ? null : handleClick()}
       ref={cardRef}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Video Preview */}
-      <div className="video-preview">
+      {/* Video Preview - Clicking here toggles play */}
+      <div
+        className="video-preview"
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isPlayingInGrid) {
+            setIsPlayingInGrid(true);
+          }
+        }}
+      >
         {hasVideo && shouldLoad ? (
           <div className="video-player-wrapper">
             <VideoListPlayer
@@ -118,6 +139,8 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
               platformVideoId={video.platform_video_id}
               sourceUrl={video.source_url}
               isVisible={isVisible}
+              // Force un-mute and controls if playing in grid
+              isPlaying={isPlayingInGrid}
             />
           </div>
         ) : (
@@ -135,17 +158,12 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
           </div>
         )}
 
-        {/* Play overlay on hover */}
-        <div className={`play-overlay ${isHovered ? 'visible' : ''}`}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          </svg>
-        </div>
-
-        {/* Platform badge */}
-        <div className="platform-badge">
-          {getPlatformIcon(video.platform)}
-        </div>
+        {/* Platform badge - Hide if playing */}
+        {!isPlayingInGrid && (
+          <div className="platform-badge">
+            {getPlatformIcon(video.platform)}
+          </div>
+        )}
       </div>
 
       {/* Card Content */}
@@ -169,6 +187,29 @@ const VideoCard = ({ video, onAuthRequired, videoList = [], currentIndex = -1, v
             initialLikesCount={video.likes_count || 0}
             onAuthRequired={onAuthRequired}
           />
+
+          <button
+            className="action-btn details-action-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              // Always navigate when clicking the footer details button, even if playing
+              navigate(`/video/${video.id}`, {
+                state: {
+                  videoList: videoList,
+                  currentIndex: currentIndex,
+                  queryParams: videoList.queryParams || {},
+                  pagination: videoList.pagination || {},
+                }
+              });
+            }}
+            title="View Details"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </button>
+
           <BookmarkButton
             videoId={video.id}
             onAuthRequired={onAuthRequired}
