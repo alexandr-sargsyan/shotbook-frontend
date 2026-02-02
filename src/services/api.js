@@ -169,9 +169,11 @@ export const updateProfile = async (data) => {
 // ==================== Видео (существующие методы) ====================
 
 // Search video references with filters
-export const searchVideoReferences = async (query = '', filters = {}) => {
+export const searchVideoReferences = async (query = '', filters = {}, page = 1, perPage = 20) => {
   const params = {
     ...filters,
+    page,
+    per_page: perPage,
   };
   
   if (query) {
@@ -208,6 +210,15 @@ export const getTags = async (search = '') => {
 // Get all hooks
 export const getHooks = async () => {
   return api.get('/hooks');
+};
+
+// Get all transition types with optional search
+export const getTransitionTypes = async (search = '') => {
+  const params = {};
+  if (search) {
+    params.search = search;
+  }
+  return api.get('/transition-types', { params });
 };
 
 export default api;

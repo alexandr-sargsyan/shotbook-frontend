@@ -84,6 +84,17 @@ const VideoDetailSidebar = ({ video, onAuthRequired }) => {
         </div>
       )}
 
+      {video.transition_types && video.transition_types.length > 0 && (
+        <div className="sidebar-section">
+          <h3>Transition Types</h3>
+          <div className="tags-container">
+            {video.transition_types.map((tt) => (
+              <TagBadge key={tt.id} tag={tt} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {features.filter(feature => hasFeature(feature.key)).length > 0 && (
         <div className="sidebar-section">
           <h3>Features</h3>
