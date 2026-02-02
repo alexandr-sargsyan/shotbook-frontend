@@ -210,4 +210,13 @@ export const getHooks = async () => {
   return api.get('/hooks');
 };
 
+// Get all transition types with optional search
+export const getTransitionTypes = async (search = '') => {
+  const params = {};
+  if (search) {
+    params.search = search;
+  }
+  return api.get('/transition-types', { params });
+};
+
 export default api;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getTags, getHooks } from '../../services/api';
+import { getTags, getHooks, getTransitionTypes } from '../../services/api';
 import './FilterSidebar.css';
 
 const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} }) => {
@@ -11,6 +11,14 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   );
   const [isTagDropdownOpen, setIsTagDropdownOpen] = useState(false);
   const tagDropdownRef = useRef(null);
+
+  const [transitionTypeSearch, setTransitionTypeSearch] = useState('');
+  const [debouncedTransitionTypeSearch, setDebouncedTransitionTypeSearch] = useState('');
+  const [selectedTransitionTypeIds, setSelectedTransitionTypeIds] = useState(
+    currentFilters.transition_type_ids || []
+  );
+  const [isTransitionTypeDropdownOpen, setIsTransitionTypeDropdownOpen] = useState(false);
+  const transitionTypeDropdownRef = useRef(null);
 
   const [filters, setFilters] = useState({
     platform: currentFilters.platform || [],
@@ -25,6 +33,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     has_ai: currentFilters.has_ai || false,
     has_tutorial: currentFilters.has_tutorial || false,
     tag_ids: currentFilters.tag_ids || [],
+    transition_type_ids: currentFilters.transition_type_ids || [],
   });
 
   // Debounce для поиска тегов
@@ -36,22 +45,34 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     return () => clearTimeout(timer);
   }, [tagSearch]);
 
+  // Debounce для поиска transition types
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedTransitionTypeSearch(transitionTypeSearch);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [transitionTypeSearch]);
+
   // Закрытие dropdown при клике вне его
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (tagDropdownRef.current && !tagDropdownRef.current.contains(event.target)) {
         setIsTagDropdownOpen(false);
       }
+      if (transitionTypeDropdownRef.current && !transitionTypeDropdownRef.current.contains(event.target)) {
+        setIsTransitionTypeDropdownOpen(false);
+      }
     };
 
-    if (isTagDropdownOpen) {
+    if (isTagDropdownOpen || isTransitionTypeDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isTagDropdownOpen]);
+  }, [isTagDropdownOpen, isTransitionTypeDropdownOpen]);
 
   // Загрузка тегов с поиском
   const { data: tagsData, isLoading: tagsLoading } = useQuery({
@@ -80,6 +101,33 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     enabled: selectedTagIds.length > 0,
   });
 
+  // Загрузка transition types с поиском
+  const { data: transitionTypesData, isLoading: transitionTypesLoading } = useQuery({
+    queryKey: ['transitionTypes', debouncedTransitionTypeSearch],
+    queryFn: async () => {
+      const response = await getTransitionTypes(debouncedTransitionTypeSearch);
+      return response.data;
+    },
+    enabled: isTransitionTypeDropdownOpen,
+  });
+
+  // Загрузка выбранных transition types для отображения
+  const { data: selectedTransitionTypesData } = useQuery({
+    queryKey: ['transitionTypes', 'selected', selectedTransitionTypeIds],
+    queryFn: async () => {
+      if (selectedTransitionTypeIds.length === 0) {
+        return { data: [] };
+      }
+      // Загружаем все transition types и фильтруем по выбранным ID
+      const response = await getTransitionTypes('');
+      const allTransitionTypes = response.data.data || [];
+      return {
+        data: allTransitionTypes.filter((tt) => selectedTransitionTypeIds.includes(tt.id)),
+      };
+    },
+    enabled: selectedTransitionTypeIds.length > 0,
+  });
+
   // Загрузка хуков
   const { data: hooksData } = useQuery({
     queryKey: ['hooks'],
@@ -91,12 +139,16 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
 
   const tags = tagsData?.data || [];
   const selectedTags = selectedTagsData?.data || [];
+  const transitionTypes = transitionTypesData?.data || [];
+  const selectedTransitionTypes = selectedTransitionTypesData?.data || [];
   const hooks = hooksData?.data || [];
 
   // Синхронизируем с currentFilters при изменении извне
   useEffect(() => {
     const newTagIds = currentFilters.tag_ids || [];
+    const newTransitionTypeIds = currentFilters.transition_type_ids || [];
     setSelectedTagIds(newTagIds);
+    setSelectedTransitionTypeIds(newTransitionTypeIds);
     setFilters({
       platform: currentFilters.platform || [],
       pacing: Array.isArray(currentFilters.pacing) ? currentFilters.pacing : (currentFilters.pacing ? [currentFilters.pacing] : []),
@@ -110,6 +162,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
       has_ai: currentFilters.has_ai || false,
       has_tutorial: currentFilters.has_tutorial || false,
       tag_ids: newTagIds,
+      transition_type_ids: newTransitionTypeIds,
     });
   }, [currentFilters]);
 
@@ -146,6 +199,35 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
     const newFilters = {
       ...filters,
       tag_ids: newTagIds,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
+  const handleTransitionTypeToggle = (transitionTypeId) => {
+    const newTransitionTypeIds = selectedTransitionTypeIds.includes(transitionTypeId)
+      ? selectedTransitionTypeIds.filter((id) => id !== transitionTypeId)
+      : [...selectedTransitionTypeIds, transitionTypeId];
+    
+    setSelectedTransitionTypeIds(newTransitionTypeIds);
+    const newFilters = {
+      ...filters,
+      transition_type_ids: newTransitionTypeIds,
+    };
+    setFilters(newFilters);
+    if (onFilterChange) {
+      onFilterChange(newFilters);
+    }
+  };
+
+  const handleTransitionTypeRemove = (transitionTypeId) => {
+    const newTransitionTypeIds = selectedTransitionTypeIds.filter((id) => id !== transitionTypeId);
+    setSelectedTransitionTypeIds(newTransitionTypeIds);
+    const newFilters = {
+      ...filters,
+      transition_type_ids: newTransitionTypeIds,
     };
     setFilters(newFilters);
     if (onFilterChange) {
@@ -228,10 +310,14 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
       has_ai: false,
       has_tutorial: false,
       tag_ids: [],
+      transition_type_ids: [],
     };
     setSelectedTagIds([]);
     setTagSearch('');
     setIsTagDropdownOpen(false);
+    setSelectedTransitionTypeIds([]);
+    setTransitionTypeSearch('');
+    setIsTransitionTypeDropdownOpen(false);
     setFilters(resetFilters);
     if (onFilterChange) {
       onFilterChange(resetFilters);
@@ -239,7 +325,7 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
   };
 
   const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
-    if (key === 'tag_ids' || key === 'platform' || key === 'pacing' || key === 'production_level' || key === 'hook_ids') {
+    if (key === 'tag_ids' || key === 'transition_type_ids' || key === 'platform' || key === 'pacing' || key === 'production_level' || key === 'hook_ids') {
       return Array.isArray(value) && value.length > 0;
     }
     return value !== '' && value !== false;
@@ -413,6 +499,68 @@ const FilterSidebar = ({ categories = [], onFilterChange, currentFilters = {} })
                     <button
                       type="button"
                       onClick={() => handleTagRemove(tag.id)}
+                      className="tag-remove"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="filter-group">
+          <label>Transition Types</label>
+          <div className="tag-selector" ref={transitionTypeDropdownRef}>
+            <div className="tag-search-container">
+              <input
+                type="text"
+                placeholder="Search transition types..."
+                value={transitionTypeSearch}
+                onChange={(e) => {
+                  setTransitionTypeSearch(e.target.value);
+                  setIsTransitionTypeDropdownOpen(true);
+                }}
+                onFocus={() => setIsTransitionTypeDropdownOpen(true)}
+                className="tag-search-input"
+              />
+              {isTransitionTypeDropdownOpen && (
+                <div className="tag-dropdown">
+                  {transitionTypesLoading ? (
+                    <div className="tag-loading">Loading...</div>
+                  ) : transitionTypes.length > 0 ? (
+                    <div className="tag-list">
+                      {transitionTypes.map((tt) => (
+                        <label
+                          key={tt.id}
+                          className={`tag-option ${
+                            selectedTransitionTypeIds.includes(tt.id) ? 'selected' : ''
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedTransitionTypeIds.includes(tt.id)}
+                            onChange={() => handleTransitionTypeToggle(tt.id)}
+                          />
+                          <span>{tt.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="tag-empty">No transition types found</div>
+                  )}
+                </div>
+              )}
+            </div>
+            {selectedTransitionTypeIds.length > 0 && (
+              <div className="selected-tags">
+                {selectedTransitionTypes.map((tt) => (
+                  <span key={tt.id} className="tag-badge">
+                    {tt.name}
+                    <button
+                      type="button"
+                      onClick={() => handleTransitionTypeRemove(tt.id)}
                       className="tag-remove"
                     >
                       ×
