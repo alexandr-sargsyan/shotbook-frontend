@@ -52,3 +52,10 @@
   }
 }
 
+.infinite-scroll-trigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  min-height: 60px;
+}

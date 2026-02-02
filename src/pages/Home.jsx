@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { useAuth } from '../contexts/AuthContext';
 import VideoGrid from '../components/VideoGrid/VideoGrid';
 import SearchBar from '../components/SearchBar/SearchBar';
@@ -96,13 +96,27 @@ const Home = () => {
     }
   });
 
-  // Fetch videos
-  const { data: videosData, isLoading } = useQuery({
+  // Fetch videos with infinite scroll
+  const {
+    data: videosData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['videoReferences', queryParams],
-    queryFn: async () => {
-      const response = await searchVideoReferences(searchQuery, queryParams);
+    queryFn: async ({ pageParam = 1 }) => {
+      const response = await searchVideoReferences(searchQuery, queryParams, pageParam, 20);
       return response.data;
     },
+    getNextPageParam: (lastPage) => {
+      const meta = lastPage?.meta;
+      if (meta && meta.current_page < meta.last_page) {
+        return meta.current_page + 1;
+      }
+      return undefined;
+    },
+    initialPageParam: 1,
   });
 
   const handleSearch = useCallback((query) => {
@@ -207,7 +221,11 @@ const Home = () => {
     });
   }, [getAllChildCategoryIds, getParentCategoryId, isParentCategory]);
 
-  const videos = videosData?.data || [];
+  // Объединяем все страницы в один массив
+  const videos = useMemo(() => {
+    if (!videosData?.pages) return [];
+    return videosData.pages.flatMap(page => page.data || []);
+  }, [videosData]);
 
   const handleAuthRequired = () => {
     setShowRegisterModal(true);
@@ -333,7 +351,10 @@ const Home = () => {
             loading={isLoading} 
             onAuthRequired={handleAuthRequired}
             queryParams={queryParams}
-            pagination={videosData?.meta}
+            pagination={videosData?.pages?.[0]?.meta}
+            fetchNextPage={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
           />
         </div>
       </div>

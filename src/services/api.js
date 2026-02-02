@@ -169,9 +169,11 @@ export const updateProfile = async (data) => {
 // ==================== Видео (существующие методы) ====================
 
 // Search video references with filters
-export const searchVideoReferences = async (query = '', filters = {}) => {
+export const searchVideoReferences = async (query = '', filters = {}, page = 1, perPage = 20) => {
   const params = {
     ...filters,
+    page,
+    per_page: perPage,
   };
   
   if (query) {
