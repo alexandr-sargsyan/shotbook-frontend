@@ -1,33 +1,39 @@
 .profile-page {
   min-height: 100vh;
   padding: 40px 20px;
-  background-color: #f9fafb;
+  background-color: var(--color-bg);
 }
 
 .profile-container {
   max-width: 600px;
   margin: 0 auto;
-  background: white;
-  border-radius: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   padding: 32px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
 }
 
 .back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 8px 16px;
-  background-color: #f3f4f6;
-  color: #374151;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   cursor: pointer;
-  margin-bottom: 16px;
-  transition: background-color 0.2s;
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-fast);
 }
 
 .back-button:hover {
-  background-color: #e5e7eb;
+  background-color: var(--color-accent);
+  color: #0d0d0d !important;
+  border-color: var(--color-accent);
 }
 
 .profile-container h1 {
@@ -134,4 +140,3 @@
   padding: 40px;
   color: #6b7280;
 }
-

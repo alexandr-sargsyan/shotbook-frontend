@@ -1,133 +1,114 @@
+/* Video Detail Page - Dark Theme */
+
 .video-detail-page {
-  min-height: 100vh;
-  background-color: #000;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-bg);
+  /* Dark background */
+  color: var(--color-text);
+  overflow-y: auto;
+  z-index: var(--z-fixed);
+  /* Ensure it sits above other things if needed */
+  padding-top: 0;
+  /* Removed fixed header padding */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-bg);
 }
 
+.video-detail-container {
+  max-width: 1800px;
+  /* Wider container for cinematic feel */
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  /* Player + Sidebar */
+  gap: var(--spacing-xl);
+  min-height: calc(100vh - var(--header-height));
+  align-items: start;
+}
+
+/* Main Content (Left Side) */
+.video-detail-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  position: relative;
+  min-width: 0;
+  /* Prevent overflow */
+}
+
+/* Sidebar Wrapper (Right Side) */
+.video-detail-sidebar-wrapper {
+  /* position: sticky; */
+  /* top: var(--spacing-lg); */
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Navigation Buttons */
 .back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 100;
-  padding: 12px 20px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background: none;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  color: var(--color-text-dim);
+  font-size: var(--text-body);
   cursor: pointer;
-  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0;
+  transition: color var(--transition-fast);
+  align-self: flex-start;
+  margin-bottom: var(--spacing-sm);
 }
 
 .back-button:hover {
-  background-color: white;
+  color: var(--color-text);
 }
 
 .open-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 100;
-  padding: 12px 20px;
-  background-color: #007bff;
-  color: white;
+  top: 0;
+  right: 0;
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  display: inline-block;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition: all var(--transition-normal);
+  border: 1px solid var(--color-border);
+  z-index: 5;
 }
 
 .open-button:hover {
-  background-color: #0056b3;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
 }
 
-
-.video-detail-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.video-detail-main {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 20px;
-  box-sizing: border-box;
-  position: relative;
-}
-
-.video-detail-sidebar-wrapper {
-  width: 500px; /* Увеличено на 25% (было 400px) */
-  flex-shrink: 0;
-  background-color: white;
-  overflow-y: auto;
-}
-
-.video-detail-page.loading,
-.video-detail-page.error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  color: white;
-}
-
-.loading-spinner,
-.error-message {
-  font-size: 18px;
-  margin-bottom: 20px;
-}
-
+/* Responsive */
 @media (max-width: 1024px) {
+  .video-detail-container {
+    padding: var(--spacing-md);
+    grid-template-columns: 1fr;
+    /* Stack on tablet */
+    gap: var(--spacing-lg);
+  }
+
   .video-detail-sidebar-wrapper {
-    width: 438px; /* Увеличено на 25% (было 350px) */
+    position: static;
   }
 }
 
 @media (max-width: 768px) {
   .video-detail-container {
-    flex-direction: column;
-  }
-
-  .video-detail-main {
-    height: 60vh;
-    min-height: 400px;
-    padding: 10px;
-    flex: 1;
-  }
-
-  .video-detail-sidebar-wrapper {
-    width: 100%;
-    max-height: 40vh;
-    position: relative;
-    border-top: 2px solid #e0e0e0;
-    transition: max-height 0.3s ease;
-  }
-
-
-  .back-button {
-    top: 10px;
-    left: 10px;
-    padding: 8px 16px;
-    font-size: 14px;
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  .open-button {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 14px;
-    min-width: 44px;
-    min-height: 44px;
+    padding: var(--spacing-sm);
   }
 }
-

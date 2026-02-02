@@ -1,264 +1,340 @@
+/* ===========================================
+   VIDEO CARD COMPONENT
+   Dark theme with green accent hover effects
+   =========================================== */
+
 .video-card {
-  cursor: pointer;
-  background: white;
-  border-radius: 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin-bottom: 20px;
+  cursor: pointer;
+
+  transition: all var(--transition-normal);
 }
 
+/* ===== HOVER EFFECTS ===== */
 .video-card:hover {
+  border-color: var(--color-accent-border);
+  box-shadow: var(--shadow-elevated);
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* ===== VIDEO PREVIEW ===== */
 .video-preview {
   position: relative;
   width: 100%;
-  padding-top: 177.78%; /* 9:16 aspect ratio (вертикальное, как в TikTok) */
-  background-color: #000;
+  aspect-ratio: 9 / 16;
+  max-height: 400px;
+  background-color: var(--color-bg);
   overflow: hidden;
 }
 
-.video-preview img {
+/* Dark overlay to hide Instagram profile header */
+.video-preview::before {
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, #0a0a0a 0%, #0a0a0a 85%, transparent 100%);
+  z-index: 10;
+  pointer-events: none;
 }
 
 .video-player-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.video-player-wrapper iframe {
-  pointer-events: auto;
-}
-
-.video-player-wrapper .video-list-player {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.video-player-wrapper .video-list-player .video-container {
-  width: 100%;
-  height: 100%;
-  padding-bottom: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-/* Дополнительные стили для Instagram в списке - убираем смещение */
-.video-player-wrapper .instagram-player {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.video-player-wrapper .instagram-player blockquote.instagram-media,
-.video-player-wrapper .instagram-player iframe {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  transform: none !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
-}
-
-/* Дополнительные стили для Facebook в списке - убираем смещение */
-.video-player-wrapper .facebook-player {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.video-player-wrapper .facebook-player iframe {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: none !important;
-  transform: none !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
 }
 
 .video-player-wrapper iframe {
   width: 100%;
   height: 100%;
   border: none;
-  position: absolute;
-  top: 0;
-  left: 0;
+  object-fit: contain;
 }
 
 .video-placeholder {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg) 100%);
 }
 
-.video-icon {
-  font-size: 48px;
+.video-placeholder .platform-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-full);
+  color: var(--color-text-dim);
 }
 
+/* ===== DURATION BADGE ===== */
 .video-duration {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  z-index: 10;
-  pointer-events: none;
+  bottom: var(--spacing-xs);
+  right: var(--spacing-xs);
+
+  padding: 0.25rem 0.5rem;
+
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: var(--radius-xs);
+
+  font-family: var(--font-mono);
+  font-size: var(--text-tag);
+  color: var(--color-text);
 }
 
-.video-platform {
+/* ===== PLATFORM BADGE ===== */
+.platform-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 14px;
-  z-index: 10;
-  pointer-events: none;
-}
+  top: var(--spacing-xs);
+  left: var(--spacing-xs);
 
-/* Верхний блок - только тайтл */
-.video-title-top {
-  padding: 8px 12px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.video-title-top .video-title {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 300;
-  font-style: italic;
-  color: #333;
-  line-height: 1.3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Нижний блок - лайк слева, кнопка Details в центре, Save справа */
-.video-info-bottom {
-  padding: 8px 12px 8px 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  border-top: 1px solid #f0f0f0;
-  position: relative;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: var(--radius-xs);
+
+  color: var(--color-text);
+
+  opacity: 0;
+  transition: opacity var(--transition-fast);
 }
 
-.video-actions-left {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  margin-left: 0;
-  padding-left: 12px;
+.video-card:hover .platform-badge {
+  opacity: 1;
 }
 
-.video-actions-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.details-button {
+/* ===== OVERLAY BUTTONS ===== */
+.play-overlay {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 6px 16px;
-  background-color: #007bff;
-  color: white;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+
+  transition: opacity var(--transition-normal);
+  backdrop-filter: blur(2px);
+}
+
+.play-overlay.visible {
+  opacity: 1;
+}
+
+.overlay-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.overlay-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: none;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 500;
+  color: var(--color-text);
   cursor: pointer;
-  transition: background-color 0.2s;
-  flex-shrink: 0;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  background-color: rgba(255, 255, 255, 0.1);
+  min-width: 80px;
 }
 
-.details-button:hover {
-  background-color: #0056b3;
+.overlay-btn:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  transform: translateY(-2px);
 }
 
-.details-button:active {
-  background-color: #004085;
+.overlay-btn svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
 }
 
-@media (max-width: 768px) {
+.overlay-btn span {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+/* ===== CARD CONTENT ===== */
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--spacing-xs);
+}
+
+.video-title {
+  font-size: var(--text-card-title);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  margin: 0;
+}
+
+/* ===== CATEGORIES ===== */
+.video-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.category-tag {
+  padding: 0.2rem 0.5rem;
+
+  background-color: var(--color-surface-elevated);
+  border-radius: var(--radius-xs);
+
+  font-size: var(--text-tag);
+  color: var(--color-text-dim);
+
+  white-space: nowrap;
+}
+
+/* ===== ACTIONS ===== */
+.video-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  /* Push to bottom if needed */
+  padding-top: var(--spacing-xs);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-dim);
+  transition: all var(--transition-fast);
+  width: 40px;
+  height: 40px;
+}
+
+.action-btn:hover {
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text);
+}
+
+/* ===== LIST VIEW ===== */
+.video-card.list-view {
+  flex-direction: row;
+  border-radius: var(--radius-md);
+}
+
+.video-card.list-view .video-preview {
+  width: 280px;
+  min-width: 280px;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.video-card.list-view .card-info {
+  flex: 1;
+  justify-content: center;
+  padding: var(--spacing-md);
+}
+
+.video-card.list-view .video-title {
+  font-size: var(--text-h3);
+  -webkit-line-clamp: 1;
+}
+
+.video-card.list-view .video-actions {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 767px) {
   .video-card {
-    margin-bottom: 16px;
+    border-radius: var(--radius-md);
   }
 
-  .video-title-top {
-    padding: 6px 10px;
+  .card-info {
+    padding: var(--spacing-xs);
   }
 
-  .video-title-top .video-title {
-    font-size: 12px;
-    font-weight: 300;
-    font-style: italic;
+  .video-title {
+    font-size: var(--text-body);
+    -webkit-line-clamp: 2;
   }
 
-  .video-info-bottom {
-    padding: 6px 10px;
+  /* List view on mobile */
+  .video-card.list-view {
+    flex-direction: column;
   }
 
-  .details-button {
-    padding: 5px 12px;
-    font-size: 12px;
+  .video-card.list-view .video-preview {
+    width: 100%;
+    min-width: unset;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .video-card.list-view .card-info {
+    padding: var(--spacing-sm);
+  }
+
+  .video-card.list-view .video-actions {
+    position: static;
+    transform: none;
+  }
+
+  .play-overlay {
+    display: none;
+  }
+
+  .platform-badge {
+    opacity: 1;
   }
 }
 
+/* ===== TABLET ===== */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .video-card.list-view .video-preview {
+    width: 200px;
+    min-width: 200px;
+  }
+}

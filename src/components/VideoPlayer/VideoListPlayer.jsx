@@ -12,33 +12,36 @@ import './VideoListPlayer.css';
  * - С зацикливанием (loop)
  * - С контролами для YouTube и TikTok (как в детальном виде)
  */
-const VideoListPlayer = ({ 
-  platform, 
-  platformVideoId, 
+const VideoListPlayer = ({
+  platform,
+  platformVideoId,
   sourceUrl,
-  isVisible = false 
+  isVisible = false,
+  isPlaying = false // New prop to force play/interaction
 }) => {
   const { renderPlayer } = usePlatformPlayer(platform, platformVideoId, sourceUrl);
 
   // Включаем контролы для YouTube и TikTok (как в детальном виде)
   // Instagram не поддерживает программное управление controls
   // Facebook использует свой встроенный плеер с контролами
-  
+
   // Автозапуск для всех платформ кроме Instagram
-  const hasControls = platform === 'youtube' || platform === 'tiktok';
-  const shouldAutoplay = platform !== 'instagram' && isVisible;
-  // Для TikTok - со звуком, для остальных - без звука
-  const shouldMute = platform !== 'tiktok';
+  const hasControls = platform === 'youtube' || platform === 'tiktok' || isPlaying;
+
+  // Если isPlaying (пользователь нажал Play), то точно автоплей и звук
+  const shouldAutoplay = isPlaying || (platform !== 'instagram' && isVisible);
+  // Для TikTok - со звуком, для остальных - без звука (если не включен isPlaying)
+  const shouldMute = isPlaying ? false : (platform !== 'tiktok');
 
   return (
-    <div className="video-list-player">
+    <div className={`video-list-player ${isPlaying ? 'interactive' : ''}`}>
       <div className="video-container">
         {renderPlayer({
-          autoplay: shouldAutoplay, // Автозапуск для YouTube, TikTok, Facebook (кроме Instagram)
-          muted: shouldMute,        // Без звука для всех кроме TikTok
-          loop: true,                // С зацикливанием
-          controls: hasControls,     // С контролами для YouTube и TikTok
-          showText: false,           // Для Facebook: не показывать текст поста в списке
+          autoplay: shouldAutoplay,
+          muted: shouldMute,
+          loop: true,
+          controls: hasControls,
+          showText: false,
         })}
       </div>
     </div>

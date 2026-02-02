@@ -1,0 +1,59 @@
+/* ===========================================
+   BOOKMARK BUTTON WRAPPER
+   Dark theme styling for save-to-collection
+   =========================================== */
+
+.bookmark-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Override SaveToCollectionButton styles */
+.bookmark-button-wrapper .save-to-collection-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+    padding: 0;
+
+    background: var(--color-surface-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    color: var(--color-text-dim);
+    cursor: pointer;
+
+    transition: all var(--transition-normal);
+}
+
+.bookmark-button-wrapper .save-to-collection-button:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.bookmark-button-wrapper .save-to-collection-button.saved {
+    background: var(--color-accent-subtle);
+    border-color: var(--color-accent);
+}
+
+.bookmark-button-wrapper .save-to-collection-button.saved svg {
+    fill: var(--color-accent);
+    stroke: var(--color-accent);
+}
+
+.bookmark-button-wrapper .save-to-collection-button svg {
+    width: 20px;
+    height: 20px;
+    transition: all var(--transition-fast);
+}
+
+/* Mobile touch target */
+@media (max-width: 767px) {
+    .bookmark-button-wrapper .save-to-collection-button {
+        width: 44px;
+        height: 44px;
+    }
+}

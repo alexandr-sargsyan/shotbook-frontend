@@ -67,7 +67,11 @@ const Collections = () => {
 
   // Закрытие меню при клике вне его
   React.useEffect(() => {
-    const handleClickOutside = () => {
+    const handleClickOutside = (e) => {
+      // Не закрывать если клик по меню или кнопке меню
+      if (e.target.closest('.collection-menu') || e.target.closest('.collection-menu-button')) {
+        return;
+      }
       setOpenMenuId(null);
     };
     if (openMenuId) {
@@ -87,7 +91,7 @@ const Collections = () => {
   }
 
   const allCollections = collectionsData?.data || [];
-  
+
   // Фильтрация коллекций по поисковому запросу
   const collections = allCollections.filter((collection) => {
     if (!searchQuery.trim()) {
@@ -110,6 +114,7 @@ const Collections = () => {
       return;
     }
     if (window.confirm('Are you sure you want to delete this collection?')) {
+      setOpenMenuId(null);
       deleteMutation.mutate(id);
     }
   };
@@ -118,7 +123,9 @@ const Collections = () => {
     e.stopPropagation();
     setSelectedCollection(collection);
     setShowShareModal(true);
+    setOpenMenuId(null);
   };
+
 
   const getShareUrl = (shareToken) => {
     return `${window.location.origin}/shared/collection/${shareToken}`;
@@ -161,7 +168,7 @@ const Collections = () => {
 
   const handleDeleteFromMenu = (e, collection) => {
     e.stopPropagation();
-    setOpenMenuId(null);
+    e.preventDefault();
     handleDelete(collection.id, collection.is_default);
   };
 
@@ -296,7 +303,7 @@ const Collections = () => {
         <div className="modal-overlay" onClick={() => setShowShareModal(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h2>Share Collection</h2>
-            <p style={{ marginBottom: '16px', color: '#6b7280' }}>
+            <p style={{ marginBottom: '16px', color: 'var(--color-text-dim)' }}>
               Share this collection with others by sending them this link:
             </p>
             <div style={{ marginBottom: '16px' }}>
@@ -307,17 +314,18 @@ const Collections = () => {
                 style={{
                   width: '100%',
                   padding: '12px',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid var(--color-border)',
                   borderRadius: '8px',
                   fontSize: '14px',
-                  backgroundColor: '#f9fafb',
+                  backgroundColor: 'var(--color-bg)',
+                  color: 'var(--color-text)',
                 }}
               />
               {copySuccess && (
                 <div
                   style={{
                     marginTop: '8px',
-                    color: '#10b981',
+                    color: 'var(--color-accent)',
                     fontSize: '14px',
                     fontWeight: '500',
                   }}

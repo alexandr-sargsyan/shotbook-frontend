@@ -1,77 +1,202 @@
-/* Responsive breakpoints */
-/* Mobile: < 768px */
-/* Tablet: 768px - 1024px */
-/* Desktop: > 1024px */
+/* ===========================================
+   SHOTBOOK - RESPONSIVE STYLES
+   Breakpoints and Mobile Utilities
+   =========================================== */
 
-/* Mobile-first approach */
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+/* 
+ * Mobile: < 768px
+ * Tablet: 768px - 1023px  
+ * Desktop: >= 1024px
+ * Wide: >= 1440px
+ */
+
+/* ===== MOBILE FIRST - BASE STYLES ===== */
+
+/* Touch-friendly targets on mobile */
 @media (max-width: 767px) {
-  /* Mobile styles */
-  body {
-    font-size: 14px;
-  }
 
-  /* Touch-friendly buttons */
+  /* Ensure all interactive elements are 44px minimum */
   button,
-  a {
+  a,
+  input[type="button"],
+  input[type="submit"],
+  [role="button"] {
     min-height: 44px;
-    min-width: 44px;
+  }
+
+  /* Reduce spacing on mobile */
+  :root {
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2.5rem;
+  }
+
+  /* Smaller header on mobile */
+  :root {
+    --header-height: var(--header-height-mobile);
   }
 }
 
-/* Tablet styles */
+/* ===== TABLET STYLES ===== */
 @media (min-width: 768px) and (max-width: 1023px) {
-  body {
-    font-size: 15px;
+  :root {
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
   }
 }
 
-/* Desktop styles */
+/* ===== DESKTOP STYLES ===== */
 @media (min-width: 1024px) {
-  body {
-    font-size: 16px;
+  :root {
+    --spacing-lg: 2.5rem;
+    --spacing-xl: 4rem;
   }
 }
 
-/* Utility classes for responsive display */
-.mobile-only {
+/* ===== RESPONSIVE DISPLAY UTILITIES ===== */
+
+/* Hide on mobile */
+.hide-mobile {
   display: block;
 }
 
-.desktop-only {
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on tablet and up */
+.show-mobile-only {
   display: none;
 }
 
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
-  }
-
-  .desktop-only {
+@media (max-width: 767px) {
+  .show-mobile-only {
     display: block;
   }
 }
 
-/* Smooth transitions */
-* {
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+/* Hide on desktop */
+.hide-desktop {
+  display: block;
 }
 
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+@media (min-width: 1024px) {
+  .hide-desktop {
+    display: none !important;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* Show only on desktop */
+.show-desktop-only {
+  display: none;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+@media (min-width: 1024px) {
+  .show-desktop-only {
+    display: block;
+  }
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+/* ===== RESPONSIVE CONTAINER ===== */
+.container {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-sm);
 }
 
+@media (min-width: 768px) {
+  .container {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-left: var(--spacing-lg);
+    padding-right: var(--spacing-lg);
+  }
+}
+
+/* ===== RESPONSIVE GRID UTILITIES ===== */
+.grid-responsive {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+/* 1 column on mobile */
+@media (max-width: 767px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 2 columns on tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Auto-fill on desktop */
+@media (min-width: 1024px) {
+  .grid-responsive {
+    grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
+  }
+}
+
+/* ===== FLEX UTILITIES ===== */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* ===== SAFE AREA SUPPORT (iOS) ===== */
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(var(--spacing-sm), env(safe-area-inset-bottom));
+  }
+
+  .safe-area-top {
+    padding-top: max(var(--spacing-sm), env(safe-area-inset-top));
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #444444;
+    --color-text-dim: #CCCCCC;
+  }
+}

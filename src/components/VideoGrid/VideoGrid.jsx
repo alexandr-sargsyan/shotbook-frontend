@@ -2,12 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import VideoCard from '../VideoCard/VideoCard';
 import './VideoGrid.css';
 
-const VideoGrid = ({ 
-  videos = [], 
-  loading = false, 
-  onAuthRequired, 
-  queryParams = {}, 
+const VideoGrid = ({
+  videos = [],
+  loading = false,
+  onAuthRequired,
+  queryParams = {},
   pagination = {},
+  viewMode = 'grid',
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
@@ -42,7 +43,21 @@ const VideoGrid = ({
   if (loading && videos.length === 0) {
     return (
       <div className="video-grid loading">
-        <div className="loading-spinner">Loading...</div>
+        <div className="loading-spinner">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10" strokeOpacity="0.25" />
+            <path d="M12 2a10 10 0 0 1 10 10" strokeLinecap="round">
+              <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 12 12"
+                to="360 12 12"
+                dur="1s"
+                repeatCount="indefinite"
+              />
+            </path>
+          </svg>
+        </div>
       </div>
     );
   }
@@ -57,14 +72,15 @@ const VideoGrid = ({
 
   return (
     <>
-      <div className="video-grid">
+      <div className={`video-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
         {videos.map((video, index) => (
-          <VideoCard 
-            key={video.id} 
-            video={video} 
+          <VideoCard
+            key={video.id}
+            video={video}
             onAuthRequired={onAuthRequired}
             videoList={{ videos, queryParams, pagination }}
             currentIndex={index}
+            viewMode={viewMode}
           />
         ))}
       </div>
@@ -81,4 +97,3 @@ const VideoGrid = ({
 };
 
 export default VideoGrid;
-

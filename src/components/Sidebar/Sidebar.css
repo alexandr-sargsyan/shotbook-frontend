@@ -1,0 +1,122 @@
+/* ===========================================
+   UNIFIED SIDEBAR WRAPPER
+   Dark theme, sticky left layout
+   =========================================== */
+
+.main-sidebar {
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+
+    overflow-y: auto;
+    z-index: var(--z-sticky);
+
+    /* Modern Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-bg);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: var(--spacing-xl);
+    padding-top: var(--spacing-md);
+}
+
+/* Sections */
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+    /* Align tightly */
+}
+
+.sidebar-section-header {
+    padding: var(--spacing-sm) var(--spacing-md);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: var(--color-surface);
+    /* border-bottom: 1px solid var(--color-border); */
+}
+
+.sidebar-section-header h3 {
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* Removed empty .sidebar-section-body rule */
+
+.sidebar-divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin: var(--spacing-xs) 0;
+    /* Reduced from sm to xs (or implicit large value) */
+}
+
+/* Overlay for Mobile */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal);
+}
+
+.sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ===== MOBILE STYLES ===== */
+@media (max-width: 1023px) {
+    .main-sidebar {
+        position: fixed;
+        top: var(--header-height);
+        left: -100%;
+        bottom: 0;
+        height: calc(100vh - var(--header-height));
+        width: 320px;
+        max-width: 85vw;
+
+        z-index: var(--z-modal);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .main-sidebar.open {
+        left: 0;
+    }
+
+    .sidebar-overlay {
+        top: var(--header-height);
+    }
+}
+
+/* ===== DESKTOP STYLES ===== */
+@media (min-width: 1024px) {
+    .sidebar-overlay {
+        display: none;
+        /* No overlay on desktop */
+    }
+
+    /* Ensure it's always visible on desktop if not explicitly hidden */
+    .main-sidebar {
+        transform: none;
+        left: 0;
+    }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './AuthModal.css';
 
@@ -79,7 +80,7 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
     setLoading(false);
   };
 
-  return (
+  return createPortal(
     <div className="auth-modal-overlay" onClick={onClose}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <div className="auth-modal-header">
@@ -173,9 +174,9 @@ const EmailVerificationModal = ({ isOpen, onClose, email: initialEmail, codeAlre
           )}
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
 export default EmailVerificationModal;
-
