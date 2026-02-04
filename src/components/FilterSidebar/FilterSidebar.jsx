@@ -349,13 +349,6 @@ const FilterSidebar = ({
         </div>
       )}
 
-      {embedded && hasActiveFilters && (
-        <div className="filter-embedded-actions">
-          <button className="filter-reset-btn" onClick={handleReset}>
-            Reset
-          </button>
-        </div>
-      )}
 
       <div className="filter-list">
         <div className="filter-group">

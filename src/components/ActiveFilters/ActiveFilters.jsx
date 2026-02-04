@@ -120,7 +120,7 @@ const ActiveFilters = ({
                 </span>
             ))}
 
-            {activeFilters.length > 1 && (
+            {activeFilters.length > 0 && (
                 <button className="clear-all-btn" onClick={onResetAll}>
                     Clear all
                 </button>

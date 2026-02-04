@@ -130,28 +130,9 @@ const CategorySidebar = ({
             </span>
             <h3>Categories</h3>
           </div>
-          {hasSelectedCategories && onReset && (
-            <button 
-              className="category-reset-btn" 
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onReset) onReset();
-              }}
-            >
-              Reset Categories
-            </button>
-          )}
         </div>
       )}
 
-      {/* If embedded, we show reset button differently or rely on parent */}
-      {embedded && hasSelectedCategories && onReset && (
-        <div className="category-embedded-actions">
-          <button className="category-reset-btn" onClick={onReset}>
-            Reset
-          </button>
-        </div>
-      )}
 
       <div className={`category-list-container ${embedded ? 'expanded' : (isCategoriesExpanded ? 'expanded' : 'collapsed')}`}>
         <div className="category-list">
