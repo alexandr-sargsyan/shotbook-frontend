@@ -226,12 +226,43 @@
 
 /* ===== ACTIONS ===== */
 .video-actions {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* Три колонки: левая, центр, правая */
   align-items: center;
   margin-top: auto;
   /* Push to bottom if needed */
   padding-top: var(--spacing-xs);
+  gap: var(--spacing-xs);
+}
+
+/* Левая часть (LikeButton) - выравнивание по левому краю */
+.video-actions > :first-child {
+  justify-self: start;
+}
+
+/* Центральная кнопка (Details) - всегда в центре */
+.video-actions .details-action-btn {
+  justify-self: center;
+  grid-column: 2; /* Всегда во второй колонке (центр) */
+  width: 48px; /* Увеличенный размер */
+  height: 48px; /* Увеличенный размер */
+  color: #ffffff; /* Белый цвет */
+}
+
+.video-actions .details-action-btn svg {
+  width: 24px; /* Увеличенная иконка */
+  height: 24px; /* Увеличенная иконка */
+}
+
+.video-actions .details-action-btn:hover {
+  color: #ffffff; /* Остается белой при hover */
+  background-color: rgba(255, 255, 255, 0.1); /* Легкий белый фон при hover */
+}
+
+/* Правая часть (BookmarkButton) - выравнивание по правому краю */
+.video-actions > :last-child {
+  justify-self: end;
+  grid-column: 3; /* Всегда в третьей колонке (справа) */
 }
 
 .action-btn {

@@ -72,7 +72,7 @@ const LikeButton = ({ videoId, initialLiked = false, initialLikesCount = 0, onAu
           </svg>
         )}
       </button>
-      {likesCount > 0 && <span className="like-count">{likesCount}</span>}
+      <span className={`like-count ${likesCount > 0 ? 'visible' : 'hidden'}`}>{likesCount || 0}</span>
     </div>
   );
 };
