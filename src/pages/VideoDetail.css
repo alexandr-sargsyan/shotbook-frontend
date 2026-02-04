@@ -9,13 +9,12 @@
   background-color: var(--color-bg);
   /* Dark background */
   color: var(--color-text);
-  overflow-y: auto;
+  overflow: hidden;
+  /* Убираем общий скролл страницы */
   z-index: var(--z-fixed);
   /* Ensure it sits above other things if needed */
   padding-top: 0;
   /* Removed fixed header padding */
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) var(--color-bg);
 }
 
 .video-detail-container {
@@ -27,8 +26,11 @@
   grid-template-columns: 1fr 400px;
   /* Player + Sidebar */
   gap: var(--spacing-xl);
-  min-height: calc(100vh - var(--header-height));
+  height: 100vh;
+  /* Фиксированная высота вместо min-height */
   align-items: start;
+  overflow: hidden;
+  /* Предотвращаем растягивание контейнера */
 }
 
 /* Main Content (Left Side) */
@@ -43,12 +45,18 @@
 
 /* Sidebar Wrapper (Right Side) */
 .video-detail-sidebar-wrapper {
-  /* position: sticky; */
-  /* top: var(--spacing-lg); */
-  height: auto;
+  height: calc(100vh - 2 * var(--spacing-lg));
+  /* Фиксированная высота с учетом padding контейнера */
+  overflow-y: auto;
+  /* Скролл только для правой панели */
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
+  padding-right: var(--spacing-xs);
+  /* Небольшой отступ для скроллбара */
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-bg);
 }
 
 /* Navigation Buttons */
@@ -100,10 +108,21 @@
     grid-template-columns: 1fr;
     /* Stack on tablet */
     gap: var(--spacing-lg);
+    height: auto;
+    /* На мобильных разрешаем растягивание */
+    overflow: visible;
   }
 
   .video-detail-sidebar-wrapper {
     position: static;
+    height: auto;
+    /* На мобильных убираем фиксированную высоту */
+    overflow-y: visible;
+  }
+
+  .video-detail-page {
+    overflow-y: auto;
+    /* На мобильных возвращаем общий скролл */
   }
 }
 
