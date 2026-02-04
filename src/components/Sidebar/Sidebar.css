@@ -42,7 +42,39 @@
     top: 0;
     z-index: 10;
     background-color: var(--color-surface);
+    cursor: pointer;
+    user-select: none;
+    transition: background-color var(--transition-fast);
     /* border-bottom: 1px solid var(--color-border); */
+}
+
+.sidebar-section-header:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.sidebar-header-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.sidebar-expand-icon {
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                color 0.2s ease;
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+    transform: rotate(0deg);
+}
+
+.sidebar-section-header.expanded .sidebar-expand-icon {
+    transform: rotate(90deg);
+}
+
+.sidebar-section-header:hover .sidebar-expand-icon {
+    color: var(--color-accent);
 }
 
 .sidebar-section-header h3 {
@@ -52,7 +84,24 @@
     margin: 0;
 }
 
-/* Removed empty .sidebar-section-body rule */
+.sidebar-section-body {
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.3s ease-in-out;
+    /* По умолчанию видим (для фильтров и других секций) */
+    max-height: none;
+    opacity: 1;
+}
+
+.sidebar-section-body.expanded {
+    max-height: 2000px; /* Достаточно большое значение для всех категорий */
+    opacity: 1;
+}
+
+.sidebar-section-body.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
 
 .sidebar-divider {
     height: 1px;

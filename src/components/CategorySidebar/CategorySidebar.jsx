@@ -7,9 +7,14 @@ const CategorySidebar = ({
   onCategoryToggle,
   onClose,
   onReset,
-  embedded = false
+  embedded = false,
+  isExpanded: externalIsExpanded = undefined // External control for expanded state
 }) => {
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [internalIsExpanded, setInternalIsExpanded] = useState(false);
+  
+  // Use external state if provided, otherwise use internal state
+  const isCategoriesExpanded = externalIsExpanded !== undefined ? externalIsExpanded : internalIsExpanded;
 
   // Ensure categories is always an array
   const categoriesArray = Array.isArray(categories) ? categories : [];
@@ -105,13 +110,34 @@ const CategorySidebar = ({
   const rootCategories = categoriesArray.filter((cat) => !cat.parent_id);
   const hasSelectedCategories = selectedCategoryIds.length > 0;
 
+  const toggleCategoriesExpanded = () => {
+    if (externalIsExpanded === undefined) {
+      // Only use internal state if external state is not provided
+      setInternalIsExpanded(!internalIsExpanded);
+    }
+  };
+
   return (
     <div className={`category-sidebar ${embedded ? 'embedded' : ''}`}>
       {!embedded && (
-        <div className="category-sidebar-header">
-          <h3>Categories</h3>
+        <div 
+          className={`category-sidebar-header ${isCategoriesExpanded ? 'expanded' : ''}`}
+          onClick={toggleCategoriesExpanded}
+        >
+          <div className="category-header-content">
+            <span className="category-expand-icon">
+              {isCategoriesExpanded ? '▼' : '▶'}
+            </span>
+            <h3>Categories</h3>
+          </div>
           {hasSelectedCategories && onReset && (
-            <button className="category-reset-btn" onClick={onReset}>
+            <button 
+              className="category-reset-btn" 
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onReset) onReset();
+              }}
+            >
               Reset Categories
             </button>
           )}
@@ -127,12 +153,14 @@ const CategorySidebar = ({
         </div>
       )}
 
-      <div className="category-list">
-        {rootCategories.length > 0 ? (
-          rootCategories.map((category) => renderCategory(category))
-        ) : (
-          <div className="category-empty">No categories</div>
-        )}
+      <div className={`category-list-container ${embedded ? 'expanded' : (isCategoriesExpanded ? 'expanded' : 'collapsed')}`}>
+        <div className="category-list">
+          {rootCategories.length > 0 ? (
+            rootCategories.map((category) => renderCategory(category))
+          ) : (
+            <div className="category-empty">No categories</div>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -14,6 +14,11 @@ const Sidebar = ({
     onClose
 }) => {
     const [activeSection, setActiveSection] = useState('all'); // 'all', 'categories', 'filters'
+    const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(false);
+
+    const toggleCategoriesExpanded = () => {
+        setIsCategoriesExpanded(!isCategoriesExpanded);
+    };
 
     return (
         <>
@@ -27,16 +32,25 @@ const Sidebar = ({
                 <div className="sidebar-content">
                     {/* Categories Section */}
                     <div className="sidebar-section">
-                        <div className="sidebar-section-header">
-                            <h3>Categories</h3>
+                        <div 
+                            className={`sidebar-section-header ${isCategoriesExpanded ? 'expanded' : ''}`}
+                            onClick={toggleCategoriesExpanded}
+                        >
+                            <div className="sidebar-header-content">
+                                <span className="sidebar-expand-icon">
+                                    {isCategoriesExpanded ? '▼' : '▶'}
+                                </span>
+                                <h3>Categories</h3>
+                            </div>
                         </div>
-                        <div className="sidebar-section-body">
+                        <div className={`sidebar-section-body ${isCategoriesExpanded ? 'expanded' : 'collapsed'}`}>
                             <CategorySidebar
                                 categories={categories}
                                 selectedCategoryIds={selectedCategoryIds}
                                 onCategoryToggle={onCategoryToggle}
                                 onReset={onResetCategories}
                                 embedded={true} // New prop to indicate embedded mode
+                                isExpanded={isCategoriesExpanded} // Pass expanded state
                             />
                         </div>
                     </div>
