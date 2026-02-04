@@ -221,8 +221,8 @@ const SaveToCollectionButton = ({ videoId, onAuthRequired, initialSaved = false,
           width="20"
           height="20"
           viewBox="0 0 24 24"
-          fill={isSaved ? '#3b82f6' : 'none'}
-          stroke={isSaved ? '#3b82f6' : 'currentColor'}
+          fill={isSaved ? '#00FF88' : 'none'}
+          stroke={isSaved ? '#00FF88' : 'currentColor'}
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
