@@ -358,118 +358,6 @@ const FilterSidebar = ({
       )}
 
       <div className="filter-list">
-        <div className="filter-group checkboxes">
-          <label>Platform</label>
-          <div className="platform-checkboxes">
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('youtube')}
-                onChange={() => handlePlatformToggle('youtube')}
-              />
-              YouTube
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('instagram')}
-                onChange={() => handlePlatformToggle('instagram')}
-              />
-              Instagram
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('tiktok')}
-                onChange={() => handlePlatformToggle('tiktok')}
-              />
-              TikTok
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.platform.includes('facebook')}
-                onChange={() => handlePlatformToggle('facebook')}
-              />
-              Facebook
-            </label>
-          </div>
-        </div>
-
-        <div className="filter-group checkboxes">
-          <label>Pacing</label>
-          <div className="pacing-checkboxes">
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.pacing.includes('slow')}
-                onChange={() => handlePacingToggle('slow')}
-              />
-              Slow
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.pacing.includes('fast')}
-                onChange={() => handlePacingToggle('fast')}
-              />
-              Fast
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.pacing.includes('mixed')}
-                onChange={() => handlePacingToggle('mixed')}
-              />
-              Mixed
-            </label>
-          </div>
-        </div>
-
-        <div className="filter-group checkboxes">
-          <label>Production Level</label>
-          <div className="production-level-checkboxes">
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.production_level.includes('low')}
-                onChange={() => handleProductionLevelToggle('low')}
-              />
-              Low
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.production_level.includes('mid')}
-                onChange={() => handleProductionLevelToggle('mid')}
-              />
-              Mid
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.production_level.includes('high')}
-                onChange={() => handleProductionLevelToggle('high')}
-              />
-              High
-            </label>
-          </div>
-        </div>
-
-        <div className="filter-group checkboxes">
-          <label>Hooks</label>
-          {hooks.map((hook) => (
-            <label key={hook.id}>
-              <input
-                type="checkbox"
-                checked={filters.hook_ids.includes(hook.id)}
-                onChange={() => handleHookToggle(hook.id)}
-              />
-              {hook.name}
-            </label>
-          ))}
-        </div>
-
         <div className="filter-group">
           <label>Tags</label>
           <div className="tag-selector" ref={tagDropdownRef}>
@@ -591,6 +479,118 @@ const FilterSidebar = ({
               </div>
             )}
           </div>
+        </div>
+
+        <div className="filter-group checkboxes">
+          <label>Platform</label>
+          <div className="platform-checkboxes">
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('youtube')}
+                onChange={() => handlePlatformToggle('youtube')}
+              />
+              YouTube
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('instagram')}
+                onChange={() => handlePlatformToggle('instagram')}
+              />
+              Instagram
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('tiktok')}
+                onChange={() => handlePlatformToggle('tiktok')}
+              />
+              TikTok
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.platform.includes('facebook')}
+                onChange={() => handlePlatformToggle('facebook')}
+              />
+              Facebook
+            </label>
+          </div>
+        </div>
+
+        <div className="filter-group checkboxes">
+          <label>Pacing</label>
+          <div className="pacing-checkboxes">
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.pacing.includes('slow')}
+                onChange={() => handlePacingToggle('slow')}
+              />
+              Slow
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.pacing.includes('fast')}
+                onChange={() => handlePacingToggle('fast')}
+              />
+              Fast
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.pacing.includes('mixed')}
+                onChange={() => handlePacingToggle('mixed')}
+              />
+              Mixed
+            </label>
+          </div>
+        </div>
+
+        <div className="filter-group checkboxes">
+          <label>Production Level</label>
+          <div className="production-level-checkboxes">
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.production_level.includes('low')}
+                onChange={() => handleProductionLevelToggle('low')}
+              />
+              Low
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.production_level.includes('mid')}
+                onChange={() => handleProductionLevelToggle('mid')}
+              />
+              Mid
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={filters.production_level.includes('high')}
+                onChange={() => handleProductionLevelToggle('high')}
+              />
+              High
+            </label>
+          </div>
+        </div>
+
+        <div className="filter-group checkboxes">
+          <label>Hooks</label>
+          {hooks.map((hook) => (
+            <label key={hook.id}>
+              <input
+                type="checkbox"
+                checked={filters.hook_ids.includes(hook.id)}
+                onChange={() => handleHookToggle(hook.id)}
+              />
+              {hook.name}
+            </label>
+          ))}
         </div>
 
         <div className="filter-group checkboxes">
