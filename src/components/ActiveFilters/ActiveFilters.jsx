@@ -12,7 +12,15 @@ const ActiveFilters = ({
     const activeFilters = [];
 
     // Helper to find category name
+    // Works with flat array (allCategories) - just find by ID
     const findCategoryName = (id, cats) => {
+        // First try to find in flat array (allCategories)
+        const category = cats.find(cat => cat.id === id);
+        if (category && category.name) {
+            return category.name;
+        }
+        
+        // Fallback: try recursive search for hierarchical structure (if needed)
         for (const cat of cats) {
             if (cat.id === id) return cat.name;
             if (cat.children) {
@@ -20,6 +28,8 @@ const ActiveFilters = ({
                 if (name) return name;
             }
         }
+        
+        // Last resort: return fallback
         return `Category ${id}`;
     };
 
