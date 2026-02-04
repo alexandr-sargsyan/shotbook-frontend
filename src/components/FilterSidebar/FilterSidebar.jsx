@@ -393,22 +393,6 @@ const FilterSidebar = ({
                 </div>
               )}
             </div>
-            {selectedTagIds.length > 0 && (
-              <div className="selected-tags">
-                {selectedTags.map((tag) => (
-                  <span key={tag.id} className="tag-badge">
-                    {tag.name}
-                    <button
-                      type="button"
-                      onClick={() => handleTagRemove(tag.id)}
-                      className="tag-remove"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
@@ -455,22 +439,6 @@ const FilterSidebar = ({
                 </div>
               )}
             </div>
-            {selectedTransitionTypeIds.length > 0 && (
-              <div className="selected-tags">
-                {selectedTransitionTypes.map((tt) => (
-                  <span key={tt.id} className="tag-badge">
-                    {tt.name}
-                    <button
-                      type="button"
-                      onClick={() => handleTransitionTypeRemove(tt.id)}
-                      className="tag-remove"
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 

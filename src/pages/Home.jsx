@@ -11,7 +11,7 @@ import Logo from '../components/Logo/Logo';
 import LoginModal from '../components/Auth/LoginModal';
 import RegisterModal from '../components/Auth/RegisterModal';
 import EmailVerificationModal from '../components/Auth/EmailVerificationModal';
-import { searchVideoReferences, getCategories } from '../services/api';
+import { searchVideoReferences, getCategories, getTags, getHooks, getTransitionTypes } from '../services/api';
 import './Home.css';
 
 const Home = () => {
@@ -50,6 +50,35 @@ const Home = () => {
   });
 
   const categories = categoriesData?.data || [];
+
+  // Fetch hooks, tags, and transition types for ActiveFilters
+  const { data: hooksData } = useQuery({
+    queryKey: ['hooks'],
+    queryFn: async () => {
+      const response = await getHooks();
+      return response.data;
+    },
+  });
+
+  const { data: tagsData } = useQuery({
+    queryKey: ['tags', 'all'],
+    queryFn: async () => {
+      const response = await getTags('');
+      return response.data;
+    },
+  });
+
+  const { data: transitionTypesData } = useQuery({
+    queryKey: ['transitionTypes', 'all'],
+    queryFn: async () => {
+      const response = await getTransitionTypes('');
+      return response.data;
+    },
+  });
+
+  const hooks = hooksData?.data || [];
+  const allTags = tagsData?.data || [];
+  const allTransitionTypes = transitionTypesData?.data || [];
 
   // Создаем плоский список всех категорий (включая дочерние) для работы с parent_id
   const allCategories = useMemo(() => {
@@ -336,6 +365,9 @@ const Home = () => {
             filters={filters}
             categories={allCategories}
             selectedCategoryIds={selectedCategoryIds}
+            hooks={hooks}
+            tags={allTags}
+            transitionTypes={allTransitionTypes}
             onRemoveFilter={handleRemoveFilter}
             onRemoveCategory={handleCategoryToggle} // Reusing toggle for removal
             onResetAll={handleResetAll}

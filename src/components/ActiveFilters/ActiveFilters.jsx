@@ -5,6 +5,9 @@ const ActiveFilters = ({
     filters = {},
     categories = [],
     selectedCategoryIds = [],
+    hooks = [],
+    tags = [],
+    transitionTypes = [],
     onRemoveFilter,
     onRemoveCategory,
     onResetAll
@@ -50,7 +53,7 @@ const ActiveFilters = ({
         filters.platform.forEach(p => {
             activeFilters.push({
                 key: `platform-${p}`,
-                label: p.charAt(0).toUpperCase() + p.slice(1),
+                label: `Platform: ${p.charAt(0).toUpperCase() + p.slice(1)}`,
                 type: 'filter',
                 onRemove: () => onRemoveFilter('platform', p)
             });
@@ -103,11 +106,50 @@ const ActiveFilters = ({
         }
     });
 
-    // Tag IDs (we might need tag names, assuming we can't easily resolve them here without extra props, 
-    // maybe just show "Tag" or skip if names unavailable, or fetching names separately. 
-    // For simplicity, let's assume we skip tags here or show generic badge if needed, 
-    // but usually users want to see tag NAMES.
-    // Ideally Home passes a lookup or we fetch. Skipping tag_ids for now to keep it simple or until we pass tag map.
+    // Hooks
+    if (filters.hook_ids && filters.hook_ids.length > 0) {
+        filters.hook_ids.forEach(hookId => {
+            const hook = hooks.find(h => h.id === hookId);
+            if (hook) {
+                activeFilters.push({
+                    key: `hook-${hookId}`,
+                    label: `Hook: ${hook.name}`,
+                    type: 'filter',
+                    onRemove: () => onRemoveFilter('hook_ids', hookId)
+                });
+            }
+        });
+    }
+
+    // Tags
+    if (filters.tag_ids && filters.tag_ids.length > 0) {
+        filters.tag_ids.forEach(tagId => {
+            const tag = tags.find(t => t.id === tagId);
+            if (tag) {
+                activeFilters.push({
+                    key: `tag-${tagId}`,
+                    label: `Tag: ${tag.name}`,
+                    type: 'filter',
+                    onRemove: () => onRemoveFilter('tag_ids', tagId)
+                });
+            }
+        });
+    }
+
+    // Transition Types
+    if (filters.transition_type_ids && filters.transition_type_ids.length > 0) {
+        filters.transition_type_ids.forEach(ttId => {
+            const tt = transitionTypes.find(t => t.id === ttId);
+            if (tt) {
+                activeFilters.push({
+                    key: `transition-${ttId}`,
+                    label: `Transition: ${tt.name}`,
+                    type: 'filter',
+                    onRemove: () => onRemoveFilter('transition_type_ids', ttId)
+                });
+            }
+        });
+    }
 
     if (activeFilters.length === 0) return null;
 
